@@ -8,6 +8,7 @@
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         bitmapCanvas = New Bitmap(MainCanvas.Width, MainCanvas.Height)
+        MainCanvas.Image = bitmapCanvas
         PointsArr = New List(Of TPoint)
         EdgesArr = New List(Of TLine)
         MeshesArr = New List(Of TMesh)
@@ -16,5 +17,13 @@
 
     Private Sub DrawMeshButton_Click(sender As Object, e As EventArgs) Handles DrawMeshButton.Click
 
+    End Sub
+
+    Private Sub MainCanvas_Click(sender As Object, e As EventArgs) Handles MainCanvas.Click
+
+    End Sub
+
+    Private Sub MainCanvas_Move(sender As Object, e As MouseEventArgs) Handles MainCanvas.MouseMove
+        ScreenCoordLabel.Text = "Coordinates: X = " + e.X.ToString() + ", Y = " + e.Y.ToString()
     End Sub
 End Class
