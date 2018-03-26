@@ -95,9 +95,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="TLine.vb" />
-    <Compile Include="TObject.vb" />
+    <Compile Include="TMesh.vb" />
+    <Compile Include="TMeshList.vb" />
     <Compile Include="TPoint.vb" />
-    <Compile Include="TPolygon.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
