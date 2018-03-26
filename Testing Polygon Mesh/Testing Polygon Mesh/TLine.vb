@@ -1,14 +1,14 @@
 ﻿Public Class TLine
-    Public Point1 As TPoint
-    Public Point2 As TPoint
+    Public PointIndex1 As Integer
+    Public PointIndex2 As Integer
 
     Public Sub New()
-        Point1 = New TPoint()
-        Point2 = New TPoint()
+        PointIndex1 = 0
+        PointIndex2 = 0
     End Sub
 
-    Public Sub New(ByRef Point1 As TPoint, ByRef Point2 As TPoint)
-        Me.Point1 = Point1
-        Me.Point2 = Point2
+    Public Sub New(ByVal PointIndex1 As Integer, ByVal PointIndex2 As Integer)
+        Me.PointIndex1 = PointIndex1
+        Me.PointIndex2 = PointIndex2
     End Sub
 End Class

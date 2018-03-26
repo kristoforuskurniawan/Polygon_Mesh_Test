@@ -95,6 +95,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="TLine.vb" />
+    <Compile Include="TMesh.vb" />
+    <Compile Include="TMeshList.vb" />
     <Compile Include="TPoint.vb" />
   </ItemGroup>
   <ItemGroup>
