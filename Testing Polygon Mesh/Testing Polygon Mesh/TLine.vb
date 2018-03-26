@@ -1,7 +1,7 @@
 ﻿Public Class TLine
     Public PointIndex1 As Integer
     Public PointIndex2 As Integer
-    Public poly1 As Integer
+    Public poly1 As Integer 'For shared edge
     Public poly2 As Integer
 
     Public Sub New()
