@@ -32,7 +32,7 @@ Namespace My
 
         <Global.System.Diagnostics.DebuggerStepThroughAttribute()> _
         Protected Overrides Sub OnCreateMainForm()
-            Me.MainForm = Global.Testing_Polygon_Mesh.Form1
+            Me.MainForm = Global.Testing_Polygon_Mesh.MainForm
         End Sub
     End Class
 End Namespace
