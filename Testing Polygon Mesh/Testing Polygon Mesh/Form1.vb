@@ -5,6 +5,7 @@
     Private EdgesArr As List(Of TLine)
     Private MeshesArr As List(Of TMesh)
     Private MeshList As TMeshList
+    Private sphereRadius As Double
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         bitmapCanvas = New Bitmap(MainCanvas.Width, MainCanvas.Height)
@@ -13,6 +14,7 @@
         EdgesArr = New List(Of TLine)
         MeshesArr = New List(Of TMesh)
         MeshList = New TMeshList()
+        sphereRadius = 0
     End Sub
 
     Private Sub DrawMeshButton_Click(sender As Object, e As EventArgs) Handles DrawMeshButton.Click
