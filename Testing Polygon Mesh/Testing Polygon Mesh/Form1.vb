@@ -1,6 +1,8 @@
 ﻿Public Class MainForm
 
     Private bitmapCanvas As Bitmap
+    Private g As Graphics
+    Private blackpen As Pen
     Private ListofVertice As List(Of TPoint)
     Private ListofEdges As List(Of TLine)
     Private ListofMeshes As List(Of TMesh)
@@ -9,6 +11,8 @@
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         bitmapCanvas = New Bitmap(MainCanvas.Width, MainCanvas.Height)
+        g = Graphics.FromImage(bitmapCanvas)
+        blackpen = New Pen(Color.Black, 0.5)
         MainCanvas.Image = bitmapCanvas
         ListofVertice = New List(Of TPoint)
         ListofEdges = New List(Of TLine)
@@ -16,6 +20,14 @@
         MeshList = New TMeshList()
         sphereRadius = 0
     End Sub
+
+
+    Private Function dotproduct(x As Double(), y As Double()) As Double
+        Dim d As Double = x(0) * y(0) + x(1) * y(1) + x(2) * y(2)
+        Return If(d < 0, -d, 0)
+    End Function
+
+    Dim point1, point2, point3, point4, point5 As System.Drawing.Point
 
     Private Sub DrawMeshButton_Click(sender As Object, e As EventArgs) Handles DrawMeshButton.Click
         Dim temp As New TPoint
