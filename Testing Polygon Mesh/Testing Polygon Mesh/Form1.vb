@@ -18,7 +18,7 @@
     End Sub
 
     Private Sub DrawMeshButton_Click(sender As Object, e As EventArgs) Handles DrawMeshButton.Click
-
+        sphereRadius = Double.Parse(SphereRadInput.Text)
     End Sub
 
     Private Sub MainCanvas_Click(sender As Object, e As EventArgs) Handles MainCanvas.Click
