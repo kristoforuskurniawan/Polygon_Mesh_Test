@@ -32,7 +32,14 @@
                 temp = New TPoint(x, y, z)
             Next
         Next
+        drawsphere()
+    End Sub
 
+    Private Sub drawsphere()
+        For i As Integer = 0 To ListofVertice.Count - 1
+
+            g.DrawSphere(ListofVertice, 0.1F)
+        Next
     End Sub
 
     Private Sub MainCanvas_Click(sender As Object, e As EventArgs) Handles MainCanvas.Click
