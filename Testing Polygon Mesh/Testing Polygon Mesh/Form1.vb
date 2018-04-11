@@ -41,54 +41,48 @@
     End Sub
 
     Private Sub Declare_Sphere()
-        SetVertices(7, 0, 1)
-        SetVertices(-7, 0, 1)
-        SetVertices(0, 7, 1)
-        SetVertices(0, -7, 1)
-        SetVertices(6, 6, 1)
-        SetVertices(-6, -6, 1)
-        SetVertices(6, -6, 1)
-        SetVertices(-6, 6, 1)
-
-        SetVertices(5, 0, 3)
-        SetVertices(-5, 0, 3)
-        SetVertices(0, 5, 3)
-        SetVertices(0, -5, 3)
-        SetVertices(4, 4, 3)
-        SetVertices(4, -4, 3)
-        SetVertices(4, -4, 3)
-        SetVertices(-4, 4, 3)
-
-        SetVertices(3, 0, 5)
-        SetVertices(-3, 0, 5)
-        SetVertices(0, 3, 5)
-        SetVertices(0, -3, 5)
-        SetVertices(3, 3, 5)
-        SetVertices(-3, -3, 5)
-        SetVertices(3, 3, 5)
-        SetVertices(-3, 3, 5)
-
-        SetVertices(1, 0, 7)
-        SetVertices(-1, 0, 7)
-        SetVertices(0, 1, 7)
-        SetVertices(0, -1, 7)
-        SetVertices(0.5, 0.5, 7)
-        SetVertices(-0.5, -0.5, 7)
-        SetVertices(0.5, -0.5, 7)
-        SetVertices(-0.5, 0.5, 7)
+        Dim radius As Integer = 1
+        Dim angley As Integer = 0
+        Dim anglez As Integer = 0
+        Dim tempx, tempy, tempz As Double
+        While anglez < 90
+            tempy = radius * Use_Sin(anglez)
+            While angley < 90
+                tempx = radius * Use_Cos(angley)
+                tempz = radius * Use_Sin(angley)
+                SetVertices(tempx, tempy, tempz)
+                SetVertices(tempx, -tempy, tempz)
+                angley += 15
+            End While
+            anglez += 15
+            angley = 0
+        End While
 
     End Sub
 
+    Private Function Use_Cos(deg As Double)
+        Return Math.Cos(convert_to_degree(deg))
+    End Function
+
+    Private Function Use_Sin(deg As Double)
+        Return Math.Sin(convert_to_degree(deg))
+    End Function
+
+    Private Function convert_to_degree(x As Double)
+        Return Math.PI * x / 180.0
+    End Function
+
     Public Sub DrawCube(M As Matrix4x4)
-        Dim obj(32) As TPoint
-        For i As Integer = 0 To 31
+        Dim size As Integer = ListofVertice.Count
+        Dim obj(size) As TPoint
+        For i As Integer = 0 To size - 1
             obj(i) = MultiplyMat(ListofVertice(i), M)
         Next
         Dim a, b, c, d As Single
-        For i As Integer = 0 To 7
+        For i As Integer = 0 To size - 1
             a = obj(i).x
             b = obj(i).y
-            For j As Integer = 0 To 7
+            For j As Integer = 0 To size - 1
                 c = obj(j).x
                 d = obj(j).y
                 g.DrawLine(blackpen, a, b, c, d)
@@ -149,6 +143,9 @@
     Private Sub MainCanvas_Move(sender As Object, e As MouseEventArgs) Handles MainCanvas.MouseMove
         ScreenCoordLabel.Text = "Coordinates: X = " + e.X.ToString() + ", Y = " + e.Y.ToString()
     End Sub
+
+
+
 End Class
 
 
