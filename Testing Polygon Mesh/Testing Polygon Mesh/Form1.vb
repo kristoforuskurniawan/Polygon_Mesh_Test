@@ -85,14 +85,14 @@
             obj(i) = MultiplyMat(ListofVertice(i), M)
         Next
         Dim a, b, c, d As Single
-        For i As Integer = 0 To 
+        For i As Integer = 0 To 7
             a = obj(i).x
             b = obj(i).y
-            'For j As Integer = 0 To 31
-            c = obj(i + 1).x
-            d = obj(i + 1).y
-            g.DrawLine(blackpen, a, b, c, d)
-            'Next
+            For j As Integer = 0 To 7
+                c = obj(j).x
+                d = obj(j).y
+                g.DrawLine(blackpen, a, b, c, d)
+            Next
         Next
         MainCanvas.Image = bitmapCanvas
     End Sub
@@ -107,31 +107,37 @@
     End Sub
 
     Private Sub DrawMeshButton_Click(sender As Object, e As EventArgs) Handles DrawMeshButton.Click
-        'Dim temp As New TPoint
-        'Dim x, y, z As Double
-        'Dim hl, vl, radius As Integer 'horizontal lines and vertical lines
-        'hl = 10
-        'vl = 10
-        'radius = 100
-        'For m As Integer = 0 To hl 'horizontalLines
-        '    For n As Integer = 0 To vl - 1 'verticalLines - 1
-        '        x = Math.Sin(Math.PI * m / hl) * Math.Cos(2 * Math.PI * n / vl) * radius
-        '        y = Math.Sin(Math.PI * m / hl) * Math.Sin(2 * Math.PI * n / vl) * radius
-        '        z = Math.Cos(Math.PI * m / hl) * radius
-        '        temp = New TPoint(x, y, z)
-        '    Next
-        'Next
-        'drawsphere()
-        DrawCube(PV)
+        Dim temp As New TPoint
+        Dim x, y, z As Double
+        Dim hl, vl, radius As Integer 'horizontal lines and vertical lines
+        hl = 10
+        vl = 10
+        radius = 100
+        For m As Integer = 0 To hl 'horizontalLines
+            For n As Integer = 0 To vl - 1 'verticalLines - 1
+                x = Math.Sin(Math.PI * m / hl) * Math.Cos(2 * Math.PI * n / vl) * radius
+                y = Math.Sin(Math.PI * m / hl) * Math.Sin(2 * Math.PI * n / vl) * radius
+                z = Math.Cos(Math.PI * m / hl) * radius
+                temp = New TPoint(x, y, z)
+            Next
+        Next
+        drawsphere()
+        'DrawCube(PV)
     End Sub
 
     Private Sub drawsphere()
+        Dim size As Integer = ListofVertice.Count
+        Dim obj(size) As TPoint
+        For i As Integer = 0 To size - 1
+            obj(i) = New TPoint
+            obj(i) = MultiplyMat(ListofVertice(i), PV)
+        Next
         Dim a, b, c, d As Single
-        For i As Integer = 0 To ListofVertice.Count - 2
-            a = ListofVertice(i).x
-            b = ListofVertice(i).y
-            c = ListofVertice(i + 1).x
-            d = ListofVertice(i + 1).y
+        For i As Integer = 0 To size - 2
+            a = obj(i).x
+            b = obj(i).y
+            c = obj(i + 1).x
+            d = obj(i + 1).y
             g.DrawLine(blackpen, a, b, c, d)
         Next
     End Sub
@@ -144,3 +150,5 @@
         ScreenCoordLabel.Text = "Coordinates: X = " + e.X.ToString() + ", Y = " + e.Y.ToString()
     End Sub
 End Class
+
+
