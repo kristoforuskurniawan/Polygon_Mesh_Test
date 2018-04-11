@@ -1,4 +1,5 @@
-﻿Public Class MainForm
+﻿Imports System.Runtime.InteropServices
+Public Class MainForm
 
     Private bitmapCanvas As Bitmap
     Private g As Graphics
@@ -9,6 +10,7 @@
     Private MeshList As TMeshList
     Private sphereRadius As Double
     Dim PV As New Matrix4x4
+    Private Status As Boolean
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         bitmapCanvas = New Bitmap(MainCanvas.Width, MainCanvas.Height)
@@ -20,9 +22,22 @@
         ListofMeshes = New List(Of TMesh)
         MeshList = New TMeshList()
         sphereRadius = 0
+        Status = True
         Declare_Sphere()
         Projection()
+        DrawCube(PV)
+
     End Sub
+
+    Public Class Win32
+        <DllImport("kernel32.dll")> Public Shared Function AllocConsole() As Boolean
+
+        End Function
+        <DllImport("kernel32.dll")> Public Shared Function FreeConsole() As Boolean
+
+        End Function
+
+    End Class
 
 
     Private Function dotproduct(x As Double(), y As Double()) As Double
@@ -41,21 +56,28 @@
     End Sub
 
     Private Sub Declare_Sphere()
-        Dim radius As Integer = 1
-        Dim angley As Integer = 0
-        Dim anglez As Integer = 0
+        Dim radius As Integer = 10
+        Dim angley As Integer = 0.1
+        Dim anglez As Integer = 0.1
         Dim tempx, tempy, tempz As Double
-        While anglez < 90
+        While anglez <= 90
             tempy = radius * Use_Sin(anglez)
-            While angley < 90
+            While angley <= 90
                 tempx = radius * Use_Cos(angley)
                 tempz = radius * Use_Sin(angley)
                 SetVertices(tempx, tempy, tempz)
+                SetVertices(tempx, tempy, -tempz)
+                SetVertices(-tempx, tempy, tempz)
+                SetVertices(-tempx, tempy, -tempz)
                 SetVertices(tempx, -tempy, tempz)
+                SetVertices(tempx, -tempy, -tempz)
+                SetVertices(-tempx, -tempy, tempz)
+                SetVertices(-tempx, -tempy, -tempz)
+
                 angley += 15
             End While
             anglez += 15
-            angley = 0
+            angley = 0.1
         End While
 
     End Sub
@@ -137,6 +159,15 @@
     End Sub
 
     Private Sub MainCanvas_Click(sender As Object, e As EventArgs) Handles MainCanvas.Click
+        Status = True
+        Win32.AllocConsole()
+        Console.WriteLine(ListofVertice.Count)
+        For i As Integer = 0 To ListofVertice.Count - 1
+            Console.WriteLine(ListofVertice(i).x.ToString() + " " + ListofVertice(i).y.ToString() + " " + ListofVertice(i).z.ToString() + Environment.NewLine)
+        Next
+        If Status = False Then
+            Win32.FreeConsole()
+        End If
 
     End Sub
 
