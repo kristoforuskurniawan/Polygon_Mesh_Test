@@ -87,6 +87,14 @@ Public Class MainForm
         Return Math.PI * x / 180.0
     End Function
 
+    Private Function CountPhong(ka As Double, ia As Double, kd As Double, il As Double, deg As Double, ks As Double, kl As Double, n As Integer, alpha As Double)
+        Return ((ka * ia) + (kd * il * Use_Cos(deg)) + (ks * il * Math.Pow(Use_Cos(alpha), n)))
+    End Function
+
+    Private Function GetPhong()
+
+    End Function
+
     Public Sub DrawCube(M As Matrix4x4)
         Dim size As Integer = ListofVertice.Count
         Dim obj(size) As TPoint
