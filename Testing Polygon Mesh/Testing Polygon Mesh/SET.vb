@@ -7,10 +7,9 @@
     Public dy As Integer
     Public carry As Integer
     Public normalize As Integer
+    Public Polygon As Integer 'show which polygon the SET belong
     Public nxt As EdgeTable
 
-
-    'by kevin
     Public Sub New()
         ymin = Nothing
         ymax = Nothing
@@ -22,18 +21,6 @@
         nxt = Nothing
     End Sub
 
-    'added by handy
-    Public Sub New(ymin As Integer, ymax As Integer, xofymin As Integer, dx As Integer, dy As Integer, normalize As Integer, Optional carry As Integer = 0)
-        Me.ymin = ymin
-        Me.ymax = ymax
-        Me.xofymin = xofymin
-        Me.dx = dx
-        Me.dy = dy
-        Me.carry = carry
-        Me.normalize = normalize
-        nxt = Nothing
-    End Sub
-    'by kevin
     Public Sub New(temp As EdgeTable)
         Me.ymin = temp.ymin
         Me.ymax = temp.ymax

@@ -57,27 +57,20 @@ Public Class MainForm
 
     Private Sub Declare_Sphere()
         Dim radius As Integer = 10
-        Dim angley As Integer = 0.1
-        Dim anglez As Integer = 0.1
+        Dim angley As Integer = 0
+        Dim anglez As Integer = 0
         Dim tempx, tempy, tempz As Double
         While anglez <= 90
             tempy = radius * Use_Sin(anglez)
-            While angley <= 90
+            While angley <= 360
                 tempx = radius * Use_Cos(angley)
                 tempz = radius * Use_Sin(angley)
                 SetVertices(tempx, tempy, tempz)
-                SetVertices(tempx, tempy, -tempz)
-                SetVertices(-tempx, tempy, tempz)
-                SetVertices(-tempx, tempy, -tempz)
                 SetVertices(tempx, -tempy, tempz)
-                SetVertices(tempx, -tempy, -tempz)
-                SetVertices(-tempx, -tempy, tempz)
-                SetVertices(-tempx, -tempy, -tempz)
-
                 angley += 15
             End While
             anglez += 15
-            angley = 0.1
+            angley = 0
         End While
 
     End Sub
