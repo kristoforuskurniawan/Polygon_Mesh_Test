@@ -4,7 +4,7 @@ Public Class MainForm
     Private bitmapCanvas As Bitmap
     Private g As Graphics
     Private blackpen As Pen
-    Private ListofVertice As List(Of TPoint)
+    Private ListofVertices As List(Of TPoint)
     Private ListofEdges As List(Of TLine)
     Private ListofMeshes As List(Of TMesh)
     Private MeshList As TMeshList
@@ -18,7 +18,7 @@ Public Class MainForm
         g = Graphics.FromImage(bitmapCanvas)
         blackpen = New Pen(Color.Black)
         MainCanvas.Image = bitmapCanvas
-        ListofVertice = New List(Of TPoint)
+        ListofVertices = New List(Of TPoint)
         ListofEdges = New List(Of TLine)
         ListofMeshes = New List(Of TMesh)
         MeshList = New TMeshList()
@@ -35,7 +35,6 @@ Public Class MainForm
         <DllImport("kernel32.dll")> Public Shared Function FreeConsole() As Boolean
 
         End Function
-
     End Class
 
 
@@ -47,7 +46,7 @@ Public Class MainForm
 
     Public Sub SetVertices(x As Double, y As Double, z As Double)
         Dim temp As New TPoint(x, y, z)
-        ListofVertice.Add(temp)
+        ListofVertices.Add(temp)
     End Sub
 
     Public Sub SetEdges(x As Integer, y As Integer, a As Integer, b As Integer)
@@ -56,15 +55,15 @@ Public Class MainForm
     End Sub
 
     Private Sub Declare_Sphere()
-        Dim radius As Integer = 10
+        'Dim radius As Integer = 10
         Dim angley As Integer = 0
         Dim anglez As Integer = 0
         Dim tempx, tempy, tempz As Double
         While anglez <= 90
-            tempy = radius * Use_Sin(anglez)
+            tempy = sphereRadius * Use_Sin(anglez)
             While angley <= 360
-                tempx = radius * Use_Cos(angley)
-                tempz = radius * Use_Sin(angley)
+                tempx = sphereRadius * Use_Cos(angley)
+                tempz = sphereRadius * Use_Sin(angley)
                 SetVertices(tempx, tempy, tempz)
                 SetVertices(tempx, -tempy, tempz)
                 angley += 15
@@ -96,10 +95,10 @@ Public Class MainForm
     End Function
 
     Public Sub DrawCube(M As Matrix4x4)
-        Dim size As Integer = ListofVertice.Count
+        Dim size As Integer = ListofVertices.Count
         Dim obj(size) As TPoint
         For i As Integer = 0 To size - 1
-            obj(i) = MultiplyMat(ListofVertice(i), M)
+            obj(i) = MultiplyMat(ListofVertices(i), M)
         Next
         Dim a, b, c, d As Single
         For i As Integer = 0 To size - 1
@@ -130,11 +129,12 @@ Public Class MainForm
             sphereRadius = SphereRadInput.Text
             longitude = LongiInput.Text
             latitude = LatiInput.Text
-        End If
 
-        Declare_Sphere()
-        Projection()
-        DrawCube(PV)
+            Declare_Sphere()
+            Projection()
+            DrawCube(PV)
+            DrawSphere()
+        End If
         'Dim temp As New TPoint
         'Dim x, y, z As Double
         'Dim hl, vl, radius As Integer 'horizontal lines and vertical lines
@@ -153,12 +153,12 @@ Public Class MainForm
         'DrawCube(PV)
     End Sub
 
-    Private Sub drawsphere()
-        Dim size As Integer = ListofVertice.Count
+    Private Sub DrawSphere()
+        Dim size As Integer = ListofVertices.Count
         Dim obj(size) As TPoint
         For i As Integer = 0 To size - 1
             obj(i) = New TPoint
-            obj(i) = MultiplyMat(ListofVertice(i), PV)
+            obj(i) = MultiplyMat(ListofVertices(i), PV)
         Next
         Dim a, b, c, d As Single
         For i As Integer = 0 To size - 2
@@ -173,9 +173,9 @@ Public Class MainForm
     Private Sub MainCanvas_Click(sender As Object, e As EventArgs) Handles MainCanvas.Click
         Status = True
         Win32.AllocConsole()
-        Console.WriteLine(ListofVertice.Count)
-        For i As Integer = 0 To ListofVertice.Count - 1
-            Console.WriteLine(ListofVertice(i).x.ToString() + " " + ListofVertice(i).y.ToString() + " " + ListofVertice(i).z.ToString() + Environment.NewLine)
+        Console.WriteLine(ListofVertices.Count)
+        For i As Integer = 0 To ListofVertices.Count - 1
+            Console.WriteLine(ListofVertices(i).x.ToString() + " " + ListofVertices(i).y.ToString() + " " + ListofVertices(i).z.ToString() + Environment.NewLine)
         Next
         If Status = False Then
             Win32.FreeConsole()
