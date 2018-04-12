@@ -57,27 +57,20 @@ Public Class MainForm
 
     Private Sub Declare_Sphere()
         Dim radius As Integer = 10
-        Dim angley As Integer = 0.1
-        Dim anglez As Integer = 0.1
+        Dim angley As Integer = 0
+        Dim anglez As Integer = 0
         Dim tempx, tempy, tempz As Double
         While anglez <= 90
             tempy = radius * Use_Sin(anglez)
-            While angley <= 90
+            While angley <= 360
                 tempx = radius * Use_Cos(angley)
                 tempz = radius * Use_Sin(angley)
                 SetVertices(tempx, tempy, tempz)
-                SetVertices(tempx, tempy, -tempz)
-                SetVertices(-tempx, tempy, tempz)
-                SetVertices(-tempx, tempy, -tempz)
                 SetVertices(tempx, -tempy, tempz)
-                SetVertices(tempx, -tempy, -tempz)
-                SetVertices(-tempx, -tempy, tempz)
-                SetVertices(-tempx, -tempy, -tempz)
-
                 angley += 15
             End While
             anglez += 15
-            angley = 0.1
+            angley = 0
         End While
 
     End Sub
@@ -92,6 +85,14 @@ Public Class MainForm
 
     Private Function convert_to_degree(x As Double)
         Return Math.PI * x / 180.0
+    End Function
+
+    Private Function CountPhong(ka As Double, ia As Double, kd As Double, il As Double, deg As Double, ks As Double, kl As Double, n As Integer, alpha As Double)
+        Return ((ka * ia) + (kd * il * Use_Cos(deg)) + (ks * il * Math.Pow(Use_Cos(alpha), n)))
+    End Function
+
+    Private Function GetPhong()
+
     End Function
 
     Public Sub DrawCube(M As Matrix4x4)
