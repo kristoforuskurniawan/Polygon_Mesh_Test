@@ -25,6 +25,8 @@ Partial Class MainForm
         Me.MainCanvas = New System.Windows.Forms.PictureBox()
         Me.DrawMeshButton = New System.Windows.Forms.Button()
         Me.ScreenCoordLabel = New System.Windows.Forms.Label()
+        Me.SphereRadLabel = New System.Windows.Forms.Label()
+        Me.SphereRadInput = New System.Windows.Forms.TextBox()
         CType(Me.MainCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -55,11 +57,29 @@ Partial Class MainForm
         Me.ScreenCoordLabel.TabIndex = 2
         Me.ScreenCoordLabel.Text = "Coordinates: X = 0, Y = 0"
         '
+        'SphereRadLabel
+        '
+        Me.SphereRadLabel.AutoSize = True
+        Me.SphereRadLabel.Location = New System.Drawing.Point(435, 118)
+        Me.SphereRadLabel.Name = "SphereRadLabel"
+        Me.SphereRadLabel.Size = New System.Drawing.Size(77, 13)
+        Me.SphereRadLabel.TabIndex = 3
+        Me.SphereRadLabel.Text = "Sphere Radius"
+        '
+        'SphereRadInput
+        '
+        Me.SphereRadInput.Location = New System.Drawing.Point(518, 115)
+        Me.SphereRadInput.Name = "SphereRadInput"
+        Me.SphereRadInput.Size = New System.Drawing.Size(62, 20)
+        Me.SphereRadInput.TabIndex = 4
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(593, 459)
+        Me.Controls.Add(Me.SphereRadInput)
+        Me.Controls.Add(Me.SphereRadLabel)
         Me.Controls.Add(Me.ScreenCoordLabel)
         Me.Controls.Add(Me.DrawMeshButton)
         Me.Controls.Add(Me.MainCanvas)
@@ -74,4 +94,6 @@ Partial Class MainForm
     Friend WithEvents MainCanvas As PictureBox
     Friend WithEvents DrawMeshButton As Button
     Friend WithEvents ScreenCoordLabel As Label
+    Friend WithEvents SphereRadLabel As Label
+    Friend WithEvents SphereRadInput As TextBox
 End Class

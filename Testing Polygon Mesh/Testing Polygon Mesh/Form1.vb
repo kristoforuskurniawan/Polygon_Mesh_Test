@@ -43,6 +43,7 @@ Public Class MainForm
     Private Function dotproduct(x As Double(), y As Double()) As Double
         Dim d As Double = x(0) * y(0) + x(1) * y(1) + x(2) * y(2)
         Return If(d < 0, -d, 0)
+        'asdf
     End Function
 
     Public Sub SetVertices(x As Double, y As Double, z As Double)
