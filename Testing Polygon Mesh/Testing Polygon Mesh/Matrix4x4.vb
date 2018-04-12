@@ -386,7 +386,7 @@
         ElseIf axis = 3 Then
             RotateZ(angle)
         Else
-            'identity
+            'IdentityMat()
         End If
     End Sub
 

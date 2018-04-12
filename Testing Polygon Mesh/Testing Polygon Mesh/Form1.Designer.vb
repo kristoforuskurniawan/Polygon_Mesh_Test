@@ -49,13 +49,13 @@ Partial Class MainForm
         Me.DrawMeshButton.Name = "DrawMeshButton"
         Me.DrawMeshButton.Size = New System.Drawing.Size(150, 23)
         Me.DrawMeshButton.TabIndex = 1
-        Me.DrawMeshButton.Text = "Draw Mesh"
+        Me.DrawMeshButton.Text = "Draw Sphere"
         Me.DrawMeshButton.UseVisualStyleBackColor = True
         '
         'ScreenCoordLabel
         '
         Me.ScreenCoordLabel.AutoSize = True
-        Me.ScreenCoordLabel.Location = New System.Drawing.Point(432, 39)
+        Me.ScreenCoordLabel.Location = New System.Drawing.Point(438, 69)
         Me.ScreenCoordLabel.Name = "ScreenCoordLabel"
         Me.ScreenCoordLabel.Size = New System.Drawing.Size(125, 13)
         Me.ScreenCoordLabel.TabIndex = 2
@@ -64,11 +64,11 @@ Partial Class MainForm
         'SphereRadLabel
         '
         Me.SphereRadLabel.AutoSize = True
-        Me.SphereRadLabel.Location = New System.Drawing.Point(435, 118)
+        Me.SphereRadLabel.Location = New System.Drawing.Point(438, 118)
         Me.SphereRadLabel.Name = "SphereRadLabel"
-        Me.SphereRadLabel.Size = New System.Drawing.Size(77, 13)
+        Me.SphereRadLabel.Size = New System.Drawing.Size(40, 13)
         Me.SphereRadLabel.TabIndex = 3
-        Me.SphereRadLabel.Text = "Sphere Radius"
+        Me.SphereRadLabel.Text = "Radius"
         '
         'SphereRadInput
         '
