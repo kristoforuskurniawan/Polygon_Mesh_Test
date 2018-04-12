@@ -124,14 +124,12 @@ Public Class MainForm
     End Sub
 
     Private Sub DrawMeshButton_Click(sender As Object, e As EventArgs) Handles DrawMeshButton.Click
-        sphereRadius = SphereRadInput.Text
-        longitude = LongiInput.Text
-        latitude = LatiInput.Text
-
-        If sphereRadius = Nothing Or longitude = Nothing Or latitude = Nothing Or sphereRadius = 0 Or (latitude = 0 And longitude = 0) Then
+        If SphereRadInput.Text = "" Or LongiInput.Text = "" Or LatiInput.Text = "" Then
             MessageBox.Show("Please give a proper input")
         Else
-
+            sphereRadius = SphereRadInput.Text
+            longitude = LongiInput.Text
+            latitude = LatiInput.Text
         End If
 
         Declare_Sphere()
