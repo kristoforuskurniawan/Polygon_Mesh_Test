@@ -27,6 +27,10 @@ Partial Class MainForm
         Me.ScreenCoordLabel = New System.Windows.Forms.Label()
         Me.SphereRadLabel = New System.Windows.Forms.Label()
         Me.SphereRadInput = New System.Windows.Forms.TextBox()
+        Me.LongitudeLabel = New System.Windows.Forms.Label()
+        Me.LatitudeLabel = New System.Windows.Forms.Label()
+        Me.LongiInput = New System.Windows.Forms.TextBox()
+        Me.LatiInput = New System.Windows.Forms.TextBox()
         CType(Me.MainCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -73,11 +77,47 @@ Partial Class MainForm
         Me.SphereRadInput.Size = New System.Drawing.Size(62, 20)
         Me.SphereRadInput.TabIndex = 4
         '
+        'LongitudeLabel
+        '
+        Me.LongitudeLabel.AutoSize = True
+        Me.LongitudeLabel.Location = New System.Drawing.Point(438, 144)
+        Me.LongitudeLabel.Name = "LongitudeLabel"
+        Me.LongitudeLabel.Size = New System.Drawing.Size(54, 13)
+        Me.LongitudeLabel.TabIndex = 5
+        Me.LongitudeLabel.Text = "Longitude"
+        '
+        'LatitudeLabel
+        '
+        Me.LatitudeLabel.AutoSize = True
+        Me.LatitudeLabel.Location = New System.Drawing.Point(438, 174)
+        Me.LatitudeLabel.Name = "LatitudeLabel"
+        Me.LatitudeLabel.Size = New System.Drawing.Size(45, 13)
+        Me.LatitudeLabel.TabIndex = 6
+        Me.LatitudeLabel.Text = "Latitude"
+        '
+        'LongiInput
+        '
+        Me.LongiInput.Location = New System.Drawing.Point(518, 144)
+        Me.LongiInput.Name = "LongiInput"
+        Me.LongiInput.Size = New System.Drawing.Size(63, 20)
+        Me.LongiInput.TabIndex = 7
+        '
+        'LatiInput
+        '
+        Me.LatiInput.Location = New System.Drawing.Point(518, 171)
+        Me.LatiInput.Name = "LatiInput"
+        Me.LatiInput.Size = New System.Drawing.Size(63, 20)
+        Me.LatiInput.TabIndex = 8
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(593, 459)
+        Me.Controls.Add(Me.LatiInput)
+        Me.Controls.Add(Me.LongiInput)
+        Me.Controls.Add(Me.LatitudeLabel)
+        Me.Controls.Add(Me.LongitudeLabel)
         Me.Controls.Add(Me.SphereRadInput)
         Me.Controls.Add(Me.SphereRadLabel)
         Me.Controls.Add(Me.ScreenCoordLabel)
@@ -96,4 +136,8 @@ Partial Class MainForm
     Friend WithEvents ScreenCoordLabel As Label
     Friend WithEvents SphereRadLabel As Label
     Friend WithEvents SphereRadInput As TextBox
+    Friend WithEvents LongitudeLabel As Label
+    Friend WithEvents LatitudeLabel As Label
+    Friend WithEvents LongiInput As TextBox
+    Friend WithEvents LatiInput As TextBox
 End Class

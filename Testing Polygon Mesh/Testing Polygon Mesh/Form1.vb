@@ -9,6 +9,7 @@ Public Class MainForm
     Private ListofMeshes As List(Of TMesh)
     Private MeshList As TMeshList
     Private sphereRadius As Double
+    Private longitude, latitude As Integer
     Dim PV As New Matrix4x4
     Private Status As Boolean
 
@@ -22,14 +23,12 @@ Public Class MainForm
         ListofMeshes = New List(Of TMesh)
         MeshList = New TMeshList()
         sphereRadius = 0
+        longitude = 0
+        latitude = 0
         Status = True
-        Declare_Sphere()
-        Projection()
-        DrawCube(PV)
-
     End Sub
 
-    Public Class Win32
+    Public Class Win32 'Ini class untuk apa?
         <DllImport("kernel32.dll")> Public Shared Function AllocConsole() As Boolean
 
         End Function
@@ -124,21 +123,34 @@ Public Class MainForm
     End Sub
 
     Private Sub DrawMeshButton_Click(sender As Object, e As EventArgs) Handles DrawMeshButton.Click
-        Dim temp As New TPoint
-        Dim x, y, z As Double
-        Dim hl, vl, radius As Integer 'horizontal lines and vertical lines
-        hl = 10
-        vl = 10
-        radius = 100
-        For m As Integer = 0 To hl 'horizontalLines
-            For n As Integer = 0 To vl - 1 'verticalLines - 1
-                x = Math.Sin(Math.PI * m / hl) * Math.Cos(2 * Math.PI * n / vl) * radius
-                y = Math.Sin(Math.PI * m / hl) * Math.Sin(2 * Math.PI * n / vl) * radius
-                z = Math.Cos(Math.PI * m / hl) * radius
-                temp = New TPoint(x, y, z)
-            Next
-        Next
-        drawsphere()
+        sphereRadius = SphereRadInput.Text
+        longitude = LongiInput.Text
+        latitude = LatiInput.Text
+
+        If sphereRadius = Nothing Or longitude = Nothing Or latitude = Nothing Or sphereRadius = 0 Or (latitude = 0 And longitude = 0) Then
+            MessageBox.Show("Please give a proper input")
+        Else
+
+        End If
+
+        Declare_Sphere()
+        Projection()
+        DrawCube(PV)
+        'Dim temp As New TPoint
+        'Dim x, y, z As Double
+        'Dim hl, vl, radius As Integer 'horizontal lines and vertical lines
+        'hl = 10
+        'vl = 10
+        'radius = 100
+        'For m As Integer = 0 To hl 'horizontalLines
+        '    For n As Integer = 0 To vl - 1 'verticalLines - 1
+        '        x = Math.Sin(Math.PI * m / hl) * Math.Cos(2 * Math.PI * n / vl) * radius
+        '        y = Math.Sin(Math.PI * m / hl) * Math.Sin(2 * Math.PI * n / vl) * radius
+        '        z = Math.Cos(Math.PI * m / hl) * radius
+        '        temp = New TPoint(x, y, z)
+        '    Next
+        'Next
+        'drawsphere()
         'DrawCube(PV)
     End Sub
 
@@ -175,9 +187,6 @@ Public Class MainForm
     Private Sub MainCanvas_Move(sender As Object, e As MouseEventArgs) Handles MainCanvas.MouseMove
         ScreenCoordLabel.Text = "Coordinates: X = " + e.X.ToString() + ", Y = " + e.Y.ToString()
     End Sub
-
-
-
 End Class
 
 
