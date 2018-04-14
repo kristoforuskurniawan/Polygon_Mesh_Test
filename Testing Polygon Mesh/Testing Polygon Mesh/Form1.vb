@@ -412,7 +412,7 @@ Public Class MainForm
             p3 = ListPolygon.Elmt(i).p3
             AB = New TPoint(ListPoints.Elmt(p2).x - ListPoints.Elmt(p1).x, ListPoints.Elmt(p2).y - ListPoints.Elmt(p1).y, ListPoints.Elmt(p2).z - ListPoints.Elmt(p1).z)
             AC = New TPoint(ListPoints.Elmt(p3).x - ListPoints.Elmt(p1).x, ListPoints.Elmt(p3).y - ListPoints.Elmt(p1).y, ListPoints.Elmt(p3).z - ListPoints.Elmt(p1).z)
-            poly.Normal(i).Calculate(AB, AC)
+            poly.Normal(i).CrossProduct(AB, AC)
         Next
     End Sub
 
