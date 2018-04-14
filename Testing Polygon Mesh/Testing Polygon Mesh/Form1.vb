@@ -10,12 +10,15 @@ Public Class MainForm
     Private mesh As TMesh
     'Private ListofEdges As List(Of TLine)
     'Private ListofMeshes As TArrMesh
+    Private L, N, V, R As Normalvalue 'Vectors to calculate intensity
+    Private LightSource As TPoint
     Private radius, dtheta, du, theta, u, x, y, z, w As Double
     Private longitude, latitude, transSphere_X, transSphere_Y, transSphere_Z As Integer
     Private PV As New Matrix4x4
     Private p1, p2, p3 As Integer
-    Private ka, kd, ks, ki, intentAmb, intentDiff, intentSpec, iTot As Double
+    Private ka, kd, ks, ki, intentAmb, intentDiff, intentSpec, intentLight, iTot As Double
     Private Status, backFaceCullingStatus As Boolean
+    Private RotX, RotY, RotZ As Boolean
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         bitmapCanvas = New Bitmap(MainCanvas.Width, MainCanvas.Height)
@@ -24,7 +27,9 @@ Public Class MainForm
         MainCanvas.Image = bitmapCanvas
         ListPoints = New ListPoints()
         ListPolygon = New ListPolygons()
+        LightSource = New TPoint()
         sphereCenter = New TPoint(0, 0, 0)
+        intentLight = 1
         'sphereCenter = New TPoint(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0)
         'mesh = New TMesh()
         'ListPoints.Init()
@@ -64,11 +69,15 @@ Public Class MainForm
         'Status = True
     End Sub
 
+    Private Function getUnitVector(ByRef Vector As TPoint) As TPoint
+        Dim divisor As Double = Math.Sqrt((Vector.x * Vector.x) + (Vector.y * Vector.y) + (Vector.z * Vector.z))
+        Dim result As New TPoint(Vector.x / divisor, Vector.y / divisor, Vector.z / divisor)
+        Return result
+    End Function
 
     Private Function dotproduct(x As Double(), y As Double()) As Double
         Dim d As Double = x(0) * y(0) + x(1) * y(1) + x(2) * y(2)
         Return If(d < 0, -d, 0)
-        'asdf
     End Function
 
     Private Sub translateButton_Click_1(sender As Object, e As EventArgs) Handles TranslateButton.Click
@@ -127,11 +136,15 @@ Public Class MainForm
     '    surfaceNormal = getCrossProduct(P1_P2, P1_P3)
     'End Sub
 
-    Private Sub BackCullON_BTN_CheckedChanged(sender As Object, e As EventArgs)
-        backFaceCullingStatus = True
+    Private Sub AddLightButton_Click(sender As Object, e As EventArgs) Handles AddLightButton.Click
+        If Light_XPosTextBox.Text <> "" And Light_YPosTextBox.Text <> "" And Light_ZPosTextBox.Text <> "" Then
+            LightSource.SetPoints(Double.Parse(Light_XPosTextBox.Text), Double.Parse(Light_YPosTextBox.Text), Double.Parse(Light_ZPosTextBox.Text))
+            MessageBox.Show(LightSource.x & ", " & LightSource.y & ", " & LightSource.z)
+            Dim rect As New Rectangle()
+            graphics.DrawEllipse(whitepen, rect)
+        End If
+        MainCanvas.Image = bitmapCanvas
     End Sub
-
-    Private RotX, RotY, RotZ As Boolean
 
     Private Sub Rotate_XButton_Click(sender As Object, e As EventArgs) Handles Rotate_XButton.Click
         RotX = True

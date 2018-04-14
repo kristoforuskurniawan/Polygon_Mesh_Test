@@ -14,4 +14,11 @@
         z = c
         w = 1
     End Sub
+
+    Public Sub SetPoints(a As Double, b As Double, c As Double)
+        x = a
+        y = b
+        z = c
+        w = 1
+    End Sub
 End Class
