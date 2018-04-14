@@ -61,16 +61,16 @@ Public Class MainForm
         Dim angley As Integer = 0
         Dim anglez As Integer = 0
         Dim tempx, tempy, tempz As Double
-        While anglez <= 90
+        While anglez <= 0
             tempy = radius * Use_Sin(anglez)
             While angley <= 360
                 tempx = radius * Use_Cos(angley)
                 tempz = radius * Use_Sin(angley)
                 SetVertices(tempx, tempy, tempz)
                 SetVertices(tempx, -tempy, tempz)
-                angley += 15
+                angley += 5
             End While
-            anglez += 15
+            anglez += 5
             angley = 0
         End While
 
@@ -102,15 +102,16 @@ Public Class MainForm
         For i As Integer = 0 To size - 1
             obj(i) = MultiplyMat(ListofVertice(i), M)
         Next
-        Dim a, b, c, d As Single
+        Dim a, b, c, d As Double
         For i As Integer = 0 To size - 1
             a = obj(i).x
             b = obj(i).y
-            For j As Integer = 0 To size - 1
-                c = obj(j).x
-                d = obj(j).y
-                g.DrawLine(blackpen, a, b, c, d)
-            Next
+            bitmapCanvas.SetPixel(a, b, Color.Red)
+            'for j as integer = 0 to size - 1
+            '    c = obj(j).x
+            '    d = obj(j).y
+            '    g.drawline(blackpen, a, b, c, d)
+            'next
         Next
         MainCanvas.Image = bitmapCanvas
     End Sub
@@ -176,8 +177,6 @@ Public Class MainForm
     Private Sub MainCanvas_Move(sender As Object, e As MouseEventArgs) Handles MainCanvas.MouseMove
         ScreenCoordLabel.Text = "Coordinates: X = " + e.X.ToString() + ", Y = " + e.Y.ToString()
     End Sub
-
-
 
 End Class
 

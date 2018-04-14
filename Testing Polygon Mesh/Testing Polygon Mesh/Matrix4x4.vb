@@ -372,8 +372,8 @@
         'temp.Mat(2, 0) = 0.5
         'temp.Mat(2, 1) = 0
         'temp.Mat(2, 2) = 0
-        'temp.Mat(0, 3) = (-1 / c)
-        'temp.Mat(1, 3) = (-1 / c)
+        temp.Mat(0, 3) = (-1 / c)
+        temp.Mat(1, 3) = (-1 / c)
         temp.Mat(2, 3) = -(-1 / c)
         MultiplyMatrix4x4(temp)
     End Sub
