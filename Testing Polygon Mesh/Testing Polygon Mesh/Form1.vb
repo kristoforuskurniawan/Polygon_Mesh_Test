@@ -18,7 +18,7 @@ Public Class MainForm
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         bitmapCanvas = New Bitmap(MainCanvas.Width, MainCanvas.Height)
-        graphics = Graphics.FromImage(bitmapCanvas)
+        graphics = graphics.FromImage(bitmapCanvas)
         whitepen = New Pen(Color.White)
         MainCanvas.Image = bitmapCanvas
         ListPoints = New ListPoints
@@ -58,8 +58,6 @@ Public Class MainForm
         radius = Integer.Parse(SphereRadInput.Text) * 150
         latitude = Integer.Parse(LatiInput.Text)
         longitude = Integer.Parse(LongiInput.Text)
-        backFaceCullingStatus = True
-        BackCulling_ONRadioButton.Select()
         DrawSphere()
         'Status = True
     End Sub
@@ -127,11 +125,11 @@ Public Class MainForm
     '    surfaceNormal = getCrossProduct(P1_P2, P1_P3)
     'End Sub
 
-    Private Sub BackCullON_BTN_CheckedChanged(sender As Object, e As EventArgs) Handles BackCulling_ONRadioButton.CheckedChanged
+    Private Sub BackCullON_BTN_CheckedChanged(sender As Object, e As EventArgs)
         backFaceCullingStatus = True
     End Sub
 
-    Private Sub BackCullOFF_BTN_CheckedChanged(sender As Object, e As EventArgs) Handles BackCulling_OFFRadioButton.CheckedChanged
+    Private Sub BackCullOFF_BTN_CheckedChanged(sender As Object, e As EventArgs)
         backFaceCullingStatus = False
     End Sub
 
@@ -170,7 +168,7 @@ Public Class MainForm
     '            d = obj(j).y
     '            graphics.DrawLine(blackpen, a, b, c, d)
     '        Next
-    '    Next
+    '    Nextx
     '    MainCanvas.Image = bitmapCanvas
     'End Sub
 
@@ -180,6 +178,23 @@ Public Class MainForm
         Vt.OnePointProjection(5) ' Zc = 3
         St.TranslateMat(200, 200, 0) 'translate
         PV.Mat = MultiplyMat4x4(Vt, St)
+        Console.WriteLine(PV.Mat(0, 0)) 'baris,kolom
+        Console.WriteLine(PV.Mat(0, 1))
+        Console.WriteLine(PV.Mat(0, 2))
+        Console.WriteLine(PV.Mat(0, 3))
+        Console.WriteLine(PV.Mat(1, 0))
+        Console.WriteLine(PV.Mat(1, 1))
+        Console.WriteLine(PV.Mat(1, 2))
+        Console.WriteLine(PV.Mat(1, 3))
+        Console.WriteLine(PV.Mat(2, 0))
+        Console.WriteLine(PV.Mat(2, 1))
+        Console.WriteLine(PV.Mat(2, 2))
+        Console.WriteLine(PV.Mat(2, 3))
+        Console.WriteLine(PV.Mat(3, 0))
+        Console.WriteLine(PV.Mat(3, 1))
+        Console.WriteLine(PV.Mat(3, 2))
+        Console.WriteLine(PV.Mat(3, 3))
+
     End Sub
 
     Private Sub DrawMeshButton_Click(sender As Object, e As EventArgs) Handles DrawMeshButton.Click
@@ -305,9 +320,8 @@ Public Class MainForm
     Public Sub gambarpoly()
         Dim m1, m2, m3, m4, m5, m6, m11, m22, m33, m44, m55, m66 As Double
         Dim p1, p2, p3 As Integer
-        If backFaceCullingStatus Then
-            BackFaceCulling()
-        End If
+        Dim temp As New ListPolygons
+        BackFaceCulling()
         Dim DOP(3) As Integer
         DOP(0) = 0
         DOP(1) = 0
@@ -317,17 +331,26 @@ Public Class MainForm
                 p1 = ListPolygon.Elmt(i).p1
                 p2 = ListPolygon.Elmt(i).p2
                 p3 = ListPolygon.Elmt(i).p3
+                temp.Init()
+                temp.InsertIndex(p1, p2, p3)
                 m1 = ListPoints.Elmt(p1).x * PV.Mat(0, 0) + ListPoints.Elmt(p1).y * PV.Mat(0, 1) + ListPoints.Elmt(p1).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
                 m2 = ListPoints.Elmt(p1).x * PV.Mat(1, 0) + ListPoints.Elmt(p1).y * PV.Mat(1, 1) + ListPoints.Elmt(p1).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
                 m3 = ListPoints.Elmt(p2).x * PV.Mat(0, 0) + ListPoints.Elmt(p2).y * PV.Mat(0, 1) + ListPoints.Elmt(p2).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
                 m4 = ListPoints.Elmt(p2).x * PV.Mat(1, 0) + ListPoints.Elmt(p2).y * PV.Mat(1, 1) + ListPoints.Elmt(p2).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
                 m5 = ListPoints.Elmt(p3).x * PV.Mat(0, 0) + ListPoints.Elmt(p3).y * PV.Mat(0, 1) + ListPoints.Elmt(p3).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
                 m6 = ListPoints.Elmt(p3).x * PV.Mat(1, 0) + ListPoints.Elmt(p3).y * PV.Mat(1, 1) + ListPoints.Elmt(p3).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3) 'test
+
                 graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
                 graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
                 graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
             End If
         Next
+
+    End Sub
+
+    Private Sub ZBuffer(p1 As Integer, p2 As Integer, p3 As Integer, m1 As Double, m2 As Double, m3 As Double, m4 As Double, m5 As Double, m6 As Double)
+
+
 
     End Sub
 
