@@ -3,12 +3,10 @@ Public Class MainForm
 
     Private bitmapCanvas As Bitmap
     Private graphics As Graphics
-    Private blackpen As Pen
+    Private whitePen As Pen
     Private ListofVertices As TArrPoint
-    Private ListPolygon As TArrMesh
     Private sphereCenter, surfaceNormal As TPoint
     Private mesh As TMesh
-    Private ListofEdges As List(Of TLine)
     Private ListofMeshes As TArrMesh
     Private sphereRadius, deltaU, deltaTheta, theta, u, rotationAngle_X, rotationAngle_Y, rotationAngle_Z, Vt(3, 3), St(3, 3), rz(3, 3), x, y, z, w As Double
     Private longitude, latitude, transPhere_X, transSphere_Y, transSphere_Z, p1, p2, p3 As Integer
@@ -18,17 +16,13 @@ Public Class MainForm
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         bitmapCanvas = New Bitmap(MainCanvas.Width, MainCanvas.Height)
         graphics = Graphics.FromImage(bitmapCanvas)
-        blackpen = New Pen(Color.Black)
+        whitePen = New Pen(Color.White)
         MainCanvas.Image = bitmapCanvas
-        ListofVertices = New TArrPoint
+        ListofVertices = New TArrPoint()
         ListofMeshes = New TArrMesh()
-        ListPolygon = New TArrMesh
         sphereCenter = New TPoint(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0)
         mesh = New TMesh()
         ListofVertices.Init()
-        ListPolygon.Init()
-        'ListofEdges = New List(Of TLine)
-        'ListofMeshes = New TArrMesh()
         ListofMeshes.Init()
         PV = New Matrix4x4()
 
@@ -63,6 +57,7 @@ Public Class MainForm
         BackCulling_ONRadioButton.Checked = False
         backFaceCullingStatus = False
         Status = True
+        DrawSphere()
     End Sub
 
     'Public Class Win32 'Ini class untuk apa?
@@ -74,44 +69,34 @@ Public Class MainForm
     '    End Function
     'End Class
 
+    Private Sub TranslateButton_Click(sender As Object, e As EventArgs) Handles TranslateButton.Click
+        If X_TransTextBox.Text <> "" And Y_TransTextBox.Text <> "" And Z_TransTextBox.Text <> "" Then
+            transPhere_X = Integer.Parse(X_TransTextBox.Text)
+            transSphere_Y = Integer.Parse(Y_TransTextBox.Text)
+            transSphere_Z = Integer.Parse(Z_TransTextBox.Text)
+
+            sphereCenter.x = sphereCenter.x + transPhere_X
+            sphereCenter.y = sphereCenter.y + transSphere_Y
+            sphereCenter.z = sphereCenter.z + transSphere_Z
+
+            St = PV.insertColumnMatrix(St, 0, 1, 0, 0, sphereCenter.x)
+            St = PV.insertColumnMatrix(St, 1, 0, -1, 0, sphereCenter.y)
+            St = PV.insertColumnMatrix(St, 2, 0, 0, 0, sphereCenter.z)
+            St = PV.insertColumnMatrix(St, 3, 0, 0, 0, 1)
+            ListofVertices = ListofVertices.DeleteAllData()
+            ListofMeshes = ListofMeshes.DeleteAllData()
+            graphics.Clear(Color.Black)
+            DrawSphere()
+        Else
+            MessageBox.Show("Please give a proper input!")
+        End If
+    End Sub
 
     Private Function dotproduct(x As Double(), y As Double()) As Double
         Dim d As Double = x(0) * y(0) + x(1) * y(1) + x(2) * y(2)
         Return If(d < 0, -d, 0)
         'asdf
     End Function
-
-    Public Sub SetVertices(x As Double, y As Double, z As Double)
-        Dim temp As New TPoint(x, y, z)
-        ListofVertices.InsertLast(temp.x, temp.y, temp.z)
-    End Sub
-
-    Public Sub SetEdges(x As Integer, y As Integer, a As Integer, b As Integer)
-        Dim temp As New TLine(x, y, a, b)
-        ListofEdges.Add(temp)
-    End Sub
-
-    'Private Sub DeclareSphere()
-    '    sphereRadius = Double.Parse(SphereRadInput.Text)
-    '    longitude = Integer.Parse(LongiInput.Text)
-    '    latitude = Integer.Parse(LatiInput.Text)
-    '    'Dim radius As Integer = 10
-    '    'Dim angley As Integer = 0
-    '    'Dim anglez As Integer = 0
-    '    'Dim tempx, tempy, tempz As Double
-    '    'While anglez <= 90
-    '    '    tempy = radius * Use_Sin(anglez)
-    '    '    While angley <= 360
-    '    '        tempx = radius * Use_Cos(angley)
-    '    '        tempz = radius * Use_Sin(angley)
-    '    '        SetVertices(tempx, tempy, tempz)
-    '    '        SetVertices(tempx, -tempy, tempz)
-    '    '        angley += 15
-    '    '    End While
-    '    '    anglez += 15
-    '    '    angley = 0
-    '    'End While
-    'End Sub
 
     Private Function getCrossProduct(ByRef Vector1 As TPoint, ByRef Vector2 As TPoint)
         Return New TPoint(Vector1.y * Vector2.z - Vector1.z * Vector2.y, Vector1.z * Vector2.x - Vector1.x * Vector2.z, Vector1.x * Vector2.y - Vector1.y * Vector2.x)
@@ -165,7 +150,7 @@ Public Class MainForm
             For j As Integer = 0 To size - 1
                 c = obj(j).x
                 d = obj(j).y
-                graphics.DrawLine(blackpen, a, b, c, d)
+                graphics.DrawLine(whitePen, a, b, c, d)
             Next
         Next
         MainCanvas.Image = bitmapCanvas
@@ -189,9 +174,9 @@ Public Class MainForm
             latitude = Integer.Parse(LatiInput.Text)
             'DeclareSphere()
             'Projection()
-            graphics.Clear(Color.White)
-            ListofVertices.DeleteAllData()
-            ListofMeshes.DeleteAllData()
+            graphics.Clear(Color.Black)
+            ListofVertices = ListofVertices.DeleteAllData()
+            ListofMeshes = ListofMeshes.DeleteAllData()
             DrawSphere()
         End If
         'MainCanvas.Image = bitmapCanvas
@@ -318,7 +303,7 @@ Public Class MainForm
     Private Sub DrawPoly()
         Dim m1, m2, m3, m4, m5, m6, m11, m22, m33, m44, m55, m66 As Double
         If (backFaceCullingStatus = False) Then
-            If Timer1.Enabled Then
+            If AnimationTimer.Enabled Then
                 'If rotx = True Then
                 '    insertColumnMatrix(rz, 0, 1, 0, 0, 0)
                 '    insertColumnMatrix(rz, 1, 0, Math.Cos(angle1 * Math.PI / 180), -Math.Sin(angle1 * Math.PI / 180), 0)
@@ -354,9 +339,9 @@ Public Class MainForm
                     m44 = (m4 * St(1, 0) + m4 * St(1, 1) + m4 * St(1, 2) + w * St(1, 3))
                     m55 = (m5 * St(0, 0) + m5 * St(0, 1) + m5 * St(0, 2) + w * St(0, 3))
                     m66 = (m6 * St(1, 0) + m6 * St(1, 1) + m6 * St(1, 2) + w * St(1, 3))
-                    graphics.DrawLine(blackpen, New Point(m11, m22), New Point(m33, m44))
-                    graphics.DrawLine(blackpen, New Point(m33, m44), New Point(m55, m66))
-                    graphics.DrawLine(blackpen, New Point(m55, m66), New Point(m11, m22))
+                    graphics.DrawLine(whitePen, New Point(m11, m22), New Point(m33, m44))
+                    graphics.DrawLine(whitePen, New Point(m33, m44), New Point(m55, m66))
+                    graphics.DrawLine(whitePen, New Point(m55, m66), New Point(m11, m22))
                 Next
             Else
                 For i = 0 To ListofMeshes.N - 1
@@ -370,9 +355,9 @@ Public Class MainForm
                     m4 = ListofVertices.Elmt(p2).x * St(1, 0) + ListofVertices.Elmt(p2).y * St(1, 1) + ListofVertices.Elmt(p2).z * St(1, 2) + w * St(1, 3)
                     m5 = ListofVertices.Elmt(p3).x * St(0, 0) + ListofVertices.Elmt(p3).y * St(0, 1) + ListofVertices.Elmt(p3).z * St(0, 2) + w * St(0, 3)
                     m6 = ListofVertices.Elmt(p3).x * St(1, 0) + ListofVertices.Elmt(p3).y * St(1, 1) + ListofVertices.Elmt(p3).z * St(1, 2) + w * St(1, 3)
-                    graphics.DrawLine(blackpen, New Point(m1, m2), New Point(m3, m4))
-                    graphics.DrawLine(blackpen, New Point(m3, m4), New Point(m5, m6))
-                    graphics.DrawLine(blackpen, New Point(m5, m6), New Point(m1, m2))
+                    graphics.DrawLine(whitePen, New Point(m1, m2), New Point(m3, m4))
+                    graphics.DrawLine(whitePen, New Point(m3, m4), New Point(m5, m6))
+                    graphics.DrawLine(whitePen, New Point(m5, m6), New Point(m1, m2))
                 Next
             End If
         Else 'Backface Culling is activated

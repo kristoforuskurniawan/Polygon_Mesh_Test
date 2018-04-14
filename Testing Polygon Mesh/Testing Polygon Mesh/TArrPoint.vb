@@ -22,7 +22,7 @@
 
     Public Function DeleteAllData() As TArrPoint
         For i = 0 To N - 1
-            Me.Elmt(i) = Nothing
+            Elmt(i) = Nothing
         Next
         Init()
         Return Me
