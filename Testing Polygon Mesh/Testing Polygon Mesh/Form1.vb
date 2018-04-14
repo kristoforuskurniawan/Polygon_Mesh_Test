@@ -154,25 +154,6 @@ Public Class MainForm
 
     End Function
 
-    'Public Sub DrawCube(M As Matrix4x4)
-    '    Dim size As Integer = ListPoints.Count()
-    '    Dim obj(size) As TPoint
-    '    For i As Integer = 0 To size - 1
-    '        obj(i) = MultiplyMat(ListPoints.Elmt(i), M)
-    '    Next
-    '    Dim a, b, c, d As Single
-    '    For i As Integer = 0 To size - 1
-    '        a = obj(i).x
-    '        b = obj(i).y
-    '        For j As Integer = 0 To size - 1
-    '            c = obj(j).x
-    '            d = obj(j).y
-    '            graphics.DrawLine(blackpen, a, b, c, d)
-    '        Next
-    '    Nextx
-    '    MainCanvas.Image = bitmapCanvas
-    'End Sub
-
     Private Sub Projection()
         Dim Vt, St As New Matrix4x4
         PV = New Matrix4x4
@@ -333,13 +314,8 @@ Public Class MainForm
                 p3 = ListPolygon.Elmt(i).EdgeIndex3
                 temp.Init()
                 temp.InsertIndex(p1, p2, p3)
-                m1 = ListPoints.Elmt(p1).x * PV.Mat(0, 0) + ListPoints.Elmt(p1).y * PV.Mat(0, 1) + ListPoints.Elmt(p1).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
-                m2 = ListPoints.Elmt(p1).x * PV.Mat(1, 0) + ListPoints.Elmt(p1).y * PV.Mat(1, 1) + ListPoints.Elmt(p1).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
-                m3 = ListPoints.Elmt(p2).x * PV.Mat(0, 0) + ListPoints.Elmt(p2).y * PV.Mat(0, 1) + ListPoints.Elmt(p2).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
-                m4 = ListPoints.Elmt(p2).x * PV.Mat(1, 0) + ListPoints.Elmt(p2).y * PV.Mat(1, 1) + ListPoints.Elmt(p2).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
-                m5 = ListPoints.Elmt(p3).x * PV.Mat(0, 0) + ListPoints.Elmt(p3).y * PV.Mat(0, 1) + ListPoints.Elmt(p3).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
-                m6 = ListPoints.Elmt(p3).x * PV.Mat(1, 0) + ListPoints.Elmt(p3).y * PV.Mat(1, 1) + ListPoints.Elmt(p3).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3) 'test
-
+                MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
+                SurfaceDetection(temp)
                 graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
                 graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
                 graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
@@ -348,9 +324,22 @@ Public Class MainForm
 
     End Sub
 
-    Private Sub ZBuffer(p1 As Integer, p2 As Integer, p3 As Integer, m1 As Double, m2 As Double, m3 As Double, m4 As Double, m5 As Double, m6 As Double)
+    Private Sub SurfaceDetection(temp As ListPolygons)
+        Dim edgetable As New List(Of EdgeTable) 'SET
+        Dim AET As New AEL
+        Dim stacker As New Stack(Of EdgeTable)
+
+    End Sub
 
 
+    Private Sub MultiplyPV(p1 As Integer, p2 As Integer, p3 As Integer, ByRef m1 As Double, ByRef m2 As Double, ByRef m3 As Double, ByRef m4 As Double, ByRef m5 As Double, ByRef m6 As Double)
+
+        m1 = ListPoints.Elmt(p1).x * PV.Mat(0, 0) + ListPoints.Elmt(p1).y * PV.Mat(0, 1) + ListPoints.Elmt(p1).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
+        m2 = ListPoints.Elmt(p1).x * PV.Mat(1, 0) + ListPoints.Elmt(p1).y * PV.Mat(1, 1) + ListPoints.Elmt(p1).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
+        m3 = ListPoints.Elmt(p2).x * PV.Mat(0, 0) + ListPoints.Elmt(p2).y * PV.Mat(0, 1) + ListPoints.Elmt(p2).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
+        m4 = ListPoints.Elmt(p2).x * PV.Mat(1, 0) + ListPoints.Elmt(p2).y * PV.Mat(1, 1) + ListPoints.Elmt(p2).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
+        m5 = ListPoints.Elmt(p3).x * PV.Mat(0, 0) + ListPoints.Elmt(p3).y * PV.Mat(0, 1) + ListPoints.Elmt(p3).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
+        m6 = ListPoints.Elmt(p3).x * PV.Mat(1, 0) + ListPoints.Elmt(p3).y * PV.Mat(1, 1) + ListPoints.Elmt(p3).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3) 'test
 
     End Sub
 
