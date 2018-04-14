@@ -176,6 +176,7 @@ Partial Class MainForm
         Me.Light_XPosTextBox.Name = "Light_XPosTextBox"
         Me.Light_XPosTextBox.Size = New System.Drawing.Size(62, 20)
         Me.Light_XPosTextBox.TabIndex = 16
+        Me.Light_XPosTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Light_YPosTextBox
         '
@@ -183,6 +184,7 @@ Partial Class MainForm
         Me.Light_YPosTextBox.Name = "Light_YPosTextBox"
         Me.Light_YPosTextBox.Size = New System.Drawing.Size(62, 20)
         Me.Light_YPosTextBox.TabIndex = 17
+        Me.Light_YPosTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Light_ZPosTextBox
         '
@@ -190,6 +192,7 @@ Partial Class MainForm
         Me.Light_ZPosTextBox.Name = "Light_ZPosTextBox"
         Me.Light_ZPosTextBox.Size = New System.Drawing.Size(62, 20)
         Me.Light_ZPosTextBox.TabIndex = 18
+        Me.Light_ZPosTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'X_LightSourceLabel
         '
@@ -299,6 +302,7 @@ Partial Class MainForm
         Me.ambientTxtBox.Name = "ambientTxtBox"
         Me.ambientTxtBox.Size = New System.Drawing.Size(69, 20)
         Me.ambientTxtBox.TabIndex = 36
+        Me.ambientTxtBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'diffuseTxtBox
         '
@@ -306,6 +310,7 @@ Partial Class MainForm
         Me.diffuseTxtBox.Name = "diffuseTxtBox"
         Me.diffuseTxtBox.Size = New System.Drawing.Size(69, 20)
         Me.diffuseTxtBox.TabIndex = 37
+        Me.diffuseTxtBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'specularTxtBox
         '
@@ -313,6 +318,7 @@ Partial Class MainForm
         Me.specularTxtBox.Name = "specularTxtBox"
         Me.specularTxtBox.Size = New System.Drawing.Size(69, 20)
         Me.specularTxtBox.TabIndex = 38
+        Me.specularTxtBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'exponentTxtBox
         '
@@ -320,6 +326,7 @@ Partial Class MainForm
         Me.exponentTxtBox.Name = "exponentTxtBox"
         Me.exponentTxtBox.Size = New System.Drawing.Size(69, 20)
         Me.exponentTxtBox.TabIndex = 39
+        Me.exponentTxtBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'ambientLbl
         '

@@ -3,7 +3,7 @@
     Dim AET As New AEL
     Dim stacker As New Stack(Of EdgeTable)
 
-    Public Sub FillPolygon(a As ListPolygons, b As ListPoints, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen)
+    Public Sub FillPolygon(a As TArrMesh, b As TArrPoint, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen)
         edgetable.Clear()
         stacker.Clear()
         FillSET(a, b)
@@ -12,7 +12,7 @@
 
     End Sub
 
-    Public Sub FillSET(a As ListPolygons, b As ListPoints)
+    Public Sub FillSET(a As TArrMesh, b As TArrPoint)
         'filling the SET if the polygon is valid (doesn't cross)
         edgetable = New List(Of EdgeTable)
         'get the min and max to know how index that is needed
@@ -38,8 +38,8 @@
                 temp.dx = a.Elmt(d).EdgeIndex1 - a.Elmt(i).EdgeIndex1
                 temp.dy = a.Elmt(d).EdgeIndex2 - a.Elmt(i).EdgeIndex2
                 temp.carry = 0
-                temp.zofymin = a.
-                temp.nxt = Nothing
+                'temp.zofymin = a.
+                'temp.nxt = Nothing
                 If temp.dy < 0 Then
                     temp.dy = -temp.dy
                     temp.dx = -temp.dx
@@ -279,7 +279,7 @@
         End If
     End Sub
 
-    Public Function getMinimumY(v As ListPoints)
+    Public Function getMinimumY(v As TArrPoint)
         Dim min As Integer
         For i As Integer = 0 To v.N - 1
             If i = 0 Then
@@ -293,7 +293,7 @@
         Return min
     End Function
 
-    Public Function getMaximumY(v As ListPoints)
+    Public Function getMaximumY(v As TArrPoint)
         Dim max As Integer
         For i As Integer = 0 To v.N - 1
             If i = 0 Then

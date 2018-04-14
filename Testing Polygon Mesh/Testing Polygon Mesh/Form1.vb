@@ -4,12 +4,12 @@ Public Class MainForm
     Private bitmapCanvas As Bitmap
     Private graphics As Graphics
     Private whitepen As Pen
-    Private ListPoints As ListPoints
-    Private ListPolygon As ListPolygons
+    Private ListPoints As TArrPoint
+    Private ListPolygon As TArrMesh
     Private sphereCenter, surfaceNormal As TPoint
     Private mesh As TMesh
     'Private ListofEdges As List(Of TLine)
-    Private ListofMeshes As TArrMesh
+    'Private ListofMeshes As TArrMesh
     Private radius, dtheta, du, theta, u, x, y, z, w As Double
     Private longitude, latitude, transSphere_X, transSphere_Y, transSphere_Z As Integer
     Private PV As New Matrix4x4
@@ -18,11 +18,12 @@ Public Class MainForm
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         bitmapCanvas = New Bitmap(MainCanvas.Width, MainCanvas.Height)
-        graphics = graphics.FromImage(bitmapCanvas)
+        graphics = Graphics.FromImage(bitmapCanvas)
         whitepen = New Pen(Color.White)
         MainCanvas.Image = bitmapCanvas
-        ListPoints = New ListPoints
-        ListPolygon = New ListPolygons
+        ListPoints = New TArrPoint()
+        ListPolygon = New TArrMesh()
+        sphereCenter = New TPoint(0, 0, 0)
         'sphereCenter = New TPoint(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0)
         'mesh = New TMesh()
         'ListPoints.Init()
@@ -54,7 +55,7 @@ Public Class MainForm
         Y_TransTextBox.Text = transSphere_Y
         Z_TransTextBox.Text = transSphere_Z
         Projection()
-        DrawSphere()
+        'DrawSphere()
         radius = Integer.Parse(SphereRadInput.Text) * 150
         latitude = Integer.Parse(LatiInput.Text)
         longitude = Integer.Parse(LongiInput.Text)
@@ -194,7 +195,6 @@ Public Class MainForm
         Console.WriteLine(PV.Mat(3, 1))
         Console.WriteLine(PV.Mat(3, 2))
         Console.WriteLine(PV.Mat(3, 3))
-
     End Sub
 
     Private Sub DrawMeshButton_Click(sender As Object, e As EventArgs) Handles DrawMeshButton.Click
@@ -219,8 +219,8 @@ Public Class MainForm
     End Sub
 
     Private Sub DrawSphere()
-        ListPoints = New ListPoints
-        ListPolygon = New ListPolygons
+        ListPoints = New TArrPoint
+        ListPolygon = New TArrMesh
         dtheta = 180 / latitude
         du = 360 / longitude
         For i = 0 To latitude / 2 - 1
@@ -320,7 +320,7 @@ Public Class MainForm
     Public Sub gambarpoly()
         Dim m1, m2, m3, m4, m5, m6, m11, m22, m33, m44, m55, m66 As Double
         Dim p1, p2, p3 As Integer
-        Dim temp As New ListPolygons
+        Dim temp As New TArrMesh
         BackFaceCulling()
         Dim DOP(3) As Integer
         DOP(0) = 0
@@ -328,9 +328,9 @@ Public Class MainForm
         DOP(2) = -10
         For i = 0 To ListPolygon.N - 1
             If dotproduct2(DOP, ListPolygon.Normal(i)) < 0 Then
-                p1 = ListPolygon.Elmt(i).p1
-                p2 = ListPolygon.Elmt(i).p2
-                p3 = ListPolygon.Elmt(i).p3
+                p1 = ListPolygon.Elmt(i).EdgeIndex1
+                p2 = ListPolygon.Elmt(i).EdgeIndex2
+                p3 = ListPolygon.Elmt(i).EdgeIndex3
                 temp.Init()
                 temp.InsertIndex(p1, p2, p3)
                 m1 = ListPoints.Elmt(p1).x * PV.Mat(0, 0) + ListPoints.Elmt(p1).y * PV.Mat(0, 1) + ListPoints.Elmt(p1).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
@@ -364,14 +364,14 @@ Public Class MainForm
         Return d
     End Function
 
-    Private Sub CalculateNormal(poly As ListPolygons)
+    Private Sub CalculateNormal(poly As TArrMesh)
         Dim ppp As New TMesh
         Dim p1, p2, p3, m1, m2, m3, m4, m5, m6 As Integer
         Dim AB, AC As TPoint
         For i As Integer = 0 To poly.N - 1
-            p1 = ListPolygon.Elmt(i).p1
-            p2 = ListPolygon.Elmt(i).p2
-            p3 = ListPolygon.Elmt(i).p3
+            p1 = ListPolygon.Elmt(i).EdgeIndex1
+            p2 = ListPolygon.Elmt(i).EdgeIndex2
+            p3 = ListPolygon.Elmt(i).EdgeIndex3
             AB = New TPoint(ListPoints.Elmt(p2).x - ListPoints.Elmt(p1).x, ListPoints.Elmt(p2).y - ListPoints.Elmt(p1).y, ListPoints.Elmt(p2).z - ListPoints.Elmt(p1).z)
             AC = New TPoint(ListPoints.Elmt(p3).x - ListPoints.Elmt(p1).x, ListPoints.Elmt(p3).y - ListPoints.Elmt(p1).y, ListPoints.Elmt(p3).z - ListPoints.Elmt(p1).z)
             poly.Normal(i).Calculate(AB, AC)
