@@ -212,124 +212,6 @@ Public Class MainForm
     End Sub
 
     Private Sub DrawSphere()
-        '<<<<<<< HEAD
-        '=======
-        '        Dim p1, p2, p3, w, r, m, n, du As Integer
-        '        Dim dtheta As Double
-        '        'Dim size As Integer = ListofVertices.Count
-        '        'Dim obj(size) As TPoint
-        '        'For i As Integer = 0 To size - 1
-        '        '    obj(i) = New TPoint
-        '        '    obj(i) = MultiplyMat(ListofVertices.Elmt(i), PV)
-        '        'Next
-        '        'Dim a, b, c, d As Single
-        '        'For i As Integer = 0 To size - 2
-        '        '    a = obj(i).x
-        '        '    b = obj(i).y
-        '        '    c = obj(i + 1).x
-        '        '    d = obj(i + 1).y
-        '        '    graphics.DrawLine(blackpen, a, b, c, d)
-        '        'Next
-        '>>>>>>> refs/remotes/origin/master
-        'deltaTheta = 180 / latitude
-        'deltaU = 360 / longitude
-        'For i = 0 To latitude / 2 - 1
-        '    theta = deltaTheta * i
-        '    For j = 0 To longitude - 1
-        '        u = deltaU * j
-        '        x = sphereRadius * Math.Cos(theta * Math.PI / 180) * Math.Sin(u * Math.PI / 180)
-        '        y = sphereRadius * Math.Sin(theta * Math.PI / 180)
-        '        z = sphereRadius * Math.Cos(theta * Math.PI / 180) * Math.Cos(u * Math.PI / 180)
-        '        w = 1
-        '        ListofVertices.InsertLast(x, y, z)
-        '    Next
-        'Next
-        'ListofVertices.InsertLast(0, sphereRadius, 0)
-        'For i = 0 To (-latitude / 2) + 1 Step -1
-        '    theta = deltaTheta * i
-        '    For j = 0 To longitude - 1
-        '        u = deltaU * j
-        '        x = sphereRadius * Math.Cos(theta * Math.PI / 180) * Math.Sin(u * Math.PI / 180)
-        '        y = sphereRadius * Math.Sin(theta * Math.PI / 180)
-        '        z = sphereRadius * Math.Cos(theta * Math.PI / 180) * Math.Cos(u * Math.PI / 180)
-        '        w = 1
-        '        ListofVertices.InsertLast(x, y, z)
-        '    Next
-        'Next
-        'ListofVertices.InsertLast(0, -sphereRadius, 0)
-        'For i = 0 To latitude / 2 - 1 'Bagian bola atas
-        '    If i <= latitude / 2 - 2 Then
-        '        For j = 0 To longitude - 2
-        '            p1 = longitude * i + j
-        '            p2 = longitude * (i + 1) + j + 1
-        '            p3 = longitude * (i + 1) + j
-        '            ListofMeshes.InsertLast(p1, p2, p3)
-
-        '            p1 = longitude * i + j
-        '            p2 = longitude * i + j + 1
-        '            p3 = longitude * (i + 1) + j + 1
-        '            ListofMeshes.InsertLast(p1, p2, p3)
-        '        Next
-        '        p1 = longitude * (i + 1) - 1
-        '        p2 = longitude * (i + 1)
-        '        p3 = longitude * (i + 2) - 1
-        '        ListofMeshes.InsertLast(p1, p2, p3)
-
-        '        p1 = longitude * (i + 1) - 1
-        '        p2 = longitude * i
-        '        p3 = longitude * (i + 1)
-        '        ListofMeshes.InsertLast(p1, p2, p3)
-        '    Else
-        '        For j = 0 To longitude - 2
-        '            p1 = longitude * i + j
-        '            p2 = longitude * i + j + 1
-        '            p3 = latitude / 2 * longitude
-        '            ListofMeshes.InsertLast(p1, p2, p3)
-        '        Next
-        '        p1 = longitude * (i + 1) - 1
-        '        p2 = longitude * i
-        '        p3 = longitude * (i + 1)
-        '        ListofMeshes.InsertLast(p1, p2, p3)
-        '    End If
-        'Next
-        'For i = 0 To (-latitude / 2) + 1 Step -1 'Bagian bola bawah
-        '    If i >= (-latitude / 2) + 2 Then
-        '        For j = 0 To longitude - 2
-        '            p1 = (longitude * (-i + 1)) + j + (latitude / 2 * longitude) + 1 '(m / 2 * n) + n + j + 1 '13 + j 'n * i + j 
-        '            p2 = (longitude * -i + j + 1) + (latitude / 2 * longitude) + 1 '(m / 2 * n) + j + 2 '10 + j 'n * (i + 1) + j + 1
-        '            p3 = (longitude * -i + j) + (latitude / 2 * longitude) + 1 '(m / 2 * n) + j + 1 '9 + j 'n * (i + 1) + j
-        '            ListofMeshes.InsertLast(p1, p2, p3)
-
-        '            p1 = (longitude * (-i + 1)) + j + (latitude / 2 * longitude) + 1 '(m / 2 * n) + n + j + 1 ' n * i + j 13
-        '            p2 = (longitude * (-i + 1) + j + 1) + (latitude / 2 * longitude) + 1 '14 + j ' n * i + j + 1 
-        '            p3 = (longitude * -i + j + 1) + (latitude / 2 * longitude) + 1 '10 + j 'n * (i + 1) + j + 1
-        '            ListofMeshes.InsertLast(p1, p2, p3)
-        '        Next
-        '        p1 = (longitude * (-i + 2) - 1) + (latitude / 2 * longitude) + 1 '16 'n * (i + 1) - 1
-        '        p2 = (longitude * -i) + (latitude / 2 * longitude) + 1 '9 'n * (i + 1)
-        '        p3 = (longitude * (-i + 1) - 1) + (latitude / 2 * longitude) + 1 '12 'n * (i + 2) - 1
-        '        ListofMeshes.InsertLast(p1, p2, p3)
-
-        '        p1 = (longitude * (-i + 2) - 1) + (latitude / 2 * longitude) + 1 '16 'n * (i + 1) - 1
-        '        p2 = (longitude * (-i + 1)) + (latitude / 2 * longitude) + 1 '13 ' n * i
-        '        p3 = (longitude * -i) + (latitude / 2 * longitude) + 1 ' 9 'n * (i + 1)
-        '        ListofMeshes.InsertLast(p1, p2, p3)
-        '    Else
-        '        For j = 0 To longitude - 2
-        '            p1 = (longitude * -i + j) + ((latitude / 2 * longitude) + 1) ' 13 + j 'n * i + j
-        '            p2 = (longitude * -i + j + 1) + (latitude / 2 * longitude) + 1 '14
-        '            p3 = (latitude / 2 * longitude) + (latitude / 2 * longitude) + 1 '17
-        '            ListofMeshes.InsertLast(p1, p2, p3)
-        '        Next
-        '        p1 = (longitude * (-i + 1) - 1) + (latitude / 2 * longitude) + 1 '16
-        '        p2 = (longitude * -i) + (latitude / 2 * longitude) + 1 '13
-        '        p3 = (longitude * (-i + 1)) + (latitude / 2 * longitude) + 1 '17
-        '        ListofMeshes.InsertLast(p1, p2, p3)
-        '    End If
-        'Next
-        ''gambarpoly()
-        'DrawPoly()
-        'MainCanvas.Image = bitmapCanvas
         deltaTheta = 180 / latitude
         deltaU = 360 / longitude
         For i = 0 To latitude / 2 - 1
@@ -340,14 +222,7 @@ Public Class MainForm
                 y = sphereRadius * Math.Sin(theta * Math.PI / 180)
                 z = sphereRadius * Math.Cos(theta * Math.PI / 180) * Math.Cos(u * Math.PI / 180)
                 w = 1
-                'Console.Write("X1: ")
-                'Console.WriteLine(x)
-                'Console.Write("Y1: ")
-                'Console.WriteLine(y)
-                'Console.Write("Z1: ")
-                'Console.WriteLine(z)
                 ListofVertices.InsertLast(x, y, z)
-                '  ListPoints1.InsertLast(x, -y, z)
             Next
         Next
         ListofVertices.InsertLast(0, sphereRadius, 0)
