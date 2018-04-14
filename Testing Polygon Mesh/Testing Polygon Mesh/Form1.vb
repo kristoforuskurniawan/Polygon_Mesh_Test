@@ -53,7 +53,7 @@ Public Class MainForm
         SphereRadInput.Text = sphereRadius.ToString()
         LongiInput.Text = longitude.ToString()
         LatiInput.Text = latitude.ToString()
-        Status = True
+        Projection()
     End Sub
 
     'Public Class Win32 'Ini class untuk apa?
@@ -166,7 +166,7 @@ Public Class MainForm
         Dim Vt, St As New Matrix4x4
         PV = New Matrix4x4
         Vt.OnePointProjection(200) ' Zc = 3
-        St.ScaleMat(1, -1, 0) ' scale
+        St.ScaleMat(10, -10, 0) ' scale
         St.TranslateMat(200, 200, 0) 'translate
         PV.Mat = MultiplyMat4x4(Vt, St)
     End Sub
@@ -200,8 +200,8 @@ Public Class MainForm
 
     Private Sub DrawSphere()
         Dim p1, p2, p3, w, r, m, n, du As Integer
-        Dim dtheta As Double
-        r = 10
+        Dim dtheta As Integer
+        r = 150
         m = 4
         n = 4
         w = 1
@@ -360,16 +360,18 @@ Public Class MainForm
         Next
         gambarpoly()
         MainCanvas.Image = bitmapCanvas
+
     End Sub
 
     Public Sub gambarpoly()
         Dim m1, m2, m3, m4, m5, m6, m11, m22, m33, m44, m55, m66 As Double
         Dim p1, p2, p3 As Integer
-
+        Dim ppp As New TMesh
         For i = 0 To ListPolygon.N - 1
-            p1 = ListPolygon.Elmt(i).EdgeIndex1
-            p2 = ListPolygon.Elmt(i).EdgeIndex2
-            p3 = ListPolygon.Elmt(i).EdgeIndex3
+            ppp = ListPolygon.Elmt(i)
+            p1 = ppp.EdgeIndex1
+            p2 = ppp.EdgeIndex2
+            p3 = ppp.EdgeIndex3
             m1 = ListPoints.Elmt(p1).x * PV.Mat(0, 0) + ListPoints.Elmt(p1).y * PV.Mat(0, 1) + ListPoints.Elmt(p1).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
             m2 = ListPoints.Elmt(p1).x * PV.Mat(1, 0) + ListPoints.Elmt(p1).y * PV.Mat(1, 1) + ListPoints.Elmt(p1).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
             m3 = ListPoints.Elmt(p2).x * PV.Mat(0, 0) + ListPoints.Elmt(p2).y * PV.Mat(0, 1) + ListPoints.Elmt(p2).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
@@ -379,6 +381,7 @@ Public Class MainForm
             graphics.DrawLine(blackpen, New Point(m1, m2), New Point(m3, m4))
             graphics.DrawLine(blackpen, New Point(m3, m4), New Point(m5, m6))
             graphics.DrawLine(blackpen, New Point(m5, m6), New Point(m1, m2))
+            MsgBox(m1.ToString + " " + m2.ToString)
         Next
 
     End Sub
