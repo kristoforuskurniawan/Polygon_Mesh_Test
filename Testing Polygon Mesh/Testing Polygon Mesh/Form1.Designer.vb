@@ -35,9 +35,6 @@ Partial Class MainForm
         Me.X_TransTextBox = New System.Windows.Forms.TextBox()
         Me.Y_TransTextBox = New System.Windows.Forms.TextBox()
         Me.Z_TransTextBox = New System.Windows.Forms.TextBox()
-        Me.X_TransButton = New System.Windows.Forms.Button()
-        Me.Y_TransButton = New System.Windows.Forms.Button()
-        Me.Z_TransButton = New System.Windows.Forms.Button()
         Me.LightSourceLabel = New System.Windows.Forms.Label()
         Me.Light_XPosTextBox = New System.Windows.Forms.TextBox()
         Me.Light_YPosTextBox = New System.Windows.Forms.TextBox()
@@ -55,7 +52,8 @@ Partial Class MainForm
         Me.BackCullingModeGroupBox = New System.Windows.Forms.GroupBox()
         Me.BackCulling_OFFRadioButton = New System.Windows.Forms.RadioButton()
         Me.BackCulling_ONRadioButton = New System.Windows.Forms.RadioButton()
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.AnimationTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.TranslateButton = New System.Windows.Forms.Button()
         CType(Me.MainCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ObjectsGroupBox.SuspendLayout()
         Me.BackCullingModeGroupBox.SuspendLayout()
@@ -63,7 +61,7 @@ Partial Class MainForm
         '
         'MainCanvas
         '
-        Me.MainCanvas.BackColor = System.Drawing.Color.White
+        Me.MainCanvas.BackColor = System.Drawing.Color.Black
         Me.MainCanvas.Location = New System.Drawing.Point(13, 13)
         Me.MainCanvas.Name = "MainCanvas"
         Me.MainCanvas.Size = New System.Drawing.Size(415, 489)
@@ -138,51 +136,27 @@ Partial Class MainForm
         '
         'X_TransTextBox
         '
-        Me.X_TransTextBox.Location = New System.Drawing.Point(443, 224)
+        Me.X_TransTextBox.Location = New System.Drawing.Point(532, 220)
         Me.X_TransTextBox.Name = "X_TransTextBox"
-        Me.X_TransTextBox.Size = New System.Drawing.Size(51, 20)
+        Me.X_TransTextBox.Size = New System.Drawing.Size(50, 20)
         Me.X_TransTextBox.TabIndex = 9
+        Me.X_TransTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Y_TransTextBox
         '
-        Me.Y_TransTextBox.Location = New System.Drawing.Point(443, 250)
+        Me.Y_TransTextBox.Location = New System.Drawing.Point(531, 247)
         Me.Y_TransTextBox.Name = "Y_TransTextBox"
         Me.Y_TransTextBox.Size = New System.Drawing.Size(51, 20)
         Me.Y_TransTextBox.TabIndex = 10
+        Me.Y_TransTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Z_TransTextBox
         '
-        Me.Z_TransTextBox.Location = New System.Drawing.Point(443, 274)
+        Me.Z_TransTextBox.Location = New System.Drawing.Point(531, 272)
         Me.Z_TransTextBox.Name = "Z_TransTextBox"
         Me.Z_TransTextBox.Size = New System.Drawing.Size(51, 20)
         Me.Z_TransTextBox.TabIndex = 11
-        '
-        'X_TransButton
-        '
-        Me.X_TransButton.Location = New System.Drawing.Point(500, 221)
-        Me.X_TransButton.Name = "X_TransButton"
-        Me.X_TransButton.Size = New System.Drawing.Size(75, 23)
-        Me.X_TransButton.TabIndex = 12
-        Me.X_TransButton.Text = "Translate X"
-        Me.X_TransButton.UseVisualStyleBackColor = True
-        '
-        'Y_TransButton
-        '
-        Me.Y_TransButton.Location = New System.Drawing.Point(500, 248)
-        Me.Y_TransButton.Name = "Y_TransButton"
-        Me.Y_TransButton.Size = New System.Drawing.Size(75, 23)
-        Me.Y_TransButton.TabIndex = 13
-        Me.Y_TransButton.Text = "Translate Y"
-        Me.Y_TransButton.UseVisualStyleBackColor = True
-        '
-        'Z_TransButton
-        '
-        Me.Z_TransButton.Location = New System.Drawing.Point(500, 275)
-        Me.Z_TransButton.Name = "Z_TransButton"
-        Me.Z_TransButton.Size = New System.Drawing.Size(75, 23)
-        Me.Z_TransButton.TabIndex = 14
-        Me.Z_TransButton.Text = "Translate Z"
-        Me.Z_TransButton.UseVisualStyleBackColor = True
+        Me.Z_TransTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'LightSourceLabel
         '
@@ -226,7 +200,7 @@ Partial Class MainForm
         'Y_LightSourceLabel
         '
         Me.Y_LightSourceLabel.AutoSize = True
-        Me.Y_LightSourceLabel.Location = New System.Drawing.Point(445, 359)
+        Me.Y_LightSourceLabel.Location = New System.Drawing.Point(446, 362)
         Me.Y_LightSourceLabel.Name = "Y_LightSourceLabel"
         Me.Y_LightSourceLabel.Size = New System.Drawing.Size(54, 13)
         Me.Y_LightSourceLabel.TabIndex = 20
@@ -342,15 +316,25 @@ Partial Class MainForm
         Me.BackCulling_ONRadioButton.Text = "ON"
         Me.BackCulling_ONRadioButton.UseVisualStyleBackColor = True
         '
-        'Timer1
+        'AnimationTimer
         '
-        Me.Timer1.Interval = 1
+        Me.AnimationTimer.Interval = 1
+        '
+        'TranslateButton
+        '
+        Me.TranslateButton.Location = New System.Drawing.Point(448, 220)
+        Me.TranslateButton.Name = "TranslateButton"
+        Me.TranslateButton.Size = New System.Drawing.Size(75, 72)
+        Me.TranslateButton.TabIndex = 32
+        Me.TranslateButton.Text = "Translate"
+        Me.TranslateButton.UseVisualStyleBackColor = True
         '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(735, 514)
+        Me.Controls.Add(Me.TranslateButton)
         Me.Controls.Add(Me.BackCullingModeGroupBox)
         Me.Controls.Add(Me.ObjectsGroupBox)
         Me.Controls.Add(Me.DeleteLightSourceButton)
@@ -364,9 +348,6 @@ Partial Class MainForm
         Me.Controls.Add(Me.Light_YPosTextBox)
         Me.Controls.Add(Me.Light_XPosTextBox)
         Me.Controls.Add(Me.LightSourceLabel)
-        Me.Controls.Add(Me.Z_TransButton)
-        Me.Controls.Add(Me.Y_TransButton)
-        Me.Controls.Add(Me.X_TransButton)
         Me.Controls.Add(Me.Z_TransTextBox)
         Me.Controls.Add(Me.Y_TransTextBox)
         Me.Controls.Add(Me.X_TransTextBox)
@@ -403,9 +384,6 @@ Partial Class MainForm
     Friend WithEvents X_TransTextBox As TextBox
     Friend WithEvents Y_TransTextBox As TextBox
     Friend WithEvents Z_TransTextBox As TextBox
-    Friend WithEvents X_TransButton As Button
-    Friend WithEvents Y_TransButton As Button
-    Friend WithEvents Z_TransButton As Button
     Friend WithEvents LightSourceLabel As Label
     Friend WithEvents Light_XPosTextBox As TextBox
     Friend WithEvents Light_YPosTextBox As TextBox
@@ -423,5 +401,6 @@ Partial Class MainForm
     Friend WithEvents BackCullingModeGroupBox As GroupBox
     Friend WithEvents BackCulling_OFFRadioButton As RadioButton
     Friend WithEvents BackCulling_ONRadioButton As RadioButton
-    Friend WithEvents Timer1 As Timer
+    Friend WithEvents AnimationTimer As Timer
+    Friend WithEvents TranslateButton As Button
 End Class
