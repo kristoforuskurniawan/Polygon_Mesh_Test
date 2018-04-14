@@ -28,6 +28,7 @@ Public Class MainForm
         DrawSphere()
     End Sub
 
+
     Private Status, backFaceCullingStatus As Boolean
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -126,11 +127,11 @@ Public Class MainForm
     '    surfaceNormal = getCrossProduct(P1_P2, P1_P3)
     'End Sub
 
-    Private Sub BackCullON_BTN_CheckedChanged(sender As Object, e As EventArgs) Handles BackCulling_ONRadioButton.CheckedChanged
+    Private Sub BackCullON_BTN_CheckedChanged(sender As Object, e As EventArgs)
         backFaceCullingStatus = True
     End Sub
 
-    Private Sub BackCullOFF_BTN_CheckedChanged(sender As Object, e As EventArgs) Handles BackCulling_OFFRadioButton.CheckedChanged
+    Private Sub BackCullOFF_BTN_CheckedChanged(sender As Object, e As EventArgs)
         backFaceCullingStatus = False
     End Sub
 
@@ -179,6 +180,23 @@ Public Class MainForm
         Vt.OnePointProjection(5) ' Zc = 3
         St.TranslateMat(200, 200, 0) 'translate
         PV.Mat = MultiplyMat4x4(Vt, St)
+        Console.WriteLine(PV.Mat(0, 0)) 'baris,kolom
+        Console.WriteLine(PV.Mat(0, 1))
+        Console.WriteLine(PV.Mat(0, 2))
+        Console.WriteLine(PV.Mat(0, 3))
+        Console.WriteLine(PV.Mat(1, 0))
+        Console.WriteLine(PV.Mat(1, 1))
+        Console.WriteLine(PV.Mat(1, 2))
+        Console.WriteLine(PV.Mat(1, 3))
+        Console.WriteLine(PV.Mat(2, 0))
+        Console.WriteLine(PV.Mat(2, 1))
+        Console.WriteLine(PV.Mat(2, 2))
+        Console.WriteLine(PV.Mat(2, 3))
+        Console.WriteLine(PV.Mat(3, 0))
+        Console.WriteLine(PV.Mat(3, 1))
+        Console.WriteLine(PV.Mat(3, 2))
+        Console.WriteLine(PV.Mat(3, 3))
+
     End Sub
 
     Private Sub DrawMeshButton_Click(sender As Object, e As EventArgs) Handles DrawMeshButton.Click
