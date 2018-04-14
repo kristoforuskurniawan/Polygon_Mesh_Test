@@ -1,7 +1,7 @@
 ﻿Public Class TArrMesh
     Public N As Integer
     Public Elmt() As TMesh
-    Public Normal() As NormalValue
+    Public Normal() As Normalvalue
 
     Public Sub Init()
         N = 0
@@ -18,6 +18,7 @@
         ReDim Preserve Elmt(N)
         ReDim Preserve Normal(N)
         Elmt(N) = P
+        Normal(N) = New Normalvalue
         N = N + 1
     End Sub
 

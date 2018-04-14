@@ -81,6 +81,8 @@ Public Class MainForm
         'asdf
     End Function
 
+
+
     Public Sub SetVertices(x As Double, y As Double, z As Double)
         Dim temp As New TPoint(x, y, z)
         ListofVertices.InsertLast(temp.x, temp.y, temp.z)
@@ -148,9 +150,9 @@ Public Class MainForm
         Return ((ka * ia) + (kd * il * Use_Cos(deg)) + (ks * il * Math.Pow(Use_Cos(alpha), n)))
     End Function
 
-    Private Function GetPhong()
+    'Private Function GetPhong()
 
-    End Function
+    'End Function
 
     Public Sub DrawCube(M As Matrix4x4)
         Dim size As Integer = ListofVertices.Count()
@@ -359,20 +361,27 @@ Public Class MainForm
                     graphics.DrawLine(blackpen, New Point(m55, m66), New Point(m11, m22))
                 Next
             Else
+                CalculateNormal(ListofMeshes)
+                Dim DOP(3) As Integer
+                DOP(0) = sphereCenter.x
+                DOP(1) = sphereCenter.y
+                DOP(2) = -10
                 For i = 0 To ListofMeshes.N - 1
-                    mesh = ListofMeshes.Elmt(i)
-                    p1 = mesh.EdgeIndex1
-                    p2 = mesh.EdgeIndex2
-                    p3 = mesh.EdgeIndex3
-                    m1 = ListofVertices.Elmt(p1).x * St(0, 0) + ListofVertices.Elmt(p1).y * St(0, 1) + ListofVertices.Elmt(p1).z * St(0, 2) + w * St(0, 3)
-                    m2 = ListofVertices.Elmt(p1).x * St(1, 0) + ListofVertices.Elmt(p1).y * St(1, 1) + ListofVertices.Elmt(p1).z * St(1, 2) + w * St(1, 3)
-                    m3 = ListofVertices.Elmt(p2).x * St(0, 0) + ListofVertices.Elmt(p2).y * St(0, 1) + ListofVertices.Elmt(p2).z * St(0, 2) + w * St(0, 3)
-                    m4 = ListofVertices.Elmt(p2).x * St(1, 0) + ListofVertices.Elmt(p2).y * St(1, 1) + ListofVertices.Elmt(p2).z * St(1, 2) + w * St(1, 3)
-                    m5 = ListofVertices.Elmt(p3).x * St(0, 0) + ListofVertices.Elmt(p3).y * St(0, 1) + ListofVertices.Elmt(p3).z * St(0, 2) + w * St(0, 3)
-                    m6 = ListofVertices.Elmt(p3).x * St(1, 0) + ListofVertices.Elmt(p3).y * St(1, 1) + ListofVertices.Elmt(p3).z * St(1, 2) + w * St(1, 3)
-                    graphics.DrawLine(blackpen, New Point(m1, m2), New Point(m3, m4))
-                    graphics.DrawLine(blackpen, New Point(m3, m4), New Point(m5, m6))
-                    graphics.DrawLine(blackpen, New Point(m5, m6), New Point(m1, m2))
+                    If dotproduct2(DOP, ListofMeshes.Normal(i)) < 0 Then
+                        mesh = ListofMeshes.Elmt(i)
+                        p1 = mesh.EdgeIndex1
+                        p2 = mesh.EdgeIndex2
+                        p3 = mesh.EdgeIndex3
+                        m1 = ListofVertices.Elmt(p1).x * St(0, 0) + ListofVertices.Elmt(p1).y * St(0, 1) + ListofVertices.Elmt(p1).z * St(0, 2) + w * St(0, 3)
+                        m2 = ListofVertices.Elmt(p1).x * St(1, 0) + ListofVertices.Elmt(p1).y * St(1, 1) + ListofVertices.Elmt(p1).z * St(1, 2) + w * St(1, 3)
+                        m3 = ListofVertices.Elmt(p2).x * St(0, 0) + ListofVertices.Elmt(p2).y * St(0, 1) + ListofVertices.Elmt(p2).z * St(0, 2) + w * St(0, 3)
+                        m4 = ListofVertices.Elmt(p2).x * St(1, 0) + ListofVertices.Elmt(p2).y * St(1, 1) + ListofVertices.Elmt(p2).z * St(1, 2) + w * St(1, 3)
+                        m5 = ListofVertices.Elmt(p3).x * St(0, 0) + ListofVertices.Elmt(p3).y * St(0, 1) + ListofVertices.Elmt(p3).z * St(0, 2) + w * St(0, 3)
+                        m6 = ListofVertices.Elmt(p3).x * St(1, 0) + ListofVertices.Elmt(p3).y * St(1, 1) + ListofVertices.Elmt(p3).z * St(1, 2) + w * St(1, 3)
+                        graphics.DrawLine(blackpen, New Point(m1, m2), New Point(m3, m4))
+                        graphics.DrawLine(blackpen, New Point(m3, m4), New Point(m5, m6))
+                        graphics.DrawLine(blackpen, New Point(m5, m6), New Point(m1, m2))
+                    End If
                 Next
             End If
         Else 'Backface Culling is activated
@@ -381,6 +390,10 @@ Public Class MainForm
         MainCanvas.Image = bitmapCanvas
     End Sub
 
+    Private Function dotproduct2(x As Integer(), normal As Normalvalue) As Integer
+        Dim d As Integer = x(0) * normal.x + x(1) * normal.y + x(2) * normal.z
+        Return d
+    End Function
 
     Private Sub MainCanvas_Click(sender As Object, e As EventArgs) Handles MainCanvas.Click
         Status = True
@@ -397,5 +410,35 @@ Public Class MainForm
 
     Private Sub MainCanvas_Move(sender As Object, e As MouseEventArgs) Handles MainCanvas.MouseMove
         ScreenCoordLabel.Text = "Coordinates: X = " + e.X.ToString() + ", Y = " + e.Y.ToString()
+    End Sub
+
+    Private Sub CalculateNormal(poly As TArrMesh)
+        Dim ppp As New TMesh
+        Dim p1, p2, p3, m1, m2, m3, m4, m5, m6 As Integer
+        Dim AB, AC As TPoint
+        For i As Integer = 0 To poly.N - 1
+            ppp = poly.Elmt(i)
+            p1 = ppp.EdgeIndex1
+            p2 = ppp.EdgeIndex2
+            p3 = ppp.EdgeIndex3
+            m1 = ListofVertices.Elmt(p1).x * St(0, 0) + ListofVertices.Elmt(p1).y * St(0, 1) + ListofVertices.Elmt(p1).z * St(0, 2) + w * St(0, 3)
+            m2 = ListofVertices.Elmt(p1).x * St(1, 0) + ListofVertices.Elmt(p1).y * St(1, 1) + ListofVertices.Elmt(p1).z * St(1, 2) + w * St(1, 3)
+            m3 = ListofVertices.Elmt(p2).x * St(0, 0) + ListofVertices.Elmt(p2).y * St(0, 1) + ListofVertices.Elmt(p2).z * St(0, 2) + w * St(0, 3)
+            m4 = ListofVertices.Elmt(p2).x * St(1, 0) + ListofVertices.Elmt(p2).y * St(1, 1) + ListofVertices.Elmt(p2).z * St(1, 2) + w * St(1, 3)
+            m5 = ListofVertices.Elmt(p3).x * St(0, 0) + ListofVertices.Elmt(p3).y * St(0, 1) + ListofVertices.Elmt(p3).z * St(0, 2) + w * St(0, 3)
+            m6 = ListofVertices.Elmt(p3).x * St(1, 0) + ListofVertices.Elmt(p3).y * St(1, 1) + ListofVertices.Elmt(p3).z * St(1, 2) + w * St(1, 3)
+            AB = New TPoint(ListofVertices.Elmt(p2).x - m1, ListofVertices.Elmt(p2).y - ListofVertices.Elmt(p1).y, ListofVertices.Elmt(p2).z - ListofVertices.Elmt(p1).z)
+            AC = New TPoint(ListofVertices.Elmt(p3).x - m1, ListofVertices.Elmt(p3).y - ListofVertices.Elmt(p1).y, ListofVertices.Elmt(p3).z - ListofVertices.Elmt(p1).z)
+            poly.Normal(i).Calculate(AB, AC)
+        Next
+    End Sub
+
+    Private Sub BackFaceCulling()
+        CalculateNormal(ListofMeshes)
+        Dim DOP(3) As Double
+        DOP(0) = sphereCenter.x
+        DOP(1) = sphereCenter.y
+        DOP(2) = -10
+
     End Sub
 End Class
