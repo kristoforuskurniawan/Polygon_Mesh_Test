@@ -38,14 +38,14 @@ Public Class MainForm
 
         St = PV.insertColumnMatrix(St, 0, 1, 0, 0, sphereCenter.x)
         St = PV.insertColumnMatrix(St, 1, 0, -1, 0, sphereCenter.y)
-        St = PV.insertColumnMatrix(St, 2, 0, 0, 0, 0)
+        St = PV.insertColumnMatrix(St, 2, 0, 0, 0, -1 / 10)
         St = PV.insertColumnMatrix(St, 3, 0, 0, 0, 1)
 
         sphereRadius = 150
         longitude = 30
         latitude = 30
-        transPhere_X = 0
-        transSphere_Y = 0
+        transPhere_X = 200
+        transSphere_Y = 200
         transSphere_Z = 0
         rotationAngle_X = 0
         rotationAngle_Y = 0
@@ -165,7 +165,7 @@ Public Class MainForm
     Private Sub Projection()
         Dim Vt, St As New Matrix4x4
         PV = New Matrix4x4
-        Vt.OnePointProjection(200) ' Zc = 3
+        Vt.OnePointProjection(20) ' Zc = 3
         St.ScaleMat(10, -10, 0) ' scale
         St.TranslateMat(200, 200, 0) 'translate
         PV.Mat = MultiplyMat4x4(Vt, St)
@@ -205,7 +205,7 @@ Public Class MainForm
         m = 4
         n = 4
         w = 1
-        du = 360 / n
+        du = 360 / longitude
         'Dim size As Integer = ListofVertices.Count
         'Dim obj(size) As TPoint
         'For i As Integer = 0 To size - 1
@@ -372,16 +372,16 @@ Public Class MainForm
             p1 = ppp.EdgeIndex1
             p2 = ppp.EdgeIndex2
             p3 = ppp.EdgeIndex3
-            m1 = ListPoints.Elmt(p1).x * PV.Mat(0, 0) + ListPoints.Elmt(p1).y * PV.Mat(0, 1) + ListPoints.Elmt(p1).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
-            m2 = ListPoints.Elmt(p1).x * PV.Mat(1, 0) + ListPoints.Elmt(p1).y * PV.Mat(1, 1) + ListPoints.Elmt(p1).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
-            m3 = ListPoints.Elmt(p2).x * PV.Mat(0, 0) + ListPoints.Elmt(p2).y * PV.Mat(0, 1) + ListPoints.Elmt(p2).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
-            m4 = ListPoints.Elmt(p2).x * PV.Mat(1, 0) + ListPoints.Elmt(p2).y * PV.Mat(1, 1) + ListPoints.Elmt(p2).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
-            m5 = ListPoints.Elmt(p3).x * PV.Mat(0, 0) + ListPoints.Elmt(p3).y * PV.Mat(0, 1) + ListPoints.Elmt(p3).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
-            m6 = ListPoints.Elmt(p3).x * PV.Mat(1, 0) + ListPoints.Elmt(p3).y * PV.Mat(1, 1) + ListPoints.Elmt(p3).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
+            m1 = ListPoints.Elmt(p1).x * St(0, 0) + ListPoints.Elmt(p1).y * St(0, 1) + ListPoints.Elmt(p1).z * St(0, 2) + 1 * St(0, 3)
+            m2 = ListPoints.Elmt(p1).x * St(1, 0) + ListPoints.Elmt(p1).y * St(1, 1) + ListPoints.Elmt(p1).z * St(1, 2) + 1 * St(1, 3)
+            m3 = ListPoints.Elmt(p2).x * St(0, 0) + ListPoints.Elmt(p2).y * St(0, 1) + ListPoints.Elmt(p2).z * St(0, 2) + 1 * St(0, 3)
+            m4 = ListPoints.Elmt(p2).x * St(1, 0) + ListPoints.Elmt(p2).y * St(1, 1) + ListPoints.Elmt(p2).z * St(1, 2) + 1 * St(1, 3)
+            m5 = ListPoints.Elmt(p3).x * St(0, 0) + ListPoints.Elmt(p3).y * St(0, 1) + ListPoints.Elmt(p3).z * St(0, 2) + 1 * St(0, 3)
+            m6 = ListPoints.Elmt(p3).x * St(1, 0) + ListPoints.Elmt(p3).y * St(1, 1) + ListPoints.Elmt(p3).z * St(1, 2) + 1 * St(1, 3)
             graphics.DrawLine(blackpen, New Point(m1, m2), New Point(m3, m4))
             graphics.DrawLine(blackpen, New Point(m3, m4), New Point(m5, m6))
             graphics.DrawLine(blackpen, New Point(m5, m6), New Point(m1, m2))
-            MsgBox(m1.ToString + " " + m2.ToString)
+            ' MsgBox(m1.ToString + " " + m2.ToString + " " + m3.ToString + " " + m4.ToString + " " + m5.ToString + " " + m6.ToString)
         Next
 
     End Sub
