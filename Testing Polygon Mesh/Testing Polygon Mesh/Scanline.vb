@@ -23,36 +23,31 @@
         Dim min As Integer = getMinimumY(a, b)
         Dim max As Integer = getMaximumY(a, b)
         Dim size As Integer = max - min + 1
-        resizeArray(edgetable, size)  'resize the array for the iteration in AEL, may cause problem
-        Dim d As Integer
-        'the increment
+        resizeArray(edgetable, size)
+        DeclareTemp(min, a.Elmt(0).p1, a.Elmt(0).p2, a, b)
 
-        If Not (b.Elmt(a.Elmt(0).p1).y = b.Elmt(a.Elmt(0).p1).y) Then
-            'If it Is Not horizontal line (a.Elmt(i).EdgeIndex2 = a.Elmt(d).EdgeIndex2) Then fill all data 
-            DeclareTemp(min, a.Elmt(0).p1, a.Elmt(0).p2, a, b)
-        End If
 
     End Sub
 
     Public Sub DeclareTemp(min As Integer, i As Integer, j As Integer, a As ListPolygons, b As ListPoints)
-        Dim temp As New EdgeTable
-        temp.normalize = min
-        temp.ymin = If(b.Elmt(i).y <= b.Elmt(j).y, b.Elmt(i).y, b.Elmt(j).y)
-        temp.ymax = If(b.Elmt(i).y <= b.Elmt(j).y, b.Elmt(i).y, b.Elmt(j).y)
-        temp.xofymin = If(b.Elmt(i).y <= b.Elmt(j).y, b.Elmt(i).x, b.Elmt(j).x)
-        temp.dx = b.Elmt(j).x - b.Elmt(i).x
-        temp.dy = b.Elmt(j).y - b.Elmt(i).y
-        temp.carry = 0
-        'temp.zofymin = a.
-        temp.nxt = Nothing
-        If temp.dy < 0 Then
-            temp.dy = -temp.dy
-            temp.dx = -temp.dx
+        If Not (b.Elmt(i).y = b.Elmt(j).y) Then
+            Dim temp As New EdgeTable
+            temp.normalize = min
+            temp.ymin = If(b.Elmt(i).y <= b.Elmt(j).y, b.Elmt(i).y, b.Elmt(j).y)
+            temp.ymax = If(b.Elmt(i).y <= b.Elmt(j).y, b.Elmt(i).y, b.Elmt(j).y)
+            temp.xofymin = If(b.Elmt(i).y <= b.Elmt(j).y, b.Elmt(i).x, b.Elmt(j).x)
+            temp.dx = b.Elmt(j).x - b.Elmt(i).x
+            temp.dy = b.Elmt(j).y - b.Elmt(i).y
+            temp.carry = 0
+            temp.zofymin = If(b.Elmt(i).y <= b.Elmt(j).y, b.Elmt(i).z, b.Elmt(j).z)
+            temp.nxt = Nothing
+            If temp.dy < 0 Then
+                temp.dy = -temp.dy
+                temp.dx = -temp.dx
+            End If
+            Dim index As Integer = temp.ymin - min
+            sortedInsertion(edgetable(index), temp)
         End If
-        'the data is filled
-        Dim index As Integer = temp.ymin - min
-        'normalize the index that will be use
-        sortedInsertion(edgetable(index), temp)
     End Sub
 
 

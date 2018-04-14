@@ -18,7 +18,7 @@ Public Class MainForm
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         bitmapCanvas = New Bitmap(MainCanvas.Width, MainCanvas.Height)
-        graphics = graphics.FromImage(bitmapCanvas)
+        graphics = Graphics.FromImage(bitmapCanvas)
         whitepen = New Pen(Color.White)
         MainCanvas.Image = bitmapCanvas
         ListPoints = New ListPoints

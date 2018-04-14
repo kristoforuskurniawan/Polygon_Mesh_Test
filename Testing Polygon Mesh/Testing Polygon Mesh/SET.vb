@@ -7,7 +7,7 @@
     Public dy As Integer
     Public carry As Integer
     Public normalize As Integer
-    Public z As Integer
+    Public zofymin As Integer
     Public PolygonColor As Color 'show which polygon the SET belong
     Public nxt As EdgeTable
 
