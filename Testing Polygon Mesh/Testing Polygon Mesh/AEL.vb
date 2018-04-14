@@ -2,13 +2,11 @@
     Public head As EdgeTable
     Public length As Integer
     Private s As New Stack(Of EdgeTable)
-    Private s2 As New Stack(Of EdgeTable)
 
     Public Sub New()
         head = Nothing
         length = 0
         s.Clear()
-        s2.Clear()
     End Sub
 
     Public Sub Add(tempdata As EdgeTable)
@@ -22,23 +20,23 @@
         Else
             While Not (currentNode Is Nothing)
                 If node.xofymin < currentNode.xofymin OrElse (node.xofymin = currentNode.xofymin AndAlso node.dx / node.dy < currentNode.dx / currentNode.dy) Then
-                    ' s.Push(node) 'old
-                    's.Push(currentNode) 'old
-                    node.nxt = currentNode
-                    prevNode.nxt = node
+                    s.Push(node) 'old
+                    s.Push(currentNode) 'old
+                    'node.nxt = currentNode
+                    'prevNode.nxt = node
                     Exit While
                 Else
-                    's.Push(currentNode) old
+                    s.Push(currentNode) old
                     If currentNode.nxt Is Nothing Then
-                        's.Push(node) 'old
-                        currentNode.nxt = node
+                        s.Push(node) 'old
+                        'currentNode.nxt = node
                         Exit While
                     End If
                 End If
-                prevNode = currentNode
+                'prevNode = currentNode
                 currentNode = currentNode.nxt
             End While
-            'RefillAET()'old
+            RefillAET() 'old
         End If
     End Sub
 
