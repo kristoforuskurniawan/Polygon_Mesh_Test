@@ -60,6 +60,9 @@ Partial Class MainForm
         Me.specularLbl = New System.Windows.Forms.Label()
         Me.specularExponentLbl = New System.Windows.Forms.Label()
         Me.DoShadingButton = New System.Windows.Forms.Button()
+        Me.xPosLbl = New System.Windows.Forms.Label()
+        Me.yPosLbl = New System.Windows.Forms.Label()
+        Me.zPosLbl = New System.Windows.Forms.Label()
         CType(Me.MainCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -374,11 +377,41 @@ Partial Class MainForm
         Me.DoShadingButton.Text = "Shade Sphere"
         Me.DoShadingButton.UseVisualStyleBackColor = True
         '
+        'xPosLbl
+        '
+        Me.xPosLbl.AutoSize = True
+        Me.xPosLbl.Location = New System.Drawing.Point(439, 169)
+        Me.xPosLbl.Name = "xPosLbl"
+        Me.xPosLbl.Size = New System.Drawing.Size(54, 13)
+        Me.xPosLbl.TabIndex = 45
+        Me.xPosLbl.Text = "X Position"
+        '
+        'yPosLbl
+        '
+        Me.yPosLbl.AutoSize = True
+        Me.yPosLbl.Location = New System.Drawing.Point(439, 198)
+        Me.yPosLbl.Name = "yPosLbl"
+        Me.yPosLbl.Size = New System.Drawing.Size(54, 13)
+        Me.yPosLbl.TabIndex = 46
+        Me.yPosLbl.Text = "Y Position"
+        '
+        'zPosLbl
+        '
+        Me.zPosLbl.AutoSize = True
+        Me.zPosLbl.Location = New System.Drawing.Point(439, 224)
+        Me.zPosLbl.Name = "zPosLbl"
+        Me.zPosLbl.Size = New System.Drawing.Size(54, 13)
+        Me.zPosLbl.TabIndex = 47
+        Me.zPosLbl.Text = "Z Position"
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(827, 514)
+        Me.Controls.Add(Me.zPosLbl)
+        Me.Controls.Add(Me.yPosLbl)
+        Me.Controls.Add(Me.xPosLbl)
         Me.Controls.Add(Me.DoShadingButton)
         Me.Controls.Add(Me.specularExponentLbl)
         Me.Controls.Add(Me.specularLbl)
@@ -460,4 +493,7 @@ Partial Class MainForm
     Friend WithEvents specularLbl As Label
     Friend WithEvents specularExponentLbl As Label
     Friend WithEvents DoShadingButton As Button
+    Friend WithEvents xPosLbl As Label
+    Friend WithEvents yPosLbl As Label
+    Friend WithEvents zPosLbl As Label
 End Class

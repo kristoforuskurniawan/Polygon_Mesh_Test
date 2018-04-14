@@ -19,6 +19,7 @@ Public Class MainForm
     Private p1, p2, p3 As Integer
     Private ka, kd, ks, ki, intentAmb, intentDiff, intentSpec, intentLight, iTot As Double
     Private Status, backFaceCullingStatus As Boolean
+
     Private RotX, RotY, RotZ As Boolean
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -231,22 +232,22 @@ Public Class MainForm
         Vt.OnePointProjection(5) ' Zc = 3
         St.TranslateMat(200, 200, 0) 'translate
         PV.Mat = MultiplyMat4x4(Vt, St)
-        Console.WriteLine(PV.Mat(0, 0)) 'baris,kolom
-        Console.WriteLine(PV.Mat(0, 1))
-        Console.WriteLine(PV.Mat(0, 2))
-        Console.WriteLine(PV.Mat(0, 3))
-        Console.WriteLine(PV.Mat(1, 0))
-        Console.WriteLine(PV.Mat(1, 1))
-        Console.WriteLine(PV.Mat(1, 2))
-        Console.WriteLine(PV.Mat(1, 3))
-        Console.WriteLine(PV.Mat(2, 0))
-        Console.WriteLine(PV.Mat(2, 1))
-        Console.WriteLine(PV.Mat(2, 2))
-        Console.WriteLine(PV.Mat(2, 3))
-        Console.WriteLine(PV.Mat(3, 0))
-        Console.WriteLine(PV.Mat(3, 1))
-        Console.WriteLine(PV.Mat(3, 2))
-        Console.WriteLine(PV.Mat(3, 3))
+        'Console.WriteLine(PV.Mat(0, 0)) 'baris,kolom
+        'Console.WriteLine(PV.Mat(0, 1))
+        'Console.WriteLine(PV.Mat(0, 2))
+        'Console.WriteLine(PV.Mat(0, 3))
+        'Console.WriteLine(PV.Mat(1, 0))
+        'Console.WriteLine(PV.Mat(1, 1))
+        'Console.WriteLine(PV.Mat(1, 2))
+        'Console.WriteLine(PV.Mat(1, 3))
+        'Console.WriteLine(PV.Mat(2, 0))
+        'Console.WriteLine(PV.Mat(2, 1))
+        'Console.WriteLine(PV.Mat(2, 2))
+        'Console.WriteLine(PV.Mat(2, 3))
+        'Console.WriteLine(PV.Mat(3, 0))
+        'Console.WriteLine(PV.Mat(3, 1))
+        'Console.WriteLine(PV.Mat(3, 2))
+        'Console.WriteLine(PV.Mat(3, 3))
     End Sub
 
     Private Sub DrawMeshButton_Click(sender As Object, e As EventArgs) Handles DrawMeshButton.Click
@@ -378,21 +379,38 @@ Public Class MainForm
         DOP(0) = 0
         DOP(1) = 0
         DOP(2) = -10
-        For i = 0 To ListPolygon.N - 1
-            If dotproduct2(DOP, ListPolygon.Normal(i)) < 0 Then
+        If AnimationTimer.Enabled = True Then
+            For i = 0 To ListPolygon.N - 1
+                ' If dotproduct2(DOP, ListPolygon.Normal(i)) < 0 Then
                 p1 = ListPolygon.Elmt(i).p1
                 p2 = ListPolygon.Elmt(i).p2
                 p3 = ListPolygon.Elmt(i).p3
                 temp.Init()
                 temp.InsertIndex(p1, p2, p3)
                 MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
-                'MsgBox(p2.ToString + " aaa " + temp.Elmt(0).p2.ToString)
-                FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, whitepen)
+                ' SurfaceDetection(temp)
                 graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
                 graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
                 graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
-            End If
-        Next
+                ' End If
+            Next
+        Else
+            For i = 0 To ListPolygon.N - 1
+                If dotproduct2(DOP, ListPolygon.Normal(i)) < 0 Then
+                    p1 = ListPolygon.Elmt(i).p1
+                    p2 = ListPolygon.Elmt(i).p2
+                    p3 = ListPolygon.Elmt(i).p3
+                    temp.Init()
+                    temp.InsertIndex(p1, p2, p3)
+                    MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
+                    'MsgBox(p2.ToString + " aaa " + temp.Elmt(0).p2.ToString)
+                    FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, whitepen)
+                    graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
+                    graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
+                    graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
+                End If
+            Next
+        End If
     End Sub
 
 
