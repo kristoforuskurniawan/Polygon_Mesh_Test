@@ -9,8 +9,8 @@ Public Class MainForm
     Private mesh As TMesh
     Private ListofEdges As List(Of TLine)
     Private ListofMeshes As TArrMesh
-    Private sphereRadius, deltaU, deltaTheta, theta, u, rotationAngle_X, rotationAngle_Y, rotationAngle_Z, Vt(3, 3), St(3, 3), x, y, z As Double
-    Private longitude, latitude, transPhere_X, transSphere_Y, transSphere_Z As Integer
+    Private sphereRadius, deltaU, deltaTheta, theta, u, rotationAngle_X, rotationAngle_Y, rotationAngle_Z, Vt(3, 3), St(3, 3), rz(3, 3), x, y, z, w As Double
+    Private longitude, latitude, transPhere_X, transSphere_Y, transSphere_Z, p1, p2, p3 As Integer
     Private PV As New Matrix4x4
     Private Status, backFaceCullingStatus As Boolean
 
@@ -50,6 +50,13 @@ Public Class MainForm
         SphereRadInput.Text = sphereRadius.ToString()
         LongiInput.Text = longitude.ToString()
         LatiInput.Text = latitude.ToString()
+        X_TransTextBox.Text = transPhere_X.ToString()
+        Y_TransTextBox.Text = transSphere_Y.ToString()
+        Z_TransTextBox.Text = transSphere_Z.ToString()
+        SphereMoveRadioButton.Checked = True
+        LightMoveRadioButton.Checked = False
+        BackCulling_OFFRadioButton.Checked = True
+        BackCulling_ONRadioButton.Checked = False
         Status = True
     End Sub
 
@@ -112,11 +119,11 @@ Public Class MainForm
         surfaceNormal = getCrossProduct(P1_P2, P1_P3)
     End Sub
 
-    Private Sub BackCullON_BTN_CheckedChanged(sender As Object, e As EventArgs) Handles BackCulling_ONRadioButton.CheckedChanged
+    Private Sub BackCullON_BTN_CheckedChanged(sender As Object, e As EventArgs)
         backFaceCullingStatus = True
     End Sub
 
-    Private Sub BackCullOFF_BTN_CheckedChanged(sender As Object, e As EventArgs) Handles BackCulling_OFFRadioButton.CheckedChanged
+    Private Sub BackCullOFF_BTN_CheckedChanged(sender As Object, e As EventArgs)
         backFaceCullingStatus = False
     End Sub
 
@@ -153,7 +160,7 @@ Public Class MainForm
             For j As Integer = 0 To size - 1
                 c = obj(j).x
                 d = obj(j).y
-                g.DrawLine(blackpen, a, b, c, d)
+                graphics.DrawLine(blackpen, a, b, c, d)
             Next
         Next
         MainCanvas.Image = bitmapCanvas
@@ -176,6 +183,7 @@ Public Class MainForm
             Projection()
             DrawSphere()
         End If
+        MainCanvas.Image = bitmapCanvas
         'DrawCube(PV)
         'Dim temp As New TPoint
         'Dim x, y, z As Double
@@ -196,20 +204,6 @@ Public Class MainForm
     End Sub
 
     Private Sub DrawSphere()
-        'Dim size As Integer = ListofVertices.Count
-        'Dim obj(size) As TPoint
-        'For i As Integer = 0 To size - 1
-        '    obj(i) = New TPoint
-        '    obj(i) = MultiplyMat(ListofVertices.Elmt(i), PV)
-        'Next
-        'Dim a, b, c, d As Single
-        'For i As Integer = 0 To size - 2
-        '    a = obj(i).x
-        '    b = obj(i).y
-        '    c = obj(i + 1).x
-        '    d = obj(i + 1).y
-        '    graphics.DrawLine(blackpen, a, b, c, d)
-        'Next
         deltaTheta = 180 / latitude
         deltaU = 360 / longitude
         For i = 0 To latitude / 2 - 1
@@ -220,136 +214,139 @@ Public Class MainForm
                 y = sphereRadius * Math.Sin(theta * Math.PI / 180)
                 z = sphereRadius * Math.Cos(theta * Math.PI / 180) * Math.Cos(u * Math.PI / 180)
                 w = 1
-                ListPoints.InsertLast(x, y, z)
+                ListofVertices.InsertLast(x, y, z)
             Next
         Next
-        ListPoints.InsertLast(0, r, 0)
-        For i = 0 To (-m / 2) + 1 Step -1
-            theta = dtheta * i
-            For j = 0 To n - 1
-                u = du * j
-                x = r * Math.Cos(theta * Math.PI / 180) * Math.Sin(u * Math.PI / 180)
-                y = r * Math.Sin(theta * Math.PI / 180)
-                z = r * Math.Cos(theta * Math.PI / 180) * Math.Cos(u * Math.PI / 180)
+        ListofVertices.InsertLast(0, sphereRadius, 0)
+        For i = 0 To (-latitude / 2) + 1 Step -1
+            theta = deltaTheta * i
+            For j = 0 To longitude - 1
+                u = deltaU * j
+                x = sphereRadius * Math.Cos(theta * Math.PI / 180) * Math.Sin(u * Math.PI / 180)
+                y = sphereRadius * Math.Sin(theta * Math.PI / 180)
+                z = sphereRadius * Math.Cos(theta * Math.PI / 180) * Math.Cos(u * Math.PI / 180)
                 w = 1
-                ListPoints.InsertLast(x, y, z)
+                ListofVertices.InsertLast(x, y, z)
             Next
         Next
-        ListPoints.InsertLast(0, -r, 0)
-        For i = 0 To m / 2 - 1 'm=latitude. Bagian bola atas
-            If i <= m / 2 - 2 Then 'n=longitude
-                For j = 0 To n - 2
-                    p1 = n * i + j
-                    p2 = n * (i + 1) + j + 1
-                    p3 = n * (i + 1) + j
-                    ListPolygon.InsertLast(p1, p2, p3)
+        ListofVertices.InsertLast(0, -sphereRadius, 0)
+        For i = 0 To latitude / 2 - 1 'Bagian bola atas
+            If i <= latitude / 2 - 2 Then
+                For j = 0 To longitude - 2
+                    p1 = longitude * i + j
+                    p2 = longitude * (i + 1) + j + 1
+                    p3 = longitude * (i + 1) + j
+                    ListofMeshes.InsertLast(p1, p2, p3)
 
-                    p1 = n * i + j
-                    p2 = n * i + j + 1
-                    p3 = n * (i + 1) + j + 1
-                    ListPolygon.InsertLast(p1, p2, p3)
+                    p1 = longitude * i + j
+                    p2 = longitude * i + j + 1
+                    p3 = longitude * (i + 1) + j + 1
+                    ListofMeshes.InsertLast(p1, p2, p3)
                 Next
-                p1 = n * (i + 1) - 1
-                p2 = n * (i + 1)
-                p3 = n * (i + 2) - 1
-                ListPolygon.InsertLast(p1, p2, p3)
+                p1 = longitude * (i + 1) - 1
+                p2 = longitude * (i + 1)
+                p3 = longitude * (i + 2) - 1
+                ListofMeshes.InsertLast(p1, p2, p3)
 
-                p1 = n * (i + 1) - 1
-                p2 = n * i
-                p3 = n * (i + 1)
-                ListPolygon.InsertLast(p1, p2, p3)
+                p1 = longitude * (i + 1) - 1
+                p2 = longitude * i
+                p3 = longitude * (i + 1)
+                ListofMeshes.InsertLast(p1, p2, p3)
             Else
-                For j = 0 To n - 2
-                    p1 = n * i + j
-                    p2 = n * i + j + 1
-                    p3 = m / 2 * n
-                    ListPolygon.InsertLast(p1, p2, p3)
+                For j = 0 To longitude - 2
+                    p1 = longitude * i + j
+                    p2 = longitude * i + j + 1
+                    p3 = latitude / 2 * longitude
+                    ListofMeshes.InsertLast(p1, p2, p3)
                 Next
-                p1 = n * (i + 1) - 1
-                p2 = n * i
-                p3 = n * (i + 1)
-                ListPolygon.InsertLast(p1, p2, p3)
+                p1 = longitude * (i + 1) - 1
+                p2 = longitude * i
+                p3 = longitude * (i + 1)
+                ListofMeshes.InsertLast(p1, p2, p3)
             End If
         Next
-        For i = 0 To (-m / 2) + 1 Step -1 'Bagian bola bawah
-            If i >= (-m / 2) + 2 Then
-                For j = 0 To n - 2
-                    p1 = (n * (-i + 1)) + j + (m / 2 * n) + 1 '(m / 2 * n) + n + j + 1 '13 + j 'n * i + j 
-                    p2 = (n * -i + j + 1) + (m / 2 * n) + 1 '(m / 2 * n) + j + 2 '10 + j 'n * (i + 1) + j + 1
-                    p3 = (n * -i + j) + (m / 2 * n) + 1 '(m / 2 * n) + j + 1 '9 + j 'n * (i + 1) + j
-                    ListPolygon.InsertLast(p1, p2, p3)
-                    'Console.WriteLine("Test1")
-                    'Console.WriteLine(ListPoints.Elmt(p1).y)
-                    'Console.WriteLine(ListPoints.Elmt(p2).y)
-                    'Console.WriteLine(ListPoints.Elmt(p3).y)
-                    ' Console.WriteLine(j)
-                    'Console.WriteLine(p1)
-                    'Console.WriteLine(p2)
-                    'Console.WriteLine(p3)
-                    p1 = (n * (-i + 1)) + j + (m / 2 * n) + 1 '(m / 2 * n) + n + j + 1 ' n * i + j 13
-                    p2 = (n * (-i + 1) + j + 1) + (m / 2 * n) + 1 '14 + j ' n * i + j + 1 
-                    p3 = (n * -i + j + 1) + (m / 2 * n) + 1 '10 + j 'n * (i + 1) + j + 1
-                    ListPolygon.InsertLast(p1, p2, p3)
-                    'Console.WriteLine("Test2")
-                    'Console.WriteLine(ListPoints.Elmt(p1).y)
-                    'Console.WriteLine(ListPoints.Elmt(p2).y)
-                    'Console.WriteLine(ListPoints.Elmt(p3).y)
-                    'Console.WriteLine(p1)
-                    'Console.WriteLine(p2)
-                    'Console.WriteLine(p3)
-                Next
-                p1 = (n * (-i + 2) - 1) + (m / 2 * n) + 1 '16 'n * (i + 1) - 1
-                p2 = (n * -i) + (m / 2 * n) + 1 '9 'n * (i + 1)
-                p3 = (n * (-i + 1) - 1) + (m / 2 * n) + 1 '12 'n * (i + 2) - 1
-                ListPolygon.InsertLast(p1, p2, p3)
-                'Console.WriteLine("Test3")
-                'Console.WriteLine(ListPoints.Elmt(p1).y)
-                'Console.WriteLine(ListPoints.Elmt(p2).y)
-                'Console.WriteLine(ListPoints.Elmt(p3).y)
-                'Console.WriteLine(p1)
-                'Console.WriteLine(p2)
-                'Console.WriteLine(p3)
-                p1 = (n * (-i + 2) - 1) + (m / 2 * n) + 1 '16 'n * (i + 1) - 1
-                p2 = (n * (-i + 1)) + (m / 2 * n) + 1 '13 ' n * i
-                p3 = (n * -i) + (m / 2 * n) + 1 ' 9 'n * (i + 1)
-                ListPolygon.InsertLast(p1, p2, p3)
-                'Console.WriteLine("Test4")
-                'Console.WriteLine(ListPoints.Elmt(p1).y)
-                'Console.WriteLine(ListPoints.Elmt(p2).y)
-                'Console.WriteLine(ListPoints.Elmt(p3).y)
-                'Console.WriteLine(p1)
-                'Console.WriteLine(p2)
-                'Console.WriteLine(p3)
-            Else
-                For j = 0 To n - 2
-                    p1 = (n * -i + j) + ((m / 2 * n) + 1) ' 13 + j 'n * i + j
-                    p2 = (n * -i + j + 1) + (m / 2 * n) + 1 '14
-                    p3 = (m / 2 * n) + (m / 2 * n) + 1 '17
-                    'Console.WriteLine(p1)
-                    ListPolygon.InsertLast(p1, p2, p3)
+        For i = 0 To (-latitude / 2) + 1 Step -1 'Bagian bola bawah
+            If i >= (-latitude / 2) + 2 Then
+                For j = 0 To longitude - 2
+                    p1 = (longitude * (-i + 1)) + j + (latitude / 2 * longitude) + 1 '(m / 2 * n) + n + j + 1 '13 + j 'n * i + j 
+                    p2 = (longitude * -i + j + 1) + (latitude / 2 * longitude) + 1 '(m / 2 * n) + j + 2 '10 + j 'n * (i + 1) + j + 1
+                    p3 = (longitude * -i + j) + (latitude / 2 * longitude) + 1 '(m / 2 * n) + j + 1 '9 + j 'n * (i + 1) + j
+                    ListofMeshes.InsertLast(p1, p2, p3)
 
-                    'Console.WriteLine(ListPoints.Elmt(p1).y)
-                    'Console.WriteLine(ListPoints.Elmt(p2).y)
-                    'Console.WriteLine(ListPoints.Elmt(p3).y)
-                    'Console.WriteLine(p1)
-                    'Console.WriteLine(p2)
-                    'Console.WriteLine(p3)
+                    p1 = (longitude * (-i + 1)) + j + (latitude / 2 * longitude) + 1 '(m / 2 * n) + n + j + 1 ' n * i + j 13
+                    p2 = (longitude * (-i + 1) + j + 1) + (latitude / 2 * longitude) + 1 '14 + j ' n * i + j + 1 
+                    p3 = (longitude * -i + j + 1) + (latitude / 2 * longitude) + 1 '10 + j 'n * (i + 1) + j + 1
+                    ListofMeshes.InsertLast(p1, p2, p3)
                 Next
-                p1 = (n * (-i + 1) - 1) + (m / 2 * n) + 1 '16
-                p2 = (n * -i) + (m / 2 * n) + 1 '13
-                p3 = (n * (-i + 1)) + (m / 2 * n) + 1 '17
-                ListPolygon.InsertLast(p1, p2, p3)
-                'Console.WriteLine("Test6")
-                'Console.WriteLine(ListPoints.Elmt(p1).y)
-                'Console.WriteLine(ListPoints.Elmt(p2).y)
-                'Console.WriteLine(ListPoints.Elmt(p3).y)
-                'Console.WriteLine(p1)
-                'Console.WriteLine(p2)
-                'Console.WriteLine(p3)
+                p1 = (longitude * (-i + 2) - 1) + (latitude / 2 * longitude) + 1 '16 'n * (i + 1) - 1
+                p2 = (longitude * -i) + (latitude / 2 * longitude) + 1 '9 'n * (i + 1)
+                p3 = (longitude * (-i + 1) - 1) + (latitude / 2 * longitude) + 1 '12 'n * (i + 2) - 1
+                ListofMeshes.InsertLast(p1, p2, p3)
+
+                p1 = (longitude * (-i + 2) - 1) + (latitude / 2 * longitude) + 1 '16 'n * (i + 1) - 1
+                p2 = (longitude * (-i + 1)) + (latitude / 2 * longitude) + 1 '13 ' n * i
+                p3 = (longitude * -i) + (latitude / 2 * longitude) + 1 ' 9 'n * (i + 1)
+                ListofMeshes.InsertLast(p1, p2, p3)
+            Else
+                For j = 0 To longitude - 2
+                    p1 = (longitude * -i + j) + ((latitude / 2 * longitude) + 1) ' 13 + j 'n * i + j
+                    p2 = (longitude * -i + j + 1) + (latitude / 2 * longitude) + 1 '14
+                    p3 = (latitude / 2 * longitude) + (latitude / 2 * longitude) + 1 '17
+                    ListofMeshes.InsertLast(p1, p2, p3)
+                Next
+                p1 = (longitude * (-i + 1) - 1) + (latitude / 2 * longitude) + 1 '16
+                p2 = (longitude * -i) + (latitude / 2 * longitude) + 1 '13
+                p3 = (longitude * (-i + 1)) + (latitude / 2 * longitude) + 1 '17
+                ListofMeshes.InsertLast(p1, p2, p3)
             End If
         Next
-        gambarpoly()
-        MainCanvas.Image = Image
+        'gambarpoly()
+        DrawPoly()
+        MainCanvas.Image = bitmapCanvas
+    End Sub
+
+    Private Sub DrawPoly()
+        Dim m1, m2, m3, m4, m5, m6, m11, m22, m33, m44, m55, m66 As Double
+        If (backFaceCullingStatus = False) Then
+            For j = 0 To ListofMeshes.N - 1
+                mesh = ListofMeshes.Elmt(j)
+                p1 = mesh.EdgeIndex1
+                p2 = mesh.EdgeIndex2
+                p3 = mesh.EdgeIndex3
+                m1 = (ListofVertices.Elmt(p1).x * rz(0, 0) + ListofVertices.Elmt(p1).y * rz(0, 1) + ListofVertices.Elmt(p1).z * rz(0, 2) + w * rz(0, 3))
+                m2 = (ListofVertices.Elmt(p1).x * rz(1, 0) + ListofVertices.Elmt(p1).y * rz(1, 1) + ListofVertices.Elmt(p1).z * rz(1, 2) + w * rz(1, 3))
+                m3 = (ListofVertices.Elmt(p2).x * rz(0, 0) + ListofVertices.Elmt(p2).y * rz(0, 1) + ListofVertices.Elmt(p2).z * rz(0, 2) + w * rz(0, 3))
+                m4 = (ListofVertices.Elmt(p2).x * rz(1, 0) + ListofVertices.Elmt(p2).y * rz(1, 1) + ListofVertices.Elmt(p2).z * rz(1, 2) + w * rz(1, 3))
+                m5 = (ListofVertices.Elmt(p3).x * rz(0, 0) + ListofVertices.Elmt(p3).y * rz(0, 1) + ListofVertices.Elmt(p3).z * rz(0, 2) + w * rz(0, 3))
+                m6 = (ListofVertices.Elmt(p3).x * rz(1, 0) + ListofVertices.Elmt(p3).y * rz(1, 1) + ListofVertices.Elmt(p3).z * rz(1, 2) + w * rz(1, 3))
+                m11 = (m1 * St(0, 0) + m1 * St(0, 1) + m1 * St(0, 2) + w * St(0, 3))
+                m22 = (m2 * St(1, 0) + m2 * St(1, 1) + m2 * St(1, 2) + w * St(1, 3))
+                m33 = (m3 * St(0, 0) + m3 * St(0, 1) + m3 * St(0, 2) + w * St(0, 3))
+                m44 = (m4 * St(1, 0) + m4 * St(1, 1) + m4 * St(1, 2) + w * St(1, 3))
+                m55 = (m5 * St(0, 0) + m5 * St(0, 1) + m5 * St(0, 2) + w * St(0, 3))
+                m66 = (m6 * St(1, 0) + m6 * St(1, 1) + m6 * St(1, 2) + w * St(1, 3))
+                graphics.DrawLine(blackpen, New Point(m11, m22), New Point(m33, m44))
+                graphics.DrawLine(blackpen, New Point(m33, m44), New Point(m55, m66))
+                graphics.DrawLine(blackpen, New Point(m55, m66), New Point(m11, m22))
+            Next
+        Else 'Backface Culling is activated
+            For i = 0 To ListofMeshes.N - 1
+                mesh = ListofMeshes.Elmt(i)
+                p1 = mesh.EdgeIndex1
+                p2 = mesh.EdgeIndex2
+                p3 = mesh.EdgeIndex3
+                m1 = (ListofVertices.Elmt(p1).x * rz(0, 0) + ListofVertices.Elmt(p1).y * rz(0, 1) + ListofVertices.Elmt(p1).z * rz(0, 2) + w * rz(0, 3))
+                m2 = (ListofVertices.Elmt(p1).x * rz(1, 0) + ListofVertices.Elmt(p1).y * rz(1, 1) + ListofVertices.Elmt(p1).z * rz(1, 2) + w * rz(1, 3))
+                m3 = (ListofVertices.Elmt(p2).x * rz(0, 0) + ListofVertices.Elmt(p2).y * rz(0, 1) + ListofVertices.Elmt(p2).z * rz(0, 2) + w * rz(0, 3))
+                m4 = (ListofVertices.Elmt(p2).x * rz(1, 0) + ListofVertices.Elmt(p2).y * rz(1, 1) + ListofVertices.Elmt(p2).z * rz(1, 2) + w * rz(1, 3))
+                m5 = (ListofVertices.Elmt(p3).x * rz(0, 0) + ListofVertices.Elmt(p3).y * rz(0, 1) + ListofVertices.Elmt(p3).z * rz(0, 2) + w * rz(0, 3))
+                m6 = (ListofVertices.Elmt(p3).x * rz(1, 0) + ListofVertices.Elmt(p3).y * rz(1, 1) + ListofVertices.Elmt(p3).z * rz(1, 2) + w * rz(1, 3))
+                graphics.DrawLine(blackpen, New Point(m11, m22), New Point(m33, m44))
+                graphics.DrawLine(blackpen, New Point(m33, m44), New Point(m55, m66))
+                graphics.DrawLine(blackpen, New Point(m55, m66), New Point(m11, m22))
+            Next
+        End If
+        MainCanvas.Image = bitmapCanvas
     End Sub
 
     Private Sub MainCanvas_Click(sender As Object, e As EventArgs) Handles MainCanvas.Click
