@@ -304,26 +304,57 @@ Public Class MainForm
     Public Sub gambarpoly()
         Dim m1, m2, m3, m4, m5, m6, m11, m22, m33, m44, m55, m66 As Double
         Dim p1, p2, p3 As Integer
-
+        BackFaceCulling()
+        Dim DOP(3) As Integer
+        DOP(0) = 0
+        DOP(1) = 0
+        DOP(2) = -10
         For i = 0 To ListPolygon.N - 1
-            p1 = ListPolygon.Elmt(i).p1
-            p2 = ListPolygon.Elmt(i).p2
-            p3 = ListPolygon.Elmt(i).p3
-            m1 = ListPoints.Elmt(p1).x * PV.Mat(0, 0) + ListPoints.Elmt(p1).y * PV.Mat(0, 1) + ListPoints.Elmt(p1).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
-            m2 = ListPoints.Elmt(p1).x * PV.Mat(1, 0) + ListPoints.Elmt(p1).y * PV.Mat(1, 1) + ListPoints.Elmt(p1).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
-            m3 = ListPoints.Elmt(p2).x * PV.Mat(0, 0) + ListPoints.Elmt(p2).y * PV.Mat(0, 1) + ListPoints.Elmt(p2).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
-            m4 = ListPoints.Elmt(p2).x * PV.Mat(1, 0) + ListPoints.Elmt(p2).y * PV.Mat(1, 1) + ListPoints.Elmt(p2).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
-            m5 = ListPoints.Elmt(p3).x * PV.Mat(0, 0) + ListPoints.Elmt(p3).y * PV.Mat(0, 1) + ListPoints.Elmt(p3).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
-            m6 = ListPoints.Elmt(p3).x * PV.Mat(1, 0) + ListPoints.Elmt(p3).y * PV.Mat(1, 1) + ListPoints.Elmt(p3).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3) 'test
-            graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
-            graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
-            graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
+            If dotproduct2(DOP, ListPolygon.Normal(i)) < 0 Then
+                p1 = ListPolygon.Elmt(i).p1
+                p2 = ListPolygon.Elmt(i).p2
+                p3 = ListPolygon.Elmt(i).p3
+                m1 = ListPoints.Elmt(p1).x * PV.Mat(0, 0) + ListPoints.Elmt(p1).y * PV.Mat(0, 1) + ListPoints.Elmt(p1).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
+                m2 = ListPoints.Elmt(p1).x * PV.Mat(1, 0) + ListPoints.Elmt(p1).y * PV.Mat(1, 1) + ListPoints.Elmt(p1).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
+                m3 = ListPoints.Elmt(p2).x * PV.Mat(0, 0) + ListPoints.Elmt(p2).y * PV.Mat(0, 1) + ListPoints.Elmt(p2).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
+                m4 = ListPoints.Elmt(p2).x * PV.Mat(1, 0) + ListPoints.Elmt(p2).y * PV.Mat(1, 1) + ListPoints.Elmt(p2).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
+                m5 = ListPoints.Elmt(p3).x * PV.Mat(0, 0) + ListPoints.Elmt(p3).y * PV.Mat(0, 1) + ListPoints.Elmt(p3).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
+                m6 = ListPoints.Elmt(p3).x * PV.Mat(1, 0) + ListPoints.Elmt(p3).y * PV.Mat(1, 1) + ListPoints.Elmt(p3).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3) 'test
+                graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
+                graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
+                graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
+            End If
         Next
 
     End Sub
 
     Private Sub MainCanvas_Move(sender As Object, e As MouseEventArgs) Handles MainCanvas.MouseMove
         ScreenCoordLabel.Text = "Coordinates: X = " + e.X.ToString() + ", Y = " + e.Y.ToString()
+    End Sub
+
+
+    Private Function dotproduct2(x As Integer(), normal As Normalvalue) As Integer
+        Dim d As Integer = x(0) * normal.x + x(1) * normal.y + x(2) * normal.z
+        Return d
+    End Function
+
+    Private Sub CalculateNormal(poly As ListPolygons)
+        Dim ppp As New TMesh
+        Dim p1, p2, p3, m1, m2, m3, m4, m5, m6 As Integer
+        Dim AB, AC As TPoint
+        For i As Integer = 0 To poly.N - 1
+            p1 = ListPolygon.Elmt(i).p1
+            p2 = ListPolygon.Elmt(i).p2
+            p3 = ListPolygon.Elmt(i).p3
+            AB = New TPoint(ListPoints.Elmt(p2).x - ListPoints.Elmt(p1).x, ListPoints.Elmt(p2).y - ListPoints.Elmt(p1).y, ListPoints.Elmt(p2).z - ListPoints.Elmt(p1).z)
+            AC = New TPoint(ListPoints.Elmt(p3).x - ListPoints.Elmt(p1).x, ListPoints.Elmt(p3).y - ListPoints.Elmt(p1).y, ListPoints.Elmt(p3).z - ListPoints.Elmt(p1).z)
+            poly.Normal(i).Calculate(AB, AC)
+        Next
+    End Sub
+
+    Private Sub BackFaceCulling()
+        CalculateNormal(ListPolygon)
+        Dim DOP(3) As Double
     End Sub
 
 
