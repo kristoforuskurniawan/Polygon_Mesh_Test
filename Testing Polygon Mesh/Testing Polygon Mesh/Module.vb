@@ -93,5 +93,9 @@
         Return temp
     End Function
 
-
+    Public Structure Normalvalue
+        Dim x As Integer
+        Dim y As Integer
+        Dim z As Integer
+    End Structure
 End Module

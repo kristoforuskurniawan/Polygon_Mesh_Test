@@ -115,6 +115,13 @@ Public Class MainForm
         surfaceNormal = getCrossProduct(P1_P2, P1_P3)
     End Sub
 
+    Private Sub calculateSurfaceNormalReal(ByRef Vector1 As TPoint, ByRef Vector2 As TPoint, ByRef normal As Normalvalue)
+        normal.x = Vector1.y * Vector2.z - Vector1.z * Vector2.y
+        normal.y = Vector1.z * Vector2.x - Vector1.x * Vector2.z
+        normal.z = Vector1.x * Vector2.y - Vector1.y * Vector2.x
+    End Sub
+
+
     Private Sub BackCullON_BTN_CheckedChanged(sender As Object, e As EventArgs) Handles BackCulling_ONRadioButton.CheckedChanged
         backFaceCullingStatus = True
     End Sub
@@ -402,6 +409,21 @@ Public Class MainForm
 
     Private Sub MainCanvas_Move(sender As Object, e As MouseEventArgs) Handles MainCanvas.MouseMove
         ScreenCoordLabel.Text = "Coordinates: X = " + e.X.ToString() + ", Y = " + e.Y.ToString()
+    End Sub
+
+    Private Sub CalculateNormal(poly As TArrMesh)
+        Dim ppp As New TMesh
+        Dim p1, p2, p3 As Integer
+        Dim AB, AC As TPoint
+        For i As Integer = 0 To poly.N - 1
+            ppp = poly.Elmt(i)
+            p1 = ppp.EdgeIndex1
+            p2 = ppp.EdgeIndex2
+            p3 = ppp.EdgeIndex3
+            AB = New TPoint(ListPoints.Elmt(p2).x - ListPoints.Elmt(p1).x, ListPoints.Elmt(p2).y - ListPoints.Elmt(p1).y, ListPoints.Elmt(p2).z - ListPoints.Elmt(p1).z)
+            AC = New TPoint(ListPoints.Elmt(p3).x - ListPoints.Elmt(p1).x, ListPoints.Elmt(p3).y - ListPoints.Elmt(p1).y, ListPoints.Elmt(p3).z - ListPoints.Elmt(p1).z)
+            calculateSurfaceNormalReal(AB, AC, poly.Normal(i)) 'normal
+        Next
     End Sub
 
 
