@@ -511,7 +511,6 @@ End Class
 '        Timer1.Enabled = False
 '    End Sub
 
->>>>>>> 54ab1e4e04751e15e20c92989f609f5bc43ec7d0
 
 '    Private Sub btnReset_Click(sender As Object, e As EventArgs) Handles btnReset.Click
 '        Timer1.Enabled = False
