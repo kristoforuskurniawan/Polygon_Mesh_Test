@@ -28,7 +28,7 @@ Public Class MainForm
         ListPolygon.Init()
         'ListofEdges = New List(Of TLine)
         'ListofMeshes = New TArrMesh()
-        ListofMeshes.Init()
+        'ListofMeshes.Init()
         PV = New Matrix4x4()
 
         Vt = PV.insertColumnMatrix(Vt, 0, 1, 0, 0, 0)
@@ -156,7 +156,7 @@ Public Class MainForm
             For j As Integer = 0 To size - 1
                 c = obj(j).x
                 d = obj(j).y
-                g.DrawLine(blackpen, a, b, c, d)
+                graphics.DrawLine(blackpen, a, b, c, d)
             Next
         Next
         MainCanvas.Image = bitmapCanvas
@@ -165,8 +165,8 @@ Public Class MainForm
     Private Sub Projection()
         Dim Vt, St As New Matrix4x4
         PV = New Matrix4x4
-        Vt.OnePointProjection(20) ' Zc = 3
-        St.ScaleMat(7, -7, 0) ' scale
+        Vt.OnePointProjection(200) ' Zc = 3
+        St.ScaleMat(1, -1, 0) ' scale
         St.TranslateMat(200, 200, 0) 'translate
         PV.Mat = MultiplyMat4x4(Vt, St)
     End Sub
@@ -201,6 +201,11 @@ Public Class MainForm
     Private Sub DrawSphere()
         Dim p1, p2, p3, w, r, m, n, du As Integer
         Dim dtheta As Double
+        r = 10
+        m = 4
+        n = 4
+        w = 1
+        du = 360 / n
         'Dim size As Integer = ListofVertices.Count
         'Dim obj(size) As TPoint
         'For i As Integer = 0 To size - 1
@@ -360,42 +365,20 @@ Public Class MainForm
     Public Sub gambarpoly()
         Dim m1, m2, m3, m4, m5, m6, m11, m22, m33, m44, m55, m66 As Double
         Dim p1, p2, p3 As Integer
-        For j = 0 To ListPolygon.N - 1
-                pin = ListPolygon.Elmt(j)
-                p1 = pin.p1
-                p2 = pin.p2
-                p3 = pin.p3
-                m1 = (ListPoints.Elmt(p1).x * rz(0, 0) + ListPoints.Elmt(p1).y * rz(0, 1) + ListPoints.Elmt(p1).z * rz(0, 2) + w * rz(0, 3))
-                m2 = (ListPoints.Elmt(p1).x * rz(1, 0) + ListPoints.Elmt(p1).y * rz(1, 1) + ListPoints.Elmt(p1).z * rz(1, 2) + w * rz(1, 3))
-                m3 = (ListPoints.Elmt(p2).x * rz(0, 0) + ListPoints.Elmt(p2).y * rz(0, 1) + ListPoints.Elmt(p2).z * rz(0, 2) + w * rz(0, 3))
-                m4 = (ListPoints.Elmt(p2).x * rz(1, 0) + ListPoints.Elmt(p2).y * rz(1, 1) + ListPoints.Elmt(p2).z * rz(1, 2) + w * rz(1, 3))
-                m5 = (ListPoints.Elmt(p3).x * rz(0, 0) + ListPoints.Elmt(p3).y * rz(0, 1) + ListPoints.Elmt(p3).z * rz(0, 2) + w * rz(0, 3))
-                m6 = (ListPoints.Elmt(p3).x * rz(1, 0) + ListPoints.Elmt(p3).y * rz(1, 1) + ListPoints.Elmt(p3).z * rz(1, 2) + w * rz(1, 3))
-                m11 = (m1 * Screen(0, 0) + m1 * Screen(0, 1) + m1 * Screen(0, 2) + w * Screen(0, 3))
-                m22 = (m2 * Screen(1, 0) + m2 * Screen(1, 1) + m2 * Screen(1, 2) + w * Screen(1, 3))
-                m33 = (m3 * Screen(0, 0) + m3 * Screen(0, 1) + m3 * Screen(0, 2) + w * Screen(0, 3))
-                m44 = (m4 * Screen(1, 0) + m4 * Screen(1, 1) + m4 * Screen(1, 2) + w * Screen(1, 3))
-                m55 = (m5 * Screen(0, 0) + m5 * Screen(0, 1) + m5 * Screen(0, 2) + w * Screen(0, 3))
-                m66 = (m6 * Screen(1, 0) + m6 * Screen(1, 1) + m6 * Screen(1, 2) + w * Screen(1, 3))
-                gr.DrawLine(pulpen, New Point(m11, m22), New Point(m33, m44))
-                gr.DrawLine(pulpen, New Point(m33, m44), New Point(m55, m66))
-                gr.DrawLine(pulpen, New Point(m55, m66), New Point(m11, m22))
-            Next
-        Else
+
         For i = 0 To ListPolygon.N - 1
-            pin = ListPolygon.Elmt(i)
-            p1 = pin.p1
-            p2 = pin.p2
-            p3 = pin.p3
-            m1 = ListPoints.Elmt(p1).x * Screen(0, 0) + ListPoints.Elmt(p1).y * Screen(0, 1) + ListPoints.Elmt(p1).z * Screen(0, 2) + w * Screen(0, 3)
-            m2 = ListPoints.Elmt(p1).x * Screen(1, 0) + ListPoints.Elmt(p1).y * Screen(1, 1) + ListPoints.Elmt(p1).z * Screen(1, 2) + w * Screen(1, 3)
-            m3 = ListPoints.Elmt(p2).x * Screen(0, 0) + ListPoints.Elmt(p2).y * Screen(0, 1) + ListPoints.Elmt(p2).z * Screen(0, 2) + w * Screen(0, 3)
-            m4 = ListPoints.Elmt(p2).x * Screen(1, 0) + ListPoints.Elmt(p2).y * Screen(1, 1) + ListPoints.Elmt(p2).z * Screen(1, 2) + w * Screen(1, 3)
-            m5 = ListPoints.Elmt(p3).x * Screen(0, 0) + ListPoints.Elmt(p3).y * Screen(0, 1) + ListPoints.Elmt(p3).z * Screen(0, 2) + w * Screen(0, 3)
-            m6 = ListPoints.Elmt(p3).x * Screen(1, 0) + ListPoints.Elmt(p3).y * Screen(1, 1) + ListPoints.Elmt(p3).z * Screen(1, 2) + w * Screen(1, 3)
-            gr.DrawLine(pulpen, New Point(m1, m2), New Point(m3, m4))
-            gr.DrawLine(pulpen, New Point(m3, m4), New Point(m5, m6))
-            gr.DrawLine(pulpen, New Point(m5, m6), New Point(m1, m2))
+            p1 = ListPolygon.Elmt(i).EdgeIndex1
+            p2 = ListPolygon.Elmt(i).EdgeIndex2
+            p3 = ListPolygon.Elmt(i).EdgeIndex3
+            m1 = ListPoints.Elmt(p1).x * PV.Mat(0, 0) + ListPoints.Elmt(p1).y * PV.Mat(0, 1) + ListPoints.Elmt(p1).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
+            m2 = ListPoints.Elmt(p1).x * PV.Mat(1, 0) + ListPoints.Elmt(p1).y * PV.Mat(1, 1) + ListPoints.Elmt(p1).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
+            m3 = ListPoints.Elmt(p2).x * PV.Mat(0, 0) + ListPoints.Elmt(p2).y * PV.Mat(0, 1) + ListPoints.Elmt(p2).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
+            m4 = ListPoints.Elmt(p2).x * PV.Mat(1, 0) + ListPoints.Elmt(p2).y * PV.Mat(1, 1) + ListPoints.Elmt(p2).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
+            m5 = ListPoints.Elmt(p3).x * PV.Mat(0, 0) + ListPoints.Elmt(p3).y * PV.Mat(0, 1) + ListPoints.Elmt(p3).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
+            m6 = ListPoints.Elmt(p3).x * PV.Mat(1, 0) + ListPoints.Elmt(p3).y * PV.Mat(1, 1) + ListPoints.Elmt(p3).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
+            graphics.DrawLine(blackpen, New Point(m1, m2), New Point(m3, m4))
+            graphics.DrawLine(blackpen, New Point(m3, m4), New Point(m5, m6))
+            graphics.DrawLine(blackpen, New Point(m5, m6), New Point(m1, m2))
         Next
 
     End Sub

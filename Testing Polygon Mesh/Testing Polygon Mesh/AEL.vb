@@ -26,7 +26,7 @@
                     'prevNode.nxt = node
                     Exit While
                 Else
-                    s.Push(currentNode) old
+                    s.Push(currentNode) 'old
                     If currentNode.nxt Is Nothing Then
                         s.Push(node) 'old
                         'currentNode.nxt = node
