@@ -9,7 +9,10 @@
 
     Public Overloads Sub InsertLast(p1 As Integer, p2 As Integer, p3 As Integer)
         Dim P As TMesh
-        P = New TMesh(p1, p2, p3)
+        P = New TMesh()
+        P.EdgeIndex1 = p1
+        P.EdgeIndex2 = p2
+        P.EdgeIndex3 = p3
         ReDim Preserve Elmt(N)
         Elmt(N) = P
         N = N + 1
