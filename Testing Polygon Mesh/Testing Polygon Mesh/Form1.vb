@@ -28,7 +28,7 @@ Public Class MainForm
 
         Vt = PV.insertColumnMatrix(Vt, 0, 1, 0, 0, 0)
         Vt = PV.insertColumnMatrix(Vt, 1, 0, 1, 0, 0)
-        Vt = PV.insertColumnMatrix(Vt, 2, 0, 0, 0, -1 / 10)
+        Vt = PV.insertColumnMatrix(Vt, 2, 0, 0, 0, -1 / 5)
         Vt = PV.insertColumnMatrix(Vt, 3, 0, 0, 0, 1)
 
         St = PV.insertColumnMatrix(St, 0, 1, 0, 0, sphereCenter.x)
@@ -95,7 +95,6 @@ Public Class MainForm
     Private Function dotproduct(x As Double(), y As Double()) As Double
         Dim d As Double = x(0) * y(0) + x(1) * y(1) + x(2) * y(2)
         Return If(d < 0, -d, 0)
-        'asdf
     End Function
 
     Private Function getCrossProduct(ByRef Vector1 As TPoint, ByRef Vector2 As TPoint)
@@ -166,37 +165,17 @@ Public Class MainForm
     End Sub
 
     Private Sub DrawMeshButton_Click(sender As Object, e As EventArgs) Handles DrawMeshButton.Click
-        If SphereRadInput.Text = "" Or LongiInput.Text = "" Or LatiInput.Text = "" Then
-            MessageBox.Show("Please give a proper input")
+        If SphereRadInput.Text = "" Or LongiInput.Text = "" Or LatiInput.Text = "" Or LongiInput.Text Mod 2 <> 0 Or LatiInput.Text Mod 2 <> 2 Then
+            MessageBox.Show("Please give a proper input! Latitude and longitude must be even numbers!")
         Else
             sphereRadius = Double.Parse(SphereRadInput.Text)
             longitude = Integer.Parse(LongiInput.Text)
             latitude = Integer.Parse(LatiInput.Text)
-            'DeclareSphere()
-            'Projection()
             graphics.Clear(Color.Black)
             ListofVertices = ListofVertices.DeleteAllData()
             ListofMeshes = ListofMeshes.DeleteAllData()
             DrawSphere()
         End If
-        'MainCanvas.Image = bitmapCanvas
-        'DrawCube(PV)
-        'Dim temp As New TPoint
-        'Dim x, y, z As Double
-        'Dim hl, vl, radius As Integer 'horizontal lines and vertical lines
-        'hl = 10
-        'vl = 10
-        'radius = 100
-        'For m As Integer = 0 To hl 'horizontalLines
-        '    For n As Integer = 0 To vl - 1 'verticalLines - 1
-        '        x = Math.Sin(Math.PI * m / hl) * Math.Cos(2 * Math.PI * n / vl) * radius
-        '        y = Math.Sin(Math.PI * m / hl) * Math.Sin(2 * Math.PI * n / vl) * radius
-        '        z = Math.Cos(Math.PI * m / hl) * radius
-        '        temp = New TPoint(x, y, z)
-        '    Next
-        'Next
-        'drawsphere()
-        'DrawCube(PV)
     End Sub
 
     Private Sub DrawSphere()
@@ -322,7 +301,7 @@ Public Class MainForm
                 '    insertColumnMatrix(rz, 2, 0, 0, 1, 0)
                 '    insertColumnMatrix(rz, 3, 0, 0, 0, 1)
                 'End If
-                For j = 0 To ListofMeshes.N - 1
+                For j = 0 To ListofMeshes.Count - 1
                     mesh = ListofMeshes.Elmt(j)
                     p1 = mesh.EdgeIndex1
                     p2 = mesh.EdgeIndex2
@@ -344,7 +323,7 @@ Public Class MainForm
                     graphics.DrawLine(whitePen, New Point(m55, m66), New Point(m11, m22))
                 Next
             Else
-                For i = 0 To ListofMeshes.N - 1
+                For i = 0 To ListofMeshes.Count - 1
                     mesh = ListofMeshes.Elmt(i)
                     p1 = mesh.EdgeIndex1
                     p2 = mesh.EdgeIndex2
