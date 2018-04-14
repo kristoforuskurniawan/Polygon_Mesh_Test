@@ -2,13 +2,6 @@
 '    Dim edgetable As New List(Of EdgeTable) 'SET
 '    Dim AET As New AEL
 '    Dim stacker As New Stack(Of EdgeTable)
-'    Dim screen(415, 433) As Double
-
-'    'Public Sub InitScreen()
-'    '    For i As Integer = 0 To 414
-'    '        For j As Integer = 0 To 433
-'    '        Next
-'    'End Sub
 
 '    Public Sub FillPolygon(a As TArrMesh, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen)
 '        edgetable.Clear()
@@ -45,7 +38,7 @@
 '                temp.dx = a.Elmt(d).EdgeIndex1 - a.Elmt(i).EdgeIndex1
 '                temp.dy = a.Elmt(d).EdgeIndex2 - a.Elmt(i).EdgeIndex2
 '                temp.carry = 0
-'                temp.z = a.Elmt(d).EdgeIndex3
+'                temp.z = a.Elmt(d).EdgeIndex1
 '                temp.nxt = Nothing
 '                If temp.dy < 0 Then
 '                    temp.dy = -temp.dy
