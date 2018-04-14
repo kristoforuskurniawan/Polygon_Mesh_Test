@@ -46,17 +46,20 @@ Partial Class MainForm
         Me.LightSourceListBox = New System.Windows.Forms.ListBox()
         Me.LightSourceListLabel = New System.Windows.Forms.Label()
         Me.DeleteLightSourceButton = New System.Windows.Forms.Button()
-        Me.ObjectsGroupBox = New System.Windows.Forms.GroupBox()
-        Me.LightMoveRadioButton = New System.Windows.Forms.RadioButton()
-        Me.SphereMoveRadioButton = New System.Windows.Forms.RadioButton()
-        Me.BackCullingModeGroupBox = New System.Windows.Forms.GroupBox()
-        Me.BackCulling_OFFRadioButton = New System.Windows.Forms.RadioButton()
-        Me.BackCulling_ONRadioButton = New System.Windows.Forms.RadioButton()
         Me.AnimationTimer = New System.Windows.Forms.Timer(Me.components)
         Me.TranslateButton = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button3 = New System.Windows.Forms.Button()
+        Me.ambientTxtBox = New System.Windows.Forms.TextBox()
+        Me.diffuseTxtBox = New System.Windows.Forms.TextBox()
+        Me.specularTxtBox = New System.Windows.Forms.TextBox()
+        Me.exponentTxtBox = New System.Windows.Forms.TextBox()
+        Me.ambientLbl = New System.Windows.Forms.Label()
+        Me.diffuseLbl = New System.Windows.Forms.Label()
+        Me.specularLbl = New System.Windows.Forms.Label()
+        Me.specularExponentLbl = New System.Windows.Forms.Label()
         CType(Me.MainCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.ObjectsGroupBox.SuspendLayout()
-        Me.BackCullingModeGroupBox.SuspendLayout()
         Me.SuspendLayout()
         '
         'MainCanvas
@@ -136,32 +139,32 @@ Partial Class MainForm
         '
         'X_TransTextBox
         '
-        Me.X_TransTextBox.Location = New System.Drawing.Point(532, 220)
+        Me.X_TransTextBox.Location = New System.Drawing.Point(519, 169)
         Me.X_TransTextBox.Name = "X_TransTextBox"
-        Me.X_TransTextBox.Size = New System.Drawing.Size(50, 20)
+        Me.X_TransTextBox.Size = New System.Drawing.Size(63, 20)
         Me.X_TransTextBox.TabIndex = 9
         Me.X_TransTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Y_TransTextBox
         '
-        Me.Y_TransTextBox.Location = New System.Drawing.Point(531, 247)
+        Me.Y_TransTextBox.Location = New System.Drawing.Point(519, 195)
         Me.Y_TransTextBox.Name = "Y_TransTextBox"
-        Me.Y_TransTextBox.Size = New System.Drawing.Size(51, 20)
+        Me.Y_TransTextBox.Size = New System.Drawing.Size(62, 20)
         Me.Y_TransTextBox.TabIndex = 10
         Me.Y_TransTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Z_TransTextBox
         '
-        Me.Z_TransTextBox.Location = New System.Drawing.Point(531, 272)
+        Me.Z_TransTextBox.Location = New System.Drawing.Point(519, 221)
         Me.Z_TransTextBox.Name = "Z_TransTextBox"
-        Me.Z_TransTextBox.Size = New System.Drawing.Size(51, 20)
+        Me.Z_TransTextBox.Size = New System.Drawing.Size(63, 20)
         Me.Z_TransTextBox.TabIndex = 11
         Me.Z_TransTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'LightSourceLabel
         '
         Me.LightSourceLabel.AutoSize = True
-        Me.LightSourceLabel.Location = New System.Drawing.Point(479, 307)
+        Me.LightSourceLabel.Location = New System.Drawing.Point(481, 273)
         Me.LightSourceLabel.Name = "LightSourceLabel"
         Me.LightSourceLabel.Size = New System.Drawing.Size(67, 13)
         Me.LightSourceLabel.TabIndex = 15
@@ -169,21 +172,21 @@ Partial Class MainForm
         '
         'Light_XPosTextBox
         '
-        Me.Light_XPosTextBox.Location = New System.Drawing.Point(519, 332)
+        Me.Light_XPosTextBox.Location = New System.Drawing.Point(519, 294)
         Me.Light_XPosTextBox.Name = "Light_XPosTextBox"
-        Me.Light_XPosTextBox.Size = New System.Drawing.Size(61, 20)
+        Me.Light_XPosTextBox.Size = New System.Drawing.Size(62, 20)
         Me.Light_XPosTextBox.TabIndex = 16
         '
         'Light_YPosTextBox
         '
-        Me.Light_YPosTextBox.Location = New System.Drawing.Point(519, 359)
+        Me.Light_YPosTextBox.Location = New System.Drawing.Point(519, 323)
         Me.Light_YPosTextBox.Name = "Light_YPosTextBox"
         Me.Light_YPosTextBox.Size = New System.Drawing.Size(62, 20)
         Me.Light_YPosTextBox.TabIndex = 17
         '
         'Light_ZPosTextBox
         '
-        Me.Light_ZPosTextBox.Location = New System.Drawing.Point(519, 386)
+        Me.Light_ZPosTextBox.Location = New System.Drawing.Point(519, 349)
         Me.Light_ZPosTextBox.Name = "Light_ZPosTextBox"
         Me.Light_ZPosTextBox.Size = New System.Drawing.Size(62, 20)
         Me.Light_ZPosTextBox.TabIndex = 18
@@ -191,7 +194,7 @@ Partial Class MainForm
         'X_LightSourceLabel
         '
         Me.X_LightSourceLabel.AutoSize = True
-        Me.X_LightSourceLabel.Location = New System.Drawing.Point(445, 335)
+        Me.X_LightSourceLabel.Location = New System.Drawing.Point(439, 297)
         Me.X_LightSourceLabel.Name = "X_LightSourceLabel"
         Me.X_LightSourceLabel.Size = New System.Drawing.Size(54, 13)
         Me.X_LightSourceLabel.TabIndex = 19
@@ -200,7 +203,7 @@ Partial Class MainForm
         'Y_LightSourceLabel
         '
         Me.Y_LightSourceLabel.AutoSize = True
-        Me.Y_LightSourceLabel.Location = New System.Drawing.Point(446, 362)
+        Me.Y_LightSourceLabel.Location = New System.Drawing.Point(439, 326)
         Me.Y_LightSourceLabel.Name = "Y_LightSourceLabel"
         Me.Y_LightSourceLabel.Size = New System.Drawing.Size(54, 13)
         Me.Y_LightSourceLabel.TabIndex = 20
@@ -209,7 +212,7 @@ Partial Class MainForm
         'Z_LightSourceLabel
         '
         Me.Z_LightSourceLabel.AutoSize = True
-        Me.Z_LightSourceLabel.Location = New System.Drawing.Point(445, 389)
+        Me.Z_LightSourceLabel.Location = New System.Drawing.Point(439, 352)
         Me.Z_LightSourceLabel.Name = "Z_LightSourceLabel"
         Me.Z_LightSourceLabel.Size = New System.Drawing.Size(54, 13)
         Me.Z_LightSourceLabel.TabIndex = 21
@@ -217,9 +220,9 @@ Partial Class MainForm
         '
         'AddLightButton
         '
-        Me.AddLightButton.Location = New System.Drawing.Point(442, 412)
+        Me.AddLightButton.Location = New System.Drawing.Point(442, 375)
         Me.AddLightButton.Name = "AddLightButton"
-        Me.AddLightButton.Size = New System.Drawing.Size(139, 23)
+        Me.AddLightButton.Size = New System.Drawing.Size(140, 23)
         Me.AddLightButton.TabIndex = 22
         Me.AddLightButton.Text = "Add Light Source"
         Me.AddLightButton.UseVisualStyleBackColor = True
@@ -227,15 +230,15 @@ Partial Class MainForm
         'LightSourceListBox
         '
         Me.LightSourceListBox.FormattingEnabled = True
-        Me.LightSourceListBox.Location = New System.Drawing.Point(598, 40)
+        Me.LightSourceListBox.Location = New System.Drawing.Point(598, 189)
         Me.LightSourceListBox.Name = "LightSourceListBox"
-        Me.LightSourceListBox.Size = New System.Drawing.Size(120, 420)
+        Me.LightSourceListBox.Size = New System.Drawing.Size(219, 277)
         Me.LightSourceListBox.TabIndex = 27
         '
         'LightSourceListLabel
         '
         Me.LightSourceListLabel.AutoSize = True
-        Me.LightSourceListLabel.Location = New System.Drawing.Point(608, 23)
+        Me.LightSourceListLabel.Location = New System.Drawing.Point(657, 169)
         Me.LightSourceListLabel.Name = "LightSourceListLabel"
         Me.LightSourceListLabel.Size = New System.Drawing.Size(97, 13)
         Me.LightSourceListLabel.TabIndex = 28
@@ -245,76 +248,10 @@ Partial Class MainForm
         '
         Me.DeleteLightSourceButton.Location = New System.Drawing.Point(598, 476)
         Me.DeleteLightSourceButton.Name = "DeleteLightSourceButton"
-        Me.DeleteLightSourceButton.Size = New System.Drawing.Size(120, 23)
+        Me.DeleteLightSourceButton.Size = New System.Drawing.Size(219, 23)
         Me.DeleteLightSourceButton.TabIndex = 29
         Me.DeleteLightSourceButton.Text = "Delete Selected"
         Me.DeleteLightSourceButton.UseVisualStyleBackColor = True
-        '
-        'ObjectsGroupBox
-        '
-        Me.ObjectsGroupBox.Controls.Add(Me.LightMoveRadioButton)
-        Me.ObjectsGroupBox.Controls.Add(Me.SphereMoveRadioButton)
-        Me.ObjectsGroupBox.Location = New System.Drawing.Point(443, 169)
-        Me.ObjectsGroupBox.Name = "ObjectsGroupBox"
-        Me.ObjectsGroupBox.Size = New System.Drawing.Size(139, 45)
-        Me.ObjectsGroupBox.TabIndex = 30
-        Me.ObjectsGroupBox.TabStop = False
-        Me.ObjectsGroupBox.Text = "Controllable Objects"
-        '
-        'LightMoveRadioButton
-        '
-        Me.LightMoveRadioButton.AutoSize = True
-        Me.LightMoveRadioButton.Location = New System.Drawing.Point(73, 19)
-        Me.LightMoveRadioButton.Name = "LightMoveRadioButton"
-        Me.LightMoveRadioButton.Size = New System.Drawing.Size(48, 17)
-        Me.LightMoveRadioButton.TabIndex = 28
-        Me.LightMoveRadioButton.TabStop = True
-        Me.LightMoveRadioButton.Text = "Light"
-        Me.LightMoveRadioButton.UseVisualStyleBackColor = True
-        '
-        'SphereMoveRadioButton
-        '
-        Me.SphereMoveRadioButton.AutoSize = True
-        Me.SphereMoveRadioButton.Location = New System.Drawing.Point(6, 19)
-        Me.SphereMoveRadioButton.Name = "SphereMoveRadioButton"
-        Me.SphereMoveRadioButton.Size = New System.Drawing.Size(59, 17)
-        Me.SphereMoveRadioButton.TabIndex = 27
-        Me.SphereMoveRadioButton.TabStop = True
-        Me.SphereMoveRadioButton.Text = "Sphere"
-        Me.SphereMoveRadioButton.UseVisualStyleBackColor = True
-        '
-        'BackCullingModeGroupBox
-        '
-        Me.BackCullingModeGroupBox.Controls.Add(Me.BackCulling_OFFRadioButton)
-        Me.BackCullingModeGroupBox.Controls.Add(Me.BackCulling_ONRadioButton)
-        Me.BackCullingModeGroupBox.Location = New System.Drawing.Point(442, 441)
-        Me.BackCullingModeGroupBox.Name = "BackCullingModeGroupBox"
-        Me.BackCullingModeGroupBox.Size = New System.Drawing.Size(137, 61)
-        Me.BackCullingModeGroupBox.TabIndex = 31
-        Me.BackCullingModeGroupBox.TabStop = False
-        Me.BackCullingModeGroupBox.Text = "Bacface Culling Mode"
-        '
-        'BackCulling_OFFRadioButton
-        '
-        Me.BackCulling_OFFRadioButton.AutoSize = True
-        Me.BackCulling_OFFRadioButton.Location = New System.Drawing.Point(28, 19)
-        Me.BackCulling_OFFRadioButton.Name = "BackCulling_OFFRadioButton"
-        Me.BackCulling_OFFRadioButton.Size = New System.Drawing.Size(45, 17)
-        Me.BackCulling_OFFRadioButton.TabIndex = 26
-        Me.BackCulling_OFFRadioButton.TabStop = True
-        Me.BackCulling_OFFRadioButton.Text = "OFF"
-        Me.BackCulling_OFFRadioButton.UseVisualStyleBackColor = True
-        '
-        'BackCulling_ONRadioButton
-        '
-        Me.BackCulling_ONRadioButton.AutoSize = True
-        Me.BackCulling_ONRadioButton.Location = New System.Drawing.Point(28, 35)
-        Me.BackCulling_ONRadioButton.Name = "BackCulling_ONRadioButton"
-        Me.BackCulling_ONRadioButton.Size = New System.Drawing.Size(41, 17)
-        Me.BackCulling_ONRadioButton.TabIndex = 25
-        Me.BackCulling_ONRadioButton.TabStop = True
-        Me.BackCulling_ONRadioButton.Text = "ON"
-        Me.BackCulling_ONRadioButton.UseVisualStyleBackColor = True
         '
         'AnimationTimer
         '
@@ -322,21 +259,121 @@ Partial Class MainForm
         '
         'TranslateButton
         '
-        Me.TranslateButton.Location = New System.Drawing.Point(448, 220)
+        Me.TranslateButton.Location = New System.Drawing.Point(442, 246)
         Me.TranslateButton.Name = "TranslateButton"
-        Me.TranslateButton.Size = New System.Drawing.Size(75, 72)
+        Me.TranslateButton.Size = New System.Drawing.Size(140, 24)
         Me.TranslateButton.TabIndex = 32
         Me.TranslateButton.Text = "Translate"
         Me.TranslateButton.UseVisualStyleBackColor = True
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(442, 420)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(140, 23)
+        Me.Button1.TabIndex = 33
+        Me.Button1.Text = "Rotate X"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(442, 449)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(139, 23)
+        Me.Button2.TabIndex = 34
+        Me.Button2.Text = "Rotate Y"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
+        'Button3
+        '
+        Me.Button3.Location = New System.Drawing.Point(442, 478)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(140, 23)
+        Me.Button3.TabIndex = 35
+        Me.Button3.Text = "Rotate Z"
+        Me.Button3.UseVisualStyleBackColor = True
+        '
+        'ambientTxtBox
+        '
+        Me.ambientTxtBox.Location = New System.Drawing.Point(598, 86)
+        Me.ambientTxtBox.Name = "ambientTxtBox"
+        Me.ambientTxtBox.Size = New System.Drawing.Size(69, 20)
+        Me.ambientTxtBox.TabIndex = 36
+        '
+        'diffuseTxtBox
+        '
+        Me.diffuseTxtBox.Location = New System.Drawing.Point(673, 86)
+        Me.diffuseTxtBox.Name = "diffuseTxtBox"
+        Me.diffuseTxtBox.Size = New System.Drawing.Size(69, 20)
+        Me.diffuseTxtBox.TabIndex = 37
+        '
+        'specularTxtBox
+        '
+        Me.specularTxtBox.Location = New System.Drawing.Point(748, 86)
+        Me.specularTxtBox.Name = "specularTxtBox"
+        Me.specularTxtBox.Size = New System.Drawing.Size(69, 20)
+        Me.specularTxtBox.TabIndex = 38
+        '
+        'exponentTxtBox
+        '
+        Me.exponentTxtBox.Location = New System.Drawing.Point(673, 140)
+        Me.exponentTxtBox.Name = "exponentTxtBox"
+        Me.exponentTxtBox.Size = New System.Drawing.Size(69, 20)
+        Me.exponentTxtBox.TabIndex = 39
+        '
+        'ambientLbl
+        '
+        Me.ambientLbl.AutoSize = True
+        Me.ambientLbl.Location = New System.Drawing.Point(608, 58)
+        Me.ambientLbl.Name = "ambientLbl"
+        Me.ambientLbl.Size = New System.Drawing.Size(45, 13)
+        Me.ambientLbl.TabIndex = 40
+        Me.ambientLbl.Text = "Ambient"
+        '
+        'diffuseLbl
+        '
+        Me.diffuseLbl.AutoSize = True
+        Me.diffuseLbl.Location = New System.Drawing.Point(687, 58)
+        Me.diffuseLbl.Name = "diffuseLbl"
+        Me.diffuseLbl.Size = New System.Drawing.Size(40, 13)
+        Me.diffuseLbl.TabIndex = 41
+        Me.diffuseLbl.Text = "Diffuse"
+        '
+        'specularLbl
+        '
+        Me.specularLbl.AutoSize = True
+        Me.specularLbl.Location = New System.Drawing.Point(756, 58)
+        Me.specularLbl.Name = "specularLbl"
+        Me.specularLbl.Size = New System.Drawing.Size(49, 13)
+        Me.specularLbl.TabIndex = 42
+        Me.specularLbl.Text = "Specular"
+        '
+        'specularExponentLbl
+        '
+        Me.specularExponentLbl.AutoSize = True
+        Me.specularExponentLbl.Location = New System.Drawing.Point(637, 117)
+        Me.specularExponentLbl.Name = "specularExponentLbl"
+        Me.specularExponentLbl.Size = New System.Drawing.Size(148, 13)
+        Me.specularExponentLbl.TabIndex = 43
+        Me.specularExponentLbl.Text = "Specular Reflection Exponent"
         '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(735, 514)
+        Me.ClientSize = New System.Drawing.Size(827, 514)
+        Me.Controls.Add(Me.specularExponentLbl)
+        Me.Controls.Add(Me.specularLbl)
+        Me.Controls.Add(Me.diffuseLbl)
+        Me.Controls.Add(Me.ambientLbl)
+        Me.Controls.Add(Me.exponentTxtBox)
+        Me.Controls.Add(Me.specularTxtBox)
+        Me.Controls.Add(Me.diffuseTxtBox)
+        Me.Controls.Add(Me.ambientTxtBox)
+        Me.Controls.Add(Me.Button3)
+        Me.Controls.Add(Me.Button2)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.TranslateButton)
-        Me.Controls.Add(Me.BackCullingModeGroupBox)
-        Me.Controls.Add(Me.ObjectsGroupBox)
         Me.Controls.Add(Me.DeleteLightSourceButton)
         Me.Controls.Add(Me.LightSourceListLabel)
         Me.Controls.Add(Me.LightSourceListBox)
@@ -363,10 +400,6 @@ Partial Class MainForm
         Me.Name = "MainForm"
         Me.Text = "Testing Polygon Mesh"
         CType(Me.MainCanvas, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ObjectsGroupBox.ResumeLayout(False)
-        Me.ObjectsGroupBox.PerformLayout()
-        Me.BackCullingModeGroupBox.ResumeLayout(False)
-        Me.BackCullingModeGroupBox.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -395,12 +428,17 @@ Partial Class MainForm
     Friend WithEvents LightSourceListBox As ListBox
     Friend WithEvents LightSourceListLabel As Label
     Friend WithEvents DeleteLightSourceButton As Button
-    Friend WithEvents ObjectsGroupBox As GroupBox
-    Friend WithEvents LightMoveRadioButton As RadioButton
-    Friend WithEvents SphereMoveRadioButton As RadioButton
-    Friend WithEvents BackCullingModeGroupBox As GroupBox
-    Friend WithEvents BackCulling_OFFRadioButton As RadioButton
-    Friend WithEvents BackCulling_ONRadioButton As RadioButton
     Friend WithEvents AnimationTimer As Timer
     Friend WithEvents TranslateButton As Button
+    Friend WithEvents Button1 As Button
+    Friend WithEvents Button2 As Button
+    Friend WithEvents Button3 As Button
+    Friend WithEvents ambientTxtBox As TextBox
+    Friend WithEvents diffuseTxtBox As TextBox
+    Friend WithEvents specularTxtBox As TextBox
+    Friend WithEvents exponentTxtBox As TextBox
+    Friend WithEvents ambientLbl As Label
+    Friend WithEvents diffuseLbl As Label
+    Friend WithEvents specularLbl As Label
+    Friend WithEvents specularExponentLbl As Label
 End Class
