@@ -13,7 +13,8 @@ Public Class MainForm
     Private radius, dtheta, du, theta, u, x, y, z, w As Double
     Private longitude, latitude, transSphere_X, transSphere_Y, transSphere_Z As Integer
     Private PV As New Matrix4x4
-    Dim p1, p2, p3 As Integer
+    Private p1, p2, p3 As Integer
+    Private ka, kd, ks, ki, intentAmb, intentDiff, intentSpec, iTot As Double
     Private Status, backFaceCullingStatus As Boolean
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -144,6 +145,16 @@ Public Class MainForm
         RotY = True
         RotZ = False
         AnimationTimer.Enabled = True
+    End Sub
+
+    Private Sub DoShadingButton_Click(sender As Object, e As EventArgs) Handles DoShadingButton.Click
+        If ambientTxtBox.Text <> "" And specularTxtBox.Text <> "" And diffuseTxtBox.Text <> "" Then
+            ka = ambientTxtBox.Text
+            ks = specularTxtBox.Text
+            kd = diffuseTxtBox.Text
+        Else
+            MessageBox.Show("Please fill the coefficient for each!")
+        End If
     End Sub
 
     Private Sub Rotate_ZButton_Click(sender As Object, e As EventArgs) Handles Rotate_ZButton.Click
@@ -360,7 +371,6 @@ Public Class MainForm
                 graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
             End If
         Next
-
     End Sub
 
     Private Sub SurfaceDetection(temp As ListPolygons)

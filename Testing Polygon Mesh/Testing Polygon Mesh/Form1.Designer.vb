@@ -59,6 +59,7 @@ Partial Class MainForm
         Me.diffuseLbl = New System.Windows.Forms.Label()
         Me.specularLbl = New System.Windows.Forms.Label()
         Me.specularExponentLbl = New System.Windows.Forms.Label()
+        Me.DoShadingButton = New System.Windows.Forms.Button()
         CType(Me.MainCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -298,7 +299,7 @@ Partial Class MainForm
         '
         'ambientTxtBox
         '
-        Me.ambientTxtBox.Location = New System.Drawing.Point(598, 86)
+        Me.ambientTxtBox.Location = New System.Drawing.Point(596, 51)
         Me.ambientTxtBox.Name = "ambientTxtBox"
         Me.ambientTxtBox.Size = New System.Drawing.Size(69, 20)
         Me.ambientTxtBox.TabIndex = 36
@@ -306,7 +307,7 @@ Partial Class MainForm
         '
         'diffuseTxtBox
         '
-        Me.diffuseTxtBox.Location = New System.Drawing.Point(673, 86)
+        Me.diffuseTxtBox.Location = New System.Drawing.Point(671, 51)
         Me.diffuseTxtBox.Name = "diffuseTxtBox"
         Me.diffuseTxtBox.Size = New System.Drawing.Size(69, 20)
         Me.diffuseTxtBox.TabIndex = 37
@@ -314,7 +315,7 @@ Partial Class MainForm
         '
         'specularTxtBox
         '
-        Me.specularTxtBox.Location = New System.Drawing.Point(748, 86)
+        Me.specularTxtBox.Location = New System.Drawing.Point(746, 51)
         Me.specularTxtBox.Name = "specularTxtBox"
         Me.specularTxtBox.Size = New System.Drawing.Size(69, 20)
         Me.specularTxtBox.TabIndex = 38
@@ -322,7 +323,7 @@ Partial Class MainForm
         '
         'exponentTxtBox
         '
-        Me.exponentTxtBox.Location = New System.Drawing.Point(673, 140)
+        Me.exponentTxtBox.Location = New System.Drawing.Point(674, 113)
         Me.exponentTxtBox.Name = "exponentTxtBox"
         Me.exponentTxtBox.Size = New System.Drawing.Size(69, 20)
         Me.exponentTxtBox.TabIndex = 39
@@ -331,7 +332,7 @@ Partial Class MainForm
         'ambientLbl
         '
         Me.ambientLbl.AutoSize = True
-        Me.ambientLbl.Location = New System.Drawing.Point(608, 58)
+        Me.ambientLbl.Location = New System.Drawing.Point(606, 23)
         Me.ambientLbl.Name = "ambientLbl"
         Me.ambientLbl.Size = New System.Drawing.Size(45, 13)
         Me.ambientLbl.TabIndex = 40
@@ -340,7 +341,7 @@ Partial Class MainForm
         'diffuseLbl
         '
         Me.diffuseLbl.AutoSize = True
-        Me.diffuseLbl.Location = New System.Drawing.Point(687, 58)
+        Me.diffuseLbl.Location = New System.Drawing.Point(685, 23)
         Me.diffuseLbl.Name = "diffuseLbl"
         Me.diffuseLbl.Size = New System.Drawing.Size(40, 13)
         Me.diffuseLbl.TabIndex = 41
@@ -349,7 +350,7 @@ Partial Class MainForm
         'specularLbl
         '
         Me.specularLbl.AutoSize = True
-        Me.specularLbl.Location = New System.Drawing.Point(756, 58)
+        Me.specularLbl.Location = New System.Drawing.Point(754, 23)
         Me.specularLbl.Name = "specularLbl"
         Me.specularLbl.Size = New System.Drawing.Size(49, 13)
         Me.specularLbl.TabIndex = 42
@@ -358,17 +359,27 @@ Partial Class MainForm
         'specularExponentLbl
         '
         Me.specularExponentLbl.AutoSize = True
-        Me.specularExponentLbl.Location = New System.Drawing.Point(637, 117)
+        Me.specularExponentLbl.Location = New System.Drawing.Point(638, 90)
         Me.specularExponentLbl.Name = "specularExponentLbl"
         Me.specularExponentLbl.Size = New System.Drawing.Size(148, 13)
         Me.specularExponentLbl.TabIndex = 43
         Me.specularExponentLbl.Text = "Specular Reflection Exponent"
+        '
+        'DoShadingButton
+        '
+        Me.DoShadingButton.Location = New System.Drawing.Point(651, 139)
+        Me.DoShadingButton.Name = "DoShadingButton"
+        Me.DoShadingButton.Size = New System.Drawing.Size(112, 23)
+        Me.DoShadingButton.TabIndex = 44
+        Me.DoShadingButton.Text = "Shade Sphere"
+        Me.DoShadingButton.UseVisualStyleBackColor = True
         '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(827, 514)
+        Me.Controls.Add(Me.DoShadingButton)
         Me.Controls.Add(Me.specularExponentLbl)
         Me.Controls.Add(Me.specularLbl)
         Me.Controls.Add(Me.diffuseLbl)
@@ -448,4 +459,5 @@ Partial Class MainForm
     Friend WithEvents diffuseLbl As Label
     Friend WithEvents specularLbl As Label
     Friend WithEvents specularExponentLbl As Label
+    Friend WithEvents DoShadingButton As Button
 End Class
