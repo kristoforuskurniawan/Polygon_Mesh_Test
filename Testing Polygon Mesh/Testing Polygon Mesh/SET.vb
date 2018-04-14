@@ -7,7 +7,8 @@
     Public dy As Integer
     Public carry As Integer
     Public normalize As Integer
-    Public Polygon As Integer 'show which polygon the SET belong
+    Public z As Integer
+    Public PolygonColor As Color 'show which polygon the SET belong
     Public nxt As EdgeTable
 
     Public Sub New()

@@ -4,7 +4,8 @@ Public Class MainForm
     Private bitmapCanvas As Bitmap
     Private graphics As Graphics
     Private blackpen As Pen
-    Private ListofVertices As TArrPoint
+    Private ListPoints As TArrPoint
+    Private ListPolygon As TArrMesh
     Private sphereCenter, surfaceNormal As TPoint
     Private mesh As TMesh
     Private ListofEdges As List(Of TLine)
@@ -19,12 +20,14 @@ Public Class MainForm
         graphics = Graphics.FromImage(bitmapCanvas)
         blackpen = New Pen(Color.Black)
         MainCanvas.Image = bitmapCanvas
-        ListofVertices = New TArrPoint
+        ListPoints = New TArrPoint
+        ListPolygon = New TArrMesh
         sphereCenter = New TPoint(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0)
         mesh = New TMesh()
-        ListofVertices.Init()
-        ListofEdges = New List(Of TLine)
-        ListofMeshes = New TArrMesh()
+        ListPoints.Init()
+        ListPolygon.Init()
+        'ListofEdges = New List(Of TLine)
+        'ListofMeshes = New TArrMesh()
         ListofMeshes.Init()
         PV = New Matrix4x4()
 
@@ -71,7 +74,7 @@ Public Class MainForm
 
     Public Sub SetVertices(x As Double, y As Double, z As Double)
         Dim temp As New TPoint(x, y, z)
-        ListofVertices.InsertLast(temp.x, temp.y, temp.z)
+        ListPoints.InsertLast(temp.x, temp.y, temp.z)
     End Sub
 
     Public Sub SetEdges(x As Integer, y As Integer, a As Integer, b As Integer)
@@ -141,10 +144,10 @@ Public Class MainForm
     End Function
 
     Public Sub DrawCube(M As Matrix4x4)
-        Dim size As Integer = ListofVertices.Count()
+        Dim size As Integer = ListPoints.Count()
         Dim obj(size) As TPoint
         For i As Integer = 0 To size - 1
-            obj(i) = MultiplyMat(ListofVertices.Elmt(i), M)
+            obj(i) = MultiplyMat(ListPoints.Elmt(i), M)
         Next
         Dim a, b, c, d As Single
         For i As Integer = 0 To size - 1
@@ -196,6 +199,8 @@ Public Class MainForm
     End Sub
 
     Private Sub DrawSphere()
+        Dim p1, p2, p3, w, r, m, n, du As Integer
+        Dim dtheta As Double
         'Dim size As Integer = ListofVertices.Count
         'Dim obj(size) As TPoint
         'For i As Integer = 0 To size - 1
@@ -349,15 +354,59 @@ Public Class MainForm
             End If
         Next
         gambarpoly()
-        MainCanvas.Image = Image
+        MainCanvas.Image = bitmapCanvas
     End Sub
+
+    Public Sub gambarpoly()
+        Dim m1, m2, m3, m4, m5, m6, m11, m22, m33, m44, m55, m66 As Double
+        Dim p1, p2, p3 As Integer
+        For j = 0 To ListPolygon.N - 1
+                pin = ListPolygon.Elmt(j)
+                p1 = pin.p1
+                p2 = pin.p2
+                p3 = pin.p3
+                m1 = (ListPoints.Elmt(p1).x * rz(0, 0) + ListPoints.Elmt(p1).y * rz(0, 1) + ListPoints.Elmt(p1).z * rz(0, 2) + w * rz(0, 3))
+                m2 = (ListPoints.Elmt(p1).x * rz(1, 0) + ListPoints.Elmt(p1).y * rz(1, 1) + ListPoints.Elmt(p1).z * rz(1, 2) + w * rz(1, 3))
+                m3 = (ListPoints.Elmt(p2).x * rz(0, 0) + ListPoints.Elmt(p2).y * rz(0, 1) + ListPoints.Elmt(p2).z * rz(0, 2) + w * rz(0, 3))
+                m4 = (ListPoints.Elmt(p2).x * rz(1, 0) + ListPoints.Elmt(p2).y * rz(1, 1) + ListPoints.Elmt(p2).z * rz(1, 2) + w * rz(1, 3))
+                m5 = (ListPoints.Elmt(p3).x * rz(0, 0) + ListPoints.Elmt(p3).y * rz(0, 1) + ListPoints.Elmt(p3).z * rz(0, 2) + w * rz(0, 3))
+                m6 = (ListPoints.Elmt(p3).x * rz(1, 0) + ListPoints.Elmt(p3).y * rz(1, 1) + ListPoints.Elmt(p3).z * rz(1, 2) + w * rz(1, 3))
+                m11 = (m1 * Screen(0, 0) + m1 * Screen(0, 1) + m1 * Screen(0, 2) + w * Screen(0, 3))
+                m22 = (m2 * Screen(1, 0) + m2 * Screen(1, 1) + m2 * Screen(1, 2) + w * Screen(1, 3))
+                m33 = (m3 * Screen(0, 0) + m3 * Screen(0, 1) + m3 * Screen(0, 2) + w * Screen(0, 3))
+                m44 = (m4 * Screen(1, 0) + m4 * Screen(1, 1) + m4 * Screen(1, 2) + w * Screen(1, 3))
+                m55 = (m5 * Screen(0, 0) + m5 * Screen(0, 1) + m5 * Screen(0, 2) + w * Screen(0, 3))
+                m66 = (m6 * Screen(1, 0) + m6 * Screen(1, 1) + m6 * Screen(1, 2) + w * Screen(1, 3))
+                gr.DrawLine(pulpen, New Point(m11, m22), New Point(m33, m44))
+                gr.DrawLine(pulpen, New Point(m33, m44), New Point(m55, m66))
+                gr.DrawLine(pulpen, New Point(m55, m66), New Point(m11, m22))
+            Next
+        Else
+        For i = 0 To ListPolygon.N - 1
+            pin = ListPolygon.Elmt(i)
+            p1 = pin.p1
+            p2 = pin.p2
+            p3 = pin.p3
+            m1 = ListPoints.Elmt(p1).x * Screen(0, 0) + ListPoints.Elmt(p1).y * Screen(0, 1) + ListPoints.Elmt(p1).z * Screen(0, 2) + w * Screen(0, 3)
+            m2 = ListPoints.Elmt(p1).x * Screen(1, 0) + ListPoints.Elmt(p1).y * Screen(1, 1) + ListPoints.Elmt(p1).z * Screen(1, 2) + w * Screen(1, 3)
+            m3 = ListPoints.Elmt(p2).x * Screen(0, 0) + ListPoints.Elmt(p2).y * Screen(0, 1) + ListPoints.Elmt(p2).z * Screen(0, 2) + w * Screen(0, 3)
+            m4 = ListPoints.Elmt(p2).x * Screen(1, 0) + ListPoints.Elmt(p2).y * Screen(1, 1) + ListPoints.Elmt(p2).z * Screen(1, 2) + w * Screen(1, 3)
+            m5 = ListPoints.Elmt(p3).x * Screen(0, 0) + ListPoints.Elmt(p3).y * Screen(0, 1) + ListPoints.Elmt(p3).z * Screen(0, 2) + w * Screen(0, 3)
+            m6 = ListPoints.Elmt(p3).x * Screen(1, 0) + ListPoints.Elmt(p3).y * Screen(1, 1) + ListPoints.Elmt(p3).z * Screen(1, 2) + w * Screen(1, 3)
+            gr.DrawLine(pulpen, New Point(m1, m2), New Point(m3, m4))
+            gr.DrawLine(pulpen, New Point(m3, m4), New Point(m5, m6))
+            gr.DrawLine(pulpen, New Point(m5, m6), New Point(m1, m2))
+        Next
+
+    End Sub
+
 
     Private Sub MainCanvas_Click(sender As Object, e As EventArgs) Handles MainCanvas.Click
         Status = True
         'Win32.AllocConsole()
-        Console.WriteLine(ListofVertices.Count)
-        For i As Integer = 0 To ListofVertices.Count - 1
-            Console.WriteLine(ListofVertices.Elmt(i).x.ToString() + " " + ListofVertices.Elmt(i).y.ToString() + " " + ListofVertices.Elmt(i).z.ToString() + Environment.NewLine)
+        Console.WriteLine(ListPoints.Count)
+        For i As Integer = 0 To ListPoints.Count - 1
+            'Console.WriteLine(ListoPoints.Elmt(i).x.ToString() + " " + ListofVertices.Elmt(i).y.ToString() + " " + ListofVertices.Elmt(i).z.ToString() + Environment.NewLine)
         Next
         If Status = False Then
             'Win32.FreeConsole()
