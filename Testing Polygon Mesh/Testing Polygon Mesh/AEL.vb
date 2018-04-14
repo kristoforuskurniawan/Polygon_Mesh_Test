@@ -2,17 +2,19 @@
     Public head As EdgeTable
     Public length As Integer
     Private s As New Stack(Of EdgeTable)
+    Private s2 As New Stack(Of EdgeTable)
 
     Public Sub New()
         head = Nothing
         length = 0
         s.Clear()
+        s2.Clear()
     End Sub
 
     Public Sub Add(tempdata As EdgeTable)
         Dim node As EdgeTable = New EdgeTable(tempdata)
         Dim currentNode As EdgeTable = Me.head
-        Dim prevNode As New EdgeTable
+
         ' an empty list
         If currentNode Is Nothing Then
             Me.head = node
@@ -20,23 +22,49 @@
         Else
             While Not (currentNode Is Nothing)
                 If node.xofymin < currentNode.xofymin OrElse (node.xofymin = currentNode.xofymin AndAlso node.dx / node.dy < currentNode.dx / currentNode.dy) Then
-                    s.Push(node) 'old
-                    s.Push(currentNode) 'old
-                    'node.nxt = currentNode
-                    'prevNode.nxt = node
+                    s.Push(node)
+                    s.Push(currentNode)
                     Exit While
                 Else
-                    s.Push(currentNode) 'old
+                    s.Push(currentNode)
                     If currentNode.nxt Is Nothing Then
-                        s.Push(node) 'old
-                        'currentNode.nxt = node
+                        s.Push(node)
                         Exit While
                     End If
                 End If
-                'prevNode = currentNode
                 currentNode = currentNode.nxt
             End While
-            RefillAET() 'old
+            RefillAET()
+        End If
+    End Sub
+
+    Public Sub Addonebyone(tempdata As EdgeTable)
+        Dim node As EdgeTable = New EdgeTable(tempdata)
+        Dim currentNode As EdgeTable = Me.head
+
+        ' an empty list
+        If currentNode Is Nothing Then
+            Me.head = node
+            Me.length = 1
+        Else
+            While Not (currentNode Is Nothing)
+                If node.xofymin < currentNode.xofymin OrElse (node.xofymin = currentNode.xofymin AndAlso node.dx / node.dy < currentNode.dx / currentNode.dy) Then
+                    s.Push(node)
+                    While Not (currentNode Is Nothing)
+                        s.Push(currentNode)
+                        currentNode = currentNode.nxt
+                    End While
+                    Exit While
+                Else
+                    s.Push(currentNode)
+                    If currentNode.nxt Is Nothing Then
+                        s.Push(node)
+                        Exit While
+                    End If
+                End If
+                currentNode = currentNode.nxt
+            End While
+            RefillAET()
         End If
     End Sub
 
@@ -73,6 +101,7 @@
     End Sub
 
     Public Sub Update()
+        'by created by kevin
         If length > 0 Then
             Dim currentNode As EdgeTable = Me.head
             While Not (currentNode Is Nothing)
@@ -87,6 +116,7 @@
                     While ((currentNode.carry + currentNode.carry) >= currentNode.dy)
                         currentNode.carry = currentNode.carry - currentNode.dy
                         currentNode.xofymin = currentNode.xofymin + 1
+                        If currentNode.xofymin > 6666 Then Exit While
                     End While
                 End If
                 s.Push(currentNode)
@@ -170,3 +200,5 @@
         Return i
     End Function
 End Class
+
+
