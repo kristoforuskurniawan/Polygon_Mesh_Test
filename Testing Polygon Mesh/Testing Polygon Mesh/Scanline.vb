@@ -39,7 +39,7 @@
         'MsgBox(edgetable.Count)
         DeclareTemp(min, pointtemp(0), pointtemp(1))
         DeclareTemp(min, pointtemp(1), pointtemp(2))
-        DeclareTemp(min, pointtemp(2), pointtemp(1))
+        DeclareTemp(min, pointtemp(2), pointtemp(0))
         'displaySET(edgetable)
         'test
 
@@ -133,7 +133,7 @@
         Dim counter As Integer = 0
         If (AET.CountAET() > 0) Then
             While Not (currentdata Is Nothing)
-                If currentdata.ymax >= y + currentdata.normalize Then
+                If currentdata.ymax = y + currentdata.normalize Then
                     'delete node
                     AET.Remove(counter)
                     counter = counter - 1

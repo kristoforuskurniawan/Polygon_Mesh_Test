@@ -12,9 +12,9 @@
         Dim result As New TArrPoint
         Dim w As Single
         w = 1
-        result.x = (ListPoint.Elmt(A).x * M.Mat(0, 0) + ListPoint.Elmt(A).y * M.Mat(1, 0) + ListPoint.Elmt(A).z * M.Mat(2, 0) + ListPoint.Elmt(A).w * M.Mat(3, 0)) / w
-        result.y = (ListPoint.Elmt(A).x * M.Mat(0, 1) + ListPoint.Elmt(A).y * M.Mat(1, 1) + ListPoint.Elmt(A).z * M.Mat(2, 1) + ListPoint.Elmt(A).w * M.Mat(3, 1)) / w
-        result.z = (ListPoint.Elmt(A).x * M.Mat(0, 2) + ListPoint.Elmt(A).y * M.Mat(1, 2) + ListPoint.Elmt(A).z * M.Mat(2, 2) + ListPoint.Elmt(A).w * M.Mat(3, 2)) / w
+        result.x = (ListPoint.Elmt(A).x * M.Mat(0, 0) + ListPoint.Elmt(A).y * M.Mat(0, 1) + ListPoint.Elmt(A).z * M.Mat(0, 2) + ListPoint.Elmt(A).w * M.Mat(0, 3)) / w
+        result.y = (ListPoint.Elmt(A).x * M.Mat(1, 0) + ListPoint.Elmt(A).y * M.Mat(1, 1) + ListPoint.Elmt(A).z * M.Mat(1, 2) + ListPoint.Elmt(A).w * M.Mat(1, 3)) / w
+        result.z = (ListPoint.Elmt(A).x * M.Mat(2, 0) + ListPoint.Elmt(A).y * M.Mat(2, 1) + ListPoint.Elmt(A).z * M.Mat(2, 2) + ListPoint.Elmt(A).w * M.Mat(2, 3)) / w
         x = result.x
         y = result.y
         z = result.z
