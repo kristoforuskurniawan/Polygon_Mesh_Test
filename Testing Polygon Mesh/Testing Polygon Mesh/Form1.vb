@@ -14,20 +14,6 @@ Public Class MainForm
     Private longitude, latitude, transSphere_X, transSphere_Y, transSphere_Z As Integer
     Private PV As New Matrix4x4
     Dim p1, p2, p3 As Integer
-
-    Private Sub translateButton_Click_1(sender As Object, e As EventArgs) Handles TranslateButton.Click
-        graphics.Clear(Color.Black)
-        transSphere_X = transSphere_X + Integer.Parse(X_TransTextBox.Text)
-        transSphere_Y = transSphere_Y + Integer.Parse(Y_TransTextBox.Text)
-        transSphere_Z = transSphere_Z + Integer.Parse(Z_TransTextBox.Text)
-        Dim Vt, St As New Matrix4x4
-        PV = New Matrix4x4
-        Vt.OnePointProjection(5)
-        St.TranslateMat(200 + transSphere_X, 200 + transSphere_Y, 0 + transSphere_Z)
-        PV.Mat = MultiplyMat4x4(Vt, St)
-        DrawSphere()
-    End Sub
-
     Private Status, backFaceCullingStatus As Boolean
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -72,6 +58,8 @@ Public Class MainForm
         radius = Integer.Parse(SphereRadInput.Text) * 150
         latitude = Integer.Parse(LatiInput.Text)
         longitude = Integer.Parse(LongiInput.Text)
+        backFaceCullingStatus = True
+        BackCulling_ONRadioButton.Select()
         DrawSphere()
         'Status = True
     End Sub
@@ -82,6 +70,19 @@ Public Class MainForm
         Return If(d < 0, -d, 0)
         'asdf
     End Function
+
+    Private Sub translateButton_Click_1(sender As Object, e As EventArgs) Handles TranslateButton.Click
+        graphics.Clear(Color.Black)
+        transSphere_X = transSphere_X + Integer.Parse(X_TransTextBox.Text)
+        transSphere_Y = transSphere_Y + Integer.Parse(Y_TransTextBox.Text)
+        transSphere_Z = transSphere_Z + Integer.Parse(Z_TransTextBox.Text)
+        Dim Vt, St As New Matrix4x4
+        PV = New Matrix4x4
+        Vt.OnePointProjection(5)
+        St.TranslateMat(200 + transSphere_X, 200 + transSphere_Y, 0 + transSphere_Z)
+        PV.Mat = MultiplyMat4x4(Vt, St)
+        DrawSphere()
+    End Sub
 
     'Public Sub SetVertices(x As Double, y As Double, z As Double)
     '    Dim temp As New TPoint(x, y, z)
@@ -304,7 +305,9 @@ Public Class MainForm
     Public Sub gambarpoly()
         Dim m1, m2, m3, m4, m5, m6, m11, m22, m33, m44, m55, m66 As Double
         Dim p1, p2, p3 As Integer
-        BackFaceCulling()
+        If backFaceCullingStatus Then
+            BackFaceCulling()
+        End If
         Dim DOP(3) As Integer
         DOP(0) = 0
         DOP(1) = 0
@@ -356,6 +359,4 @@ Public Class MainForm
         CalculateNormal(ListPolygon)
         Dim DOP(3) As Double
     End Sub
-
-
 End Class
