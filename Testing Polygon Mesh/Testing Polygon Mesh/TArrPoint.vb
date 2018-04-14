@@ -19,4 +19,12 @@
     Public Function Count()
         Return N
     End Function
+
+    Public Function DeleteAllData() As TArrPoint
+        For i = 0 To N - 1
+            Me.Elmt(i) = Nothing
+        Next
+        Init()
+        Return Me
+    End Function
 End Class

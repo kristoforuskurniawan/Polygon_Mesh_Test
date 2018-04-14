@@ -189,9 +189,12 @@ Public Class MainForm
             latitude = Integer.Parse(LatiInput.Text)
             'DeclareSphere()
             'Projection()
+            graphics.Clear(Color.White)
+            ListofVertices.DeleteAllData()
+            ListofMeshes.DeleteAllData()
             DrawSphere()
         End If
-        MainCanvas.Image = bitmapCanvas
+        'MainCanvas.Image = bitmapCanvas
         'DrawCube(PV)
         'Dim temp As New TPoint
         'Dim x, y, z As Double
@@ -314,7 +317,6 @@ Public Class MainForm
 
     Private Sub DrawPoly()
         Dim m1, m2, m3, m4, m5, m6, m11, m22, m33, m44, m55, m66 As Double
-        'MessageBox.Show("Number of vertices: " & ListPoints.N & vbNewLine & "Number of polygons: " & ListPolygon.N)
         If (backFaceCullingStatus = False) Then
             If Timer1.Enabled Then
                 'If rotx = True Then
@@ -376,64 +378,6 @@ Public Class MainForm
         Else 'Backface Culling is activated
 
         End If
-        'Dim m1, m2, m3, m4, m5, m6, m11, m22, m33, m44, m55, m66 As Double
-        ''MessageBox.Show("Number of vertices: " & ListofVertices.Count.ToString() & vbNewLine & "Number of polygons: " & ListofMeshes.Count.ToString())
-        'For i = 0 To ListofMeshes.N - 1
-        '    mesh = ListofMeshes.Elmt(i)
-        '    p1 = mesh.EdgeIndex1
-        '    p2 = mesh.EdgeIndex2
-        '    p3 = mesh.EdgeIndex3
-        '    m1 = (ListofVertices.Elmt(p1).x * St(0, 0) + ListofVertices.Elmt(p1).y * St(0, 1) + ListofVertices.Elmt(p1).z * St(0, 2) + w * St(0, 3))
-        '    m2 = (ListofVertices.Elmt(p1).x * St(1, 0) + ListofVertices.Elmt(p1).y * St(1, 1) + ListofVertices.Elmt(p1).z * St(1, 2) + w * St(1, 3))
-        '    m3 = (ListofVertices.Elmt(p2).x * St(0, 0) + ListofVertices.Elmt(p2).y * St(0, 1) + ListofVertices.Elmt(p2).z * St(0, 2) + w * St(0, 3))
-        '    m4 = (ListofVertices.Elmt(p2).x * St(1, 0) + ListofVertices.Elmt(p2).y * St(1, 1) + ListofVertices.Elmt(p2).z * St(1, 2) + w * St(1, 3))
-        '    m5 = (ListofVertices.Elmt(p3).x * St(0, 0) + ListofVertices.Elmt(p3).y * St(0, 1) + ListofVertices.Elmt(p3).z * St(0, 2) + w * St(0, 3))
-        '    m6 = (ListofVertices.Elmt(p3).x * St(1, 0) + ListofVertices.Elmt(p3).y * St(1, 1) + ListofVertices.Elmt(p3).z * St(1, 2) + w * St(1, 3))
-        '    'MessageBox.Show(m1)
-        '    'graphics.DrawLine(blackpen, New Point(100, 100), New Point(200, 200))
-        '    graphics.DrawLine(blackpen, New Point(m11, m22), New Point(m33, m44))
-        '    graphics.DrawLine(blackpen, New Point(m33, m44), New Point(m55, m66))
-        '    graphics.DrawLine(blackpen, New Point(m55, m66), New Point(m11, m22))
-        'Next
-        'If (backFaceCullingStatus = False) Then
-        '    For j = 0 To ListofMeshes.N - 1
-        '        mesh = ListofMeshes.Elmt(j)
-        '        p1 = mesh.EdgeIndex1
-        '        p2 = mesh.EdgeIndex2
-        '        p3 = mesh.EdgeIndex3
-        '        m1 = (ListofVertices.Elmt(p1).x * rz(0, 0) + ListofVertices.Elmt(p1).y * rz(0, 1) + ListofVertices.Elmt(p1).z * rz(0, 2) + w * rz(0, 3))
-        '        m2 = (ListofVertices.Elmt(p1).x * rz(1, 0) + ListofVertices.Elmt(p1).y * rz(1, 1) + ListofVertices.Elmt(p1).z * rz(1, 2) + w * rz(1, 3))
-        '        m3 = (ListofVertices.Elmt(p2).x * rz(0, 0) + ListofVertices.Elmt(p2).y * rz(0, 1) + ListofVertices.Elmt(p2).z * rz(0, 2) + w * rz(0, 3))
-        '        m4 = (ListofVertices.Elmt(p2).x * rz(1, 0) + ListofVertices.Elmt(p2).y * rz(1, 1) + ListofVertices.Elmt(p2).z * rz(1, 2) + w * rz(1, 3))
-        '        m5 = (ListofVertices.Elmt(p3).x * rz(0, 0) + ListofVertices.Elmt(p3).y * rz(0, 1) + ListofVertices.Elmt(p3).z * rz(0, 2) + w * rz(0, 3))
-        '        m6 = (ListofVertices.Elmt(p3).x * rz(1, 0) + ListofVertices.Elmt(p3).y * rz(1, 1) + ListofVertices.Elmt(p3).z * rz(1, 2) + w * rz(1, 3))
-        '        m11 = (m1 * St(0, 0) + m1 * St(0, 1) + m1 * St(0, 2) + w * St(0, 3))
-        '        m22 = (m2 * St(1, 0) + m2 * St(1, 1) + m2 * St(1, 2) + w * St(1, 3))
-        '        m33 = (m3 * St(0, 0) + m3 * St(0, 1) + m3 * St(0, 2) + w * St(0, 3))
-        '        m44 = (m4 * St(1, 0) + m4 * St(1, 1) + m4 * St(1, 2) + w * St(1, 3))
-        '        m55 = (m5 * St(0, 0) + m5 * St(0, 1) + m5 * St(0, 2) + w * St(0, 3))
-        '        m66 = (m6 * St(1, 0) + m6 * St(1, 1) + m6 * St(1, 2) + w * St(1, 3))
-        '        graphics.DrawLine(blackpen, New Point(m11, m22), New Point(m33, m44))
-        '        graphics.DrawLine(blackpen, New Point(m33, m44), New Point(m55, m66))
-        '        graphics.DrawLine(blackpen, New Point(m55, m66), New Point(m11, m22))
-        '    Next
-        'Else 'Backface Culling is activated
-        '    For i = 0 To ListofMeshes.N - 1
-        '        mesh = ListofMeshes.Elmt(i)
-        '        p1 = mesh.EdgeIndex1
-        '        p2 = mesh.EdgeIndex2
-        '        p3 = mesh.EdgeIndex3
-        '        m1 = (ListofVertices.Elmt(p1).x * rz(0, 0) + ListofVertices.Elmt(p1).y * rz(0, 1) + ListofVertices.Elmt(p1).z * rz(0, 2) + w * rz(0, 3))
-        '        m2 = (ListofVertices.Elmt(p1).x * rz(1, 0) + ListofVertices.Elmt(p1).y * rz(1, 1) + ListofVertices.Elmt(p1).z * rz(1, 2) + w * rz(1, 3))
-        '        m3 = (ListofVertices.Elmt(p2).x * rz(0, 0) + ListofVertices.Elmt(p2).y * rz(0, 1) + ListofVertices.Elmt(p2).z * rz(0, 2) + w * rz(0, 3))
-        '        m4 = (ListofVertices.Elmt(p2).x * rz(1, 0) + ListofVertices.Elmt(p2).y * rz(1, 1) + ListofVertices.Elmt(p2).z * rz(1, 2) + w * rz(1, 3))
-        '        m5 = (ListofVertices.Elmt(p3).x * rz(0, 0) + ListofVertices.Elmt(p3).y * rz(0, 1) + ListofVertices.Elmt(p3).z * rz(0, 2) + w * rz(0, 3))
-        '        m6 = (ListofVertices.Elmt(p3).x * rz(1, 0) + ListofVertices.Elmt(p3).y * rz(1, 1) + ListofVertices.Elmt(p3).z * rz(1, 2) + w * rz(1, 3))
-        '        graphics.DrawLine(blackpen, New Point(m11, m22), New Point(m33, m44))
-        '        graphics.DrawLine(blackpen, New Point(m33, m44), New Point(m55, m66))
-        '        graphics.DrawLine(blackpen, New Point(m55, m66), New Point(m11, m22))
-        '    Next
-        'End If
         MainCanvas.Image = bitmapCanvas
     End Sub
 
