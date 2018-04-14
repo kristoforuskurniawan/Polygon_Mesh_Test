@@ -10,11 +10,12 @@ Public Class MainForm
     Private sphereCenter, surfaceNormal As TPoint
     Private mesh As TMesh
     'Private ListofEdges As List(Of TLine)
-    Private ListofMeshes As TArrMesh
+    'Private ListofMeshes As TArrMesh
     Private radius, dtheta, du, theta, u, x, y, z, w As Double
     Private longitude, latitude, transSphere_X, transSphere_Y, transSphere_Z As Integer
     Private PV As New Matrix4x4
-    Dim p1, p2, p3 As Integer
+    Private p1, p2, p3 As Integer
+    Private ka, kd, ks, ki, intentAmb, intentDiff, intentSpec, iTot As Double
     Private Status, backFaceCullingStatus As Boolean
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -23,8 +24,9 @@ Public Class MainForm
         whitepen = New Pen(Color.White)
         bluepen = New Pen(Color.Blue)
         MainCanvas.Image = bitmapCanvas
-        ListPoints = New ListPoints
-        ListPolygon = New ListPolygons
+        ListPoints = New ListPoints()
+        ListPolygon = New ListPolygons()
+        sphereCenter = New TPoint(0, 0, 0)
         'sphereCenter = New TPoint(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0)
         'mesh = New TMesh()
         'ListPoints.Init()
@@ -56,7 +58,7 @@ Public Class MainForm
         Y_TransTextBox.Text = transSphere_Y
         Z_TransTextBox.Text = transSphere_Z
         Projection()
-        DrawSphere()
+        'DrawSphere()
         radius = Integer.Parse(SphereRadInput.Text) * 150
         latitude = Integer.Parse(LatiInput.Text)
         longitude = Integer.Parse(LongiInput.Text)
@@ -131,6 +133,55 @@ Public Class MainForm
         backFaceCullingStatus = True
     End Sub
 
+    Private RotX, RotY, RotZ As Boolean
+
+    Private Sub Rotate_XButton_Click(sender As Object, e As EventArgs) Handles Rotate_XButton.Click
+        RotX = True
+        RotY = False
+        RotZ = False
+        AnimationTimer.Enabled = True
+    End Sub
+
+    Private Sub Rotate_YButton_Click(sender As Object, e As EventArgs) Handles Rotate_YButton.Click
+        RotX = False
+        RotY = True
+        RotZ = False
+        AnimationTimer.Enabled = True
+    End Sub
+
+    Private Sub DoShadingButton_Click(sender As Object, e As EventArgs) Handles DoShadingButton.Click
+        If ambientTxtBox.Text <> "" And specularTxtBox.Text <> "" And diffuseTxtBox.Text <> "" Then
+            ka = ambientTxtBox.Text
+            ks = specularTxtBox.Text
+            kd = diffuseTxtBox.Text
+        Else
+            MessageBox.Show("Please fill the coefficient for each!")
+        End If
+    End Sub
+
+    Private Sub Rotate_ZButton_Click(sender As Object, e As EventArgs) Handles Rotate_ZButton.Click
+        RotX = False
+        RotY = False
+        RotZ = True
+        AnimationTimer.Enabled = True
+    End Sub
+
+    Private Sub AnimationTimer_Tick(sender As Object, e As EventArgs) Handles AnimationTimer.Tick
+        If RotX Then
+            graphics.Clear(Color.Black)
+            PV.RotateX(0.344)
+            DrawSphere()
+        ElseIf RotY Then
+            graphics.Clear(Color.Black)
+            PV.RotateY(0.344)
+            DrawSphere()
+        Else
+            graphics.Clear(Color.Black)
+            PV.RotateZ(0.344)
+            DrawSphere()
+        End If
+    End Sub
+
     Private Sub BackCullOFF_BTN_CheckedChanged(sender As Object, e As EventArgs)
         backFaceCullingStatus = False
     End Sub
@@ -183,7 +234,6 @@ Public Class MainForm
         Console.WriteLine(PV.Mat(3, 1))
         Console.WriteLine(PV.Mat(3, 2))
         Console.WriteLine(PV.Mat(3, 3))
-
     End Sub
 
     Private Sub DrawMeshButton_Click(sender As Object, e As EventArgs) Handles DrawMeshButton.Click
@@ -309,7 +359,7 @@ Public Class MainForm
     Public Sub gambarpoly()
         Dim m1, m2, m3, m4, m5, m6, m11, m22, m33, m44, m55, m66 As Double
         Dim p1, p2, p3 As Integer
-        Dim temp As New ListPolygons
+        Dim temp As New ListPolygons()
         BackFaceCulling()
         Dim DOP(3) As Integer
         DOP(0) = 0
@@ -330,7 +380,6 @@ Public Class MainForm
                 graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
             End If
         Next
-
     End Sub
 
 
@@ -366,7 +415,7 @@ Public Class MainForm
             p3 = ListPolygon.Elmt(i).p3
             AB = New TPoint(ListPoints.Elmt(p2).x - ListPoints.Elmt(p1).x, ListPoints.Elmt(p2).y - ListPoints.Elmt(p1).y, ListPoints.Elmt(p2).z - ListPoints.Elmt(p1).z)
             AC = New TPoint(ListPoints.Elmt(p3).x - ListPoints.Elmt(p1).x, ListPoints.Elmt(p3).y - ListPoints.Elmt(p1).y, ListPoints.Elmt(p3).z - ListPoints.Elmt(p1).z)
-            poly.Normal(i).Calculate(AB, AC)
+            poly.Normal(i).CrossProduct(AB, AC)
         Next
     End Sub
 

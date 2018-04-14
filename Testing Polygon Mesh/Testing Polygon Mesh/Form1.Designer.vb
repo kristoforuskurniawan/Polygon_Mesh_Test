@@ -48,9 +48,9 @@ Partial Class MainForm
         Me.DeleteLightSourceButton = New System.Windows.Forms.Button()
         Me.AnimationTimer = New System.Windows.Forms.Timer(Me.components)
         Me.TranslateButton = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
+        Me.Rotate_XButton = New System.Windows.Forms.Button()
+        Me.Rotate_YButton = New System.Windows.Forms.Button()
+        Me.Rotate_ZButton = New System.Windows.Forms.Button()
         Me.ambientTxtBox = New System.Windows.Forms.TextBox()
         Me.diffuseTxtBox = New System.Windows.Forms.TextBox()
         Me.specularTxtBox = New System.Windows.Forms.TextBox()
@@ -59,6 +59,7 @@ Partial Class MainForm
         Me.diffuseLbl = New System.Windows.Forms.Label()
         Me.specularLbl = New System.Windows.Forms.Label()
         Me.specularExponentLbl = New System.Windows.Forms.Label()
+        Me.DoShadingButton = New System.Windows.Forms.Button()
         CType(Me.MainCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -176,6 +177,7 @@ Partial Class MainForm
         Me.Light_XPosTextBox.Name = "Light_XPosTextBox"
         Me.Light_XPosTextBox.Size = New System.Drawing.Size(62, 20)
         Me.Light_XPosTextBox.TabIndex = 16
+        Me.Light_XPosTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Light_YPosTextBox
         '
@@ -183,6 +185,7 @@ Partial Class MainForm
         Me.Light_YPosTextBox.Name = "Light_YPosTextBox"
         Me.Light_YPosTextBox.Size = New System.Drawing.Size(62, 20)
         Me.Light_YPosTextBox.TabIndex = 17
+        Me.Light_YPosTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Light_ZPosTextBox
         '
@@ -190,6 +193,7 @@ Partial Class MainForm
         Me.Light_ZPosTextBox.Name = "Light_ZPosTextBox"
         Me.Light_ZPosTextBox.Size = New System.Drawing.Size(62, 20)
         Me.Light_ZPosTextBox.TabIndex = 18
+        Me.Light_ZPosTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'X_LightSourceLabel
         '
@@ -266,65 +270,69 @@ Partial Class MainForm
         Me.TranslateButton.Text = "Translate"
         Me.TranslateButton.UseVisualStyleBackColor = True
         '
-        'Button1
+        'Rotate_XButton
         '
-        Me.Button1.Location = New System.Drawing.Point(442, 420)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(140, 23)
-        Me.Button1.TabIndex = 33
-        Me.Button1.Text = "Rotate X"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Rotate_XButton.Location = New System.Drawing.Point(442, 420)
+        Me.Rotate_XButton.Name = "Rotate_XButton"
+        Me.Rotate_XButton.Size = New System.Drawing.Size(140, 23)
+        Me.Rotate_XButton.TabIndex = 33
+        Me.Rotate_XButton.Text = "Rotate X"
+        Me.Rotate_XButton.UseVisualStyleBackColor = True
         '
-        'Button2
+        'Rotate_YButton
         '
-        Me.Button2.Location = New System.Drawing.Point(442, 449)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(139, 23)
-        Me.Button2.TabIndex = 34
-        Me.Button2.Text = "Rotate Y"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.Rotate_YButton.Location = New System.Drawing.Point(442, 449)
+        Me.Rotate_YButton.Name = "Rotate_YButton"
+        Me.Rotate_YButton.Size = New System.Drawing.Size(139, 23)
+        Me.Rotate_YButton.TabIndex = 34
+        Me.Rotate_YButton.Text = "Rotate Y"
+        Me.Rotate_YButton.UseVisualStyleBackColor = True
         '
-        'Button3
+        'Rotate_ZButton
         '
-        Me.Button3.Location = New System.Drawing.Point(442, 478)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(140, 23)
-        Me.Button3.TabIndex = 35
-        Me.Button3.Text = "Rotate Z"
-        Me.Button3.UseVisualStyleBackColor = True
+        Me.Rotate_ZButton.Location = New System.Drawing.Point(442, 478)
+        Me.Rotate_ZButton.Name = "Rotate_ZButton"
+        Me.Rotate_ZButton.Size = New System.Drawing.Size(140, 23)
+        Me.Rotate_ZButton.TabIndex = 35
+        Me.Rotate_ZButton.Text = "Rotate Z"
+        Me.Rotate_ZButton.UseVisualStyleBackColor = True
         '
         'ambientTxtBox
         '
-        Me.ambientTxtBox.Location = New System.Drawing.Point(598, 86)
+        Me.ambientTxtBox.Location = New System.Drawing.Point(596, 51)
         Me.ambientTxtBox.Name = "ambientTxtBox"
         Me.ambientTxtBox.Size = New System.Drawing.Size(69, 20)
         Me.ambientTxtBox.TabIndex = 36
+        Me.ambientTxtBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'diffuseTxtBox
         '
-        Me.diffuseTxtBox.Location = New System.Drawing.Point(673, 86)
+        Me.diffuseTxtBox.Location = New System.Drawing.Point(671, 51)
         Me.diffuseTxtBox.Name = "diffuseTxtBox"
         Me.diffuseTxtBox.Size = New System.Drawing.Size(69, 20)
         Me.diffuseTxtBox.TabIndex = 37
+        Me.diffuseTxtBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'specularTxtBox
         '
-        Me.specularTxtBox.Location = New System.Drawing.Point(748, 86)
+        Me.specularTxtBox.Location = New System.Drawing.Point(746, 51)
         Me.specularTxtBox.Name = "specularTxtBox"
         Me.specularTxtBox.Size = New System.Drawing.Size(69, 20)
         Me.specularTxtBox.TabIndex = 38
+        Me.specularTxtBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'exponentTxtBox
         '
-        Me.exponentTxtBox.Location = New System.Drawing.Point(673, 140)
+        Me.exponentTxtBox.Location = New System.Drawing.Point(674, 113)
         Me.exponentTxtBox.Name = "exponentTxtBox"
         Me.exponentTxtBox.Size = New System.Drawing.Size(69, 20)
         Me.exponentTxtBox.TabIndex = 39
+        Me.exponentTxtBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'ambientLbl
         '
         Me.ambientLbl.AutoSize = True
-        Me.ambientLbl.Location = New System.Drawing.Point(608, 58)
+        Me.ambientLbl.Location = New System.Drawing.Point(606, 23)
         Me.ambientLbl.Name = "ambientLbl"
         Me.ambientLbl.Size = New System.Drawing.Size(45, 13)
         Me.ambientLbl.TabIndex = 40
@@ -333,7 +341,7 @@ Partial Class MainForm
         'diffuseLbl
         '
         Me.diffuseLbl.AutoSize = True
-        Me.diffuseLbl.Location = New System.Drawing.Point(687, 58)
+        Me.diffuseLbl.Location = New System.Drawing.Point(685, 23)
         Me.diffuseLbl.Name = "diffuseLbl"
         Me.diffuseLbl.Size = New System.Drawing.Size(40, 13)
         Me.diffuseLbl.TabIndex = 41
@@ -342,7 +350,7 @@ Partial Class MainForm
         'specularLbl
         '
         Me.specularLbl.AutoSize = True
-        Me.specularLbl.Location = New System.Drawing.Point(756, 58)
+        Me.specularLbl.Location = New System.Drawing.Point(754, 23)
         Me.specularLbl.Name = "specularLbl"
         Me.specularLbl.Size = New System.Drawing.Size(49, 13)
         Me.specularLbl.TabIndex = 42
@@ -351,17 +359,27 @@ Partial Class MainForm
         'specularExponentLbl
         '
         Me.specularExponentLbl.AutoSize = True
-        Me.specularExponentLbl.Location = New System.Drawing.Point(637, 117)
+        Me.specularExponentLbl.Location = New System.Drawing.Point(638, 90)
         Me.specularExponentLbl.Name = "specularExponentLbl"
         Me.specularExponentLbl.Size = New System.Drawing.Size(148, 13)
         Me.specularExponentLbl.TabIndex = 43
         Me.specularExponentLbl.Text = "Specular Reflection Exponent"
+        '
+        'DoShadingButton
+        '
+        Me.DoShadingButton.Location = New System.Drawing.Point(651, 139)
+        Me.DoShadingButton.Name = "DoShadingButton"
+        Me.DoShadingButton.Size = New System.Drawing.Size(112, 23)
+        Me.DoShadingButton.TabIndex = 44
+        Me.DoShadingButton.Text = "Shade Sphere"
+        Me.DoShadingButton.UseVisualStyleBackColor = True
         '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(827, 514)
+        Me.Controls.Add(Me.DoShadingButton)
         Me.Controls.Add(Me.specularExponentLbl)
         Me.Controls.Add(Me.specularLbl)
         Me.Controls.Add(Me.diffuseLbl)
@@ -370,9 +388,9 @@ Partial Class MainForm
         Me.Controls.Add(Me.specularTxtBox)
         Me.Controls.Add(Me.diffuseTxtBox)
         Me.Controls.Add(Me.ambientTxtBox)
-        Me.Controls.Add(Me.Button3)
-        Me.Controls.Add(Me.Button2)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.Rotate_ZButton)
+        Me.Controls.Add(Me.Rotate_YButton)
+        Me.Controls.Add(Me.Rotate_XButton)
         Me.Controls.Add(Me.TranslateButton)
         Me.Controls.Add(Me.DeleteLightSourceButton)
         Me.Controls.Add(Me.LightSourceListLabel)
@@ -430,9 +448,9 @@ Partial Class MainForm
     Friend WithEvents DeleteLightSourceButton As Button
     Friend WithEvents AnimationTimer As Timer
     Friend WithEvents TranslateButton As Button
-    Friend WithEvents Button1 As Button
-    Friend WithEvents Button2 As Button
-    Friend WithEvents Button3 As Button
+    Friend WithEvents Rotate_XButton As Button
+    Friend WithEvents Rotate_YButton As Button
+    Friend WithEvents Rotate_ZButton As Button
     Friend WithEvents ambientTxtBox As TextBox
     Friend WithEvents diffuseTxtBox As TextBox
     Friend WithEvents specularTxtBox As TextBox
@@ -441,4 +459,5 @@ Partial Class MainForm
     Friend WithEvents diffuseLbl As Label
     Friend WithEvents specularLbl As Label
     Friend WithEvents specularExponentLbl As Label
+    Friend WithEvents DoShadingButton As Button
 End Class
