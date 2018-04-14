@@ -5,7 +5,6 @@
         N = 0
         ReDim Elmt(-1)
     End Sub
-
     Public Overloads Sub InsertLast(x As Double, y As Double, z As Double)
         Dim P As TPoint
         P = New TPoint
@@ -19,5 +18,13 @@
 
     Public Function Count()
         Return N
+    End Function
+
+    Public Function DeleteAllData() As TArrPoint
+        For i = 0 To N - 1
+            Me.Elmt(i) = Nothing
+        Next
+        Init()
+        Return Me
     End Function
 End Class

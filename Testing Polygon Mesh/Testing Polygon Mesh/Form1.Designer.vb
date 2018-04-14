@@ -22,6 +22,7 @@ Partial Class MainForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.MainCanvas = New System.Windows.Forms.PictureBox()
         Me.DrawMeshButton = New System.Windows.Forms.Button()
         Me.ScreenCoordLabel = New System.Windows.Forms.Label()
@@ -54,6 +55,7 @@ Partial Class MainForm
         Me.BackCullingModeGroupBox = New System.Windows.Forms.GroupBox()
         Me.BackCulling_OFFRadioButton = New System.Windows.Forms.RadioButton()
         Me.BackCulling_ONRadioButton = New System.Windows.Forms.RadioButton()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         CType(Me.MainCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ObjectsGroupBox.SuspendLayout()
         Me.BackCullingModeGroupBox.SuspendLayout()
@@ -136,21 +138,21 @@ Partial Class MainForm
         '
         'X_TransTextBox
         '
-        Me.X_TransTextBox.Location = New System.Drawing.Point(442, 225)
+        Me.X_TransTextBox.Location = New System.Drawing.Point(443, 224)
         Me.X_TransTextBox.Name = "X_TransTextBox"
         Me.X_TransTextBox.Size = New System.Drawing.Size(51, 20)
         Me.X_TransTextBox.TabIndex = 9
         '
         'Y_TransTextBox
         '
-        Me.Y_TransTextBox.Location = New System.Drawing.Point(442, 252)
+        Me.Y_TransTextBox.Location = New System.Drawing.Point(443, 250)
         Me.Y_TransTextBox.Name = "Y_TransTextBox"
         Me.Y_TransTextBox.Size = New System.Drawing.Size(51, 20)
         Me.Y_TransTextBox.TabIndex = 10
         '
         'Z_TransTextBox
         '
-        Me.Z_TransTextBox.Location = New System.Drawing.Point(442, 279)
+        Me.Z_TransTextBox.Location = New System.Drawing.Point(443, 274)
         Me.Z_TransTextBox.Name = "Z_TransTextBox"
         Me.Z_TransTextBox.Size = New System.Drawing.Size(51, 20)
         Me.Z_TransTextBox.TabIndex = 11
@@ -340,6 +342,10 @@ Partial Class MainForm
         Me.BackCulling_ONRadioButton.Text = "ON"
         Me.BackCulling_ONRadioButton.UseVisualStyleBackColor = True
         '
+        'Timer1
+        '
+        Me.Timer1.Interval = 1
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -417,4 +423,5 @@ Partial Class MainForm
     Friend WithEvents BackCullingModeGroupBox As GroupBox
     Friend WithEvents BackCulling_OFFRadioButton As RadioButton
     Friend WithEvents BackCulling_ONRadioButton As RadioButton
+    Friend WithEvents Timer1 As Timer
 End Class
