@@ -14,4 +14,6 @@
         y = Point1.z * Point2.x - Point1.x * Point2.z
         z = Point1.x * Point2.y - Point1.y * Point2.x
     End Sub
+
+
 End Class

@@ -4,8 +4,8 @@ Public Class MainForm
     Private bitmapCanvas As Bitmap
     Private graphics As Graphics
     Private whitepen As Pen
-    Private ListPoints As TArrPoint
-    Private ListPolygon As TArrMesh
+    Private ListPoints As ListPoints
+    Private ListPolygon As ListPolygons
     Private sphereCenter, surfaceNormal As TPoint
     Private mesh As TMesh
     'Private ListofEdges As List(Of TLine)
@@ -21,8 +21,8 @@ Public Class MainForm
         graphics = Graphics.FromImage(bitmapCanvas)
         whitepen = New Pen(Color.White)
         MainCanvas.Image = bitmapCanvas
-        ListPoints = New TArrPoint()
-        ListPolygon = New TArrMesh()
+        ListPoints = New ListPoints()
+        ListPolygon = New ListPolygons()
         sphereCenter = New TPoint(0, 0, 0)
         'sphereCenter = New TPoint(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0)
         'mesh = New TMesh()
@@ -200,8 +200,8 @@ Public Class MainForm
     End Sub
 
     Private Sub DrawSphere()
-        ListPoints = New TArrPoint
-        ListPolygon = New TArrMesh
+        ListPoints = New ListPoints
+        ListPolygon = New ListPolygons
         dtheta = 180 / latitude
         du = 360 / longitude
         For i = 0 To latitude / 2 - 1
@@ -301,7 +301,7 @@ Public Class MainForm
     Public Sub gambarpoly()
         Dim m1, m2, m3, m4, m5, m6, m11, m22, m33, m44, m55, m66 As Double
         Dim p1, p2, p3 As Integer
-        Dim temp As New TArrMesh
+        Dim temp As New ListPolygons()
         BackFaceCulling()
         Dim DOP(3) As Integer
         DOP(0) = 0
@@ -309,9 +309,9 @@ Public Class MainForm
         DOP(2) = -10
         For i = 0 To ListPolygon.N - 1
             If dotproduct2(DOP, ListPolygon.Normal(i)) < 0 Then
-                p1 = ListPolygon.Elmt(i).EdgeIndex1
-                p2 = ListPolygon.Elmt(i).EdgeIndex2
-                p3 = ListPolygon.Elmt(i).EdgeIndex3
+                p1 = ListPolygon.Elmt(i).p1
+                p2 = ListPolygon.Elmt(i).p2
+                p3 = ListPolygon.Elmt(i).p3
                 temp.Init()
                 temp.InsertIndex(p1, p2, p3)
                 MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
@@ -353,14 +353,14 @@ Public Class MainForm
         Return d
     End Function
 
-    Private Sub CalculateNormal(poly As TArrMesh)
+    Private Sub CalculateNormal(poly As ListPolygons)
         Dim ppp As New TMesh
         Dim p1, p2, p3, m1, m2, m3, m4, m5, m6 As Integer
         Dim AB, AC As TPoint
         For i As Integer = 0 To poly.N - 1
-            p1 = ListPolygon.Elmt(i).EdgeIndex1
-            p2 = ListPolygon.Elmt(i).EdgeIndex2
-            p3 = ListPolygon.Elmt(i).EdgeIndex3
+            p1 = ListPolygon.Elmt(i).p1
+            p2 = ListPolygon.Elmt(i).p2
+            p3 = ListPolygon.Elmt(i).p3
             AB = New TPoint(ListPoints.Elmt(p2).x - ListPoints.Elmt(p1).x, ListPoints.Elmt(p2).y - ListPoints.Elmt(p1).y, ListPoints.Elmt(p2).z - ListPoints.Elmt(p1).z)
             AC = New TPoint(ListPoints.Elmt(p3).x - ListPoints.Elmt(p1).x, ListPoints.Elmt(p3).y - ListPoints.Elmt(p1).y, ListPoints.Elmt(p3).z - ListPoints.Elmt(p1).z)
             poly.Normal(i).Calculate(AB, AC)
