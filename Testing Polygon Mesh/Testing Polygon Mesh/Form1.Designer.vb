@@ -48,9 +48,9 @@ Partial Class MainForm
         Me.DeleteLightSourceButton = New System.Windows.Forms.Button()
         Me.AnimationTimer = New System.Windows.Forms.Timer(Me.components)
         Me.TranslateButton = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
+        Me.Rotate_XButton = New System.Windows.Forms.Button()
+        Me.Rotate_YButton = New System.Windows.Forms.Button()
+        Me.Rotate_ZButton = New System.Windows.Forms.Button()
         Me.ambientTxtBox = New System.Windows.Forms.TextBox()
         Me.diffuseTxtBox = New System.Windows.Forms.TextBox()
         Me.specularTxtBox = New System.Windows.Forms.TextBox()
@@ -269,32 +269,32 @@ Partial Class MainForm
         Me.TranslateButton.Text = "Translate"
         Me.TranslateButton.UseVisualStyleBackColor = True
         '
-        'Button1
+        'Rotate_XButton
         '
-        Me.Button1.Location = New System.Drawing.Point(442, 420)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(140, 23)
-        Me.Button1.TabIndex = 33
-        Me.Button1.Text = "Rotate X"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Rotate_XButton.Location = New System.Drawing.Point(442, 420)
+        Me.Rotate_XButton.Name = "Rotate_XButton"
+        Me.Rotate_XButton.Size = New System.Drawing.Size(140, 23)
+        Me.Rotate_XButton.TabIndex = 33
+        Me.Rotate_XButton.Text = "Rotate X"
+        Me.Rotate_XButton.UseVisualStyleBackColor = True
         '
-        'Button2
+        'Rotate_YButton
         '
-        Me.Button2.Location = New System.Drawing.Point(442, 449)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(139, 23)
-        Me.Button2.TabIndex = 34
-        Me.Button2.Text = "Rotate Y"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.Rotate_YButton.Location = New System.Drawing.Point(442, 449)
+        Me.Rotate_YButton.Name = "Rotate_YButton"
+        Me.Rotate_YButton.Size = New System.Drawing.Size(139, 23)
+        Me.Rotate_YButton.TabIndex = 34
+        Me.Rotate_YButton.Text = "Rotate Y"
+        Me.Rotate_YButton.UseVisualStyleBackColor = True
         '
-        'Button3
+        'Rotate_ZButton
         '
-        Me.Button3.Location = New System.Drawing.Point(442, 478)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(140, 23)
-        Me.Button3.TabIndex = 35
-        Me.Button3.Text = "Rotate Z"
-        Me.Button3.UseVisualStyleBackColor = True
+        Me.Rotate_ZButton.Location = New System.Drawing.Point(442, 478)
+        Me.Rotate_ZButton.Name = "Rotate_ZButton"
+        Me.Rotate_ZButton.Size = New System.Drawing.Size(140, 23)
+        Me.Rotate_ZButton.TabIndex = 35
+        Me.Rotate_ZButton.Text = "Rotate Z"
+        Me.Rotate_ZButton.UseVisualStyleBackColor = True
         '
         'ambientTxtBox
         '
@@ -377,9 +377,9 @@ Partial Class MainForm
         Me.Controls.Add(Me.specularTxtBox)
         Me.Controls.Add(Me.diffuseTxtBox)
         Me.Controls.Add(Me.ambientTxtBox)
-        Me.Controls.Add(Me.Button3)
-        Me.Controls.Add(Me.Button2)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.Rotate_ZButton)
+        Me.Controls.Add(Me.Rotate_YButton)
+        Me.Controls.Add(Me.Rotate_XButton)
         Me.Controls.Add(Me.TranslateButton)
         Me.Controls.Add(Me.DeleteLightSourceButton)
         Me.Controls.Add(Me.LightSourceListLabel)
@@ -437,9 +437,9 @@ Partial Class MainForm
     Friend WithEvents DeleteLightSourceButton As Button
     Friend WithEvents AnimationTimer As Timer
     Friend WithEvents TranslateButton As Button
-    Friend WithEvents Button1 As Button
-    Friend WithEvents Button2 As Button
-    Friend WithEvents Button3 As Button
+    Friend WithEvents Rotate_XButton As Button
+    Friend WithEvents Rotate_YButton As Button
+    Friend WithEvents Rotate_ZButton As Button
     Friend WithEvents ambientTxtBox As TextBox
     Friend WithEvents diffuseTxtBox As TextBox
     Friend WithEvents specularTxtBox As TextBox

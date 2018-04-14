@@ -130,6 +130,45 @@ Public Class MainForm
         backFaceCullingStatus = True
     End Sub
 
+    Private RotX, RotY, RotZ As Boolean
+
+    Private Sub Rotate_XButton_Click(sender As Object, e As EventArgs) Handles Rotate_XButton.Click
+        RotX = True
+        RotY = False
+        RotZ = False
+        AnimationTimer.Enabled = True
+    End Sub
+
+    Private Sub Rotate_YButton_Click(sender As Object, e As EventArgs) Handles Rotate_YButton.Click
+        RotX = False
+        RotY = True
+        RotZ = False
+        AnimationTimer.Enabled = True
+    End Sub
+
+    Private Sub Rotate_ZButton_Click(sender As Object, e As EventArgs) Handles Rotate_ZButton.Click
+        RotX = False
+        RotY = False
+        RotZ = True
+        AnimationTimer.Enabled = True
+    End Sub
+
+    Private Sub AnimationTimer_Tick(sender As Object, e As EventArgs) Handles AnimationTimer.Tick
+        If RotX Then
+            graphics.Clear(Color.Black)
+            PV.RotateX(0.344)
+            DrawSphere()
+        ElseIf RotY Then
+            graphics.Clear(Color.Black)
+            PV.RotateY(0.344)
+            DrawSphere()
+        Else
+            graphics.Clear(Color.Black)
+            PV.RotateZ(0.344)
+            DrawSphere()
+        End If
+    End Sub
+
     Private Sub BackCullOFF_BTN_CheckedChanged(sender As Object, e As EventArgs)
         backFaceCullingStatus = False
     End Sub
