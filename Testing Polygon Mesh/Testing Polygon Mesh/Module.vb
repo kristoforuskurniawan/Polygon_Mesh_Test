@@ -77,7 +77,6 @@
                 temp(j, i) = A.Mat(j, 0) * B.Mat(0, i) + A.Mat(j, 1) * B.Mat(1, i) + A.Mat(j, 2) * B.Mat(2, i) + A.Mat(j, 3) * B.Mat(3, i)
             Next
         Next
-
         Return temp
     End Function
 
@@ -92,6 +91,4 @@
         Next
         Return temp
     End Function
-
-
 End Module
