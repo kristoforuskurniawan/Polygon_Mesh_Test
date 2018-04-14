@@ -438,4 +438,12 @@
         Next
         Mat = temp
     End Sub
+
+    Public Function insertColumnMatrix(ByRef Matrix(,) As Double, ByVal index As Integer, ByVal a As Double, ByVal b As Double, ByVal c As Double, ByVal d As Double) As Double(,)
+        Matrix(index, 0) = a
+        Matrix(index, 1) = b
+        Matrix(index, 2) = c
+        Matrix(index, 3) = d
+        Return Matrix
+    End Function
 End Class
