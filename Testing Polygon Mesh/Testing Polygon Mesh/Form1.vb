@@ -169,7 +169,7 @@ Public Class MainForm
     '            d = obj(j).y
     '            graphics.DrawLine(blackpen, a, b, c, d)
     '        Next
-    '    Next
+    '    Nextx
     '    MainCanvas.Image = bitmapCanvas
     'End Sub
 

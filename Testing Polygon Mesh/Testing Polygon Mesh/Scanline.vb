@@ -3,28 +3,28 @@
 '    Dim AET As New AEL
 '    Dim stacker As New Stack(Of EdgeTable)
 
-'    Public Sub FillPolygon(a As TArrMesh, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen)
+'    Public Sub FillPolygon(a As ListPolygons, b As ListPoints, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen)
 '        edgetable.Clear()
 '        stacker.Clear()
-'        FillSET(a)
+'        FillSET(a, b)
 '        AET = New AEL
 '        ProcessAET(g, bmp, pen)
 
 '    End Sub
 
-'    Public Sub FillSET(a As TArrMesh)
+'    Public Sub FillSET(a As ListPolygons, b As ListPoints)
 '        'filling the SET if the polygon is valid (doesn't cross)
 '        edgetable = New List(Of EdgeTable)
 '        'get the min and max to know how index that is needed
-'        Dim min As Integer = getMinimumY(a)
-'        Dim max As Integer = getMaximumY(a)
+'        Dim min As Integer = getMinimumY(b)
+'        Dim max As Integer = getMaximumY(b)
 '        Dim size As Integer = max - min + 1
 '        resizeArray(edgetable, size)  'resize the array for the iteration in AEL, may cause problem
 '        Dim d As Integer
 '        'the increment
-'        For i As Integer = 0 To a.N
+'        For i As Integer = 0 To a.N - 1
 '            d = i + 1
-'            If i = a.N Then
+'            If i = a.N - 1 Then
 '                'if it's the last index, make the line with last point and start point
 '                d = 0
 '            End If
@@ -279,28 +279,28 @@
 '        End If
 '    End Sub
 
-'    Public Function getMinimumY(v As List(Of Point))
+'    Public Function getMinimumY(v As ListPoints)
 '        Dim min As Integer
-'        For i As Integer = 0 To v.Count - 1
+'        For i As Integer = 0 To v.N - 1
 '            If i = 0 Then
-'                min = v(i).Y
+'                min = v.Elmt(i).y
 '            Else
-'                If v(i).Y < min Then
-'                    min = v(i).Y
+'                If v.Elmt(i).y < min Then
+'                    min = v.Elmt(i).y
 '                End If
 '            End If
 '        Next
 '        Return min
 '    End Function
 
-'    Public Function getMaximumY(v As List(Of Point))
+'    Public Function getMaximumY(v As ListPoints)
 '        Dim max As Integer
-'        For i As Integer = 0 To v.Count - 1
+'        For i As Integer = 0 To v.N - 1
 '            If i = 0 Then
-'                max = v(i).Y
+'                max = v.Elmt(i).y
 '            Else
-'                If v(i).Y > max Then
-'                    max = v(i).Y
+'                If v.Elmt(i).y > max Then
+'                    max = v.Elmt(i).y
 '                End If
 '            End If
 '        Next
