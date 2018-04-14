@@ -5,6 +5,7 @@ Public Class MainForm
     Private graphics As Graphics
     Private blackpen As Pen
     Private ListofVertices As TArrPoint
+    Private ListPolygon As TArrMesh
     Private sphereCenter, surfaceNormal As TPoint
     Private mesh As TMesh
     Private ListofEdges As List(Of TLine)
@@ -20,11 +21,14 @@ Public Class MainForm
         blackpen = New Pen(Color.Black)
         MainCanvas.Image = bitmapCanvas
         ListofVertices = New TArrPoint
+        ListofMeshes = New TArrMesh()
+        ListPolygon = New TArrMesh
         sphereCenter = New TPoint(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0)
         mesh = New TMesh()
         ListofVertices.Init()
-        ListofEdges = New List(Of TLine)
-        ListofMeshes = New TArrMesh()
+        ListPolygon.Init()
+        'ListofEdges = New List(Of TLine)
+        'ListofMeshes = New TArrMesh()
         ListofMeshes.Init()
         PV = New Matrix4x4()
 
@@ -204,6 +208,25 @@ Public Class MainForm
     End Sub
 
     Private Sub DrawSphere()
+        '<<<<<<< HEAD
+        '=======
+        '        Dim p1, p2, p3, w, r, m, n, du As Integer
+        '        Dim dtheta As Double
+        '        'Dim size As Integer = ListofVertices.Count
+        '        'Dim obj(size) As TPoint
+        '        'For i As Integer = 0 To size - 1
+        '        '    obj(i) = New TPoint
+        '        '    obj(i) = MultiplyMat(ListofVertices.Elmt(i), PV)
+        '        'Next
+        '        'Dim a, b, c, d As Single
+        '        'For i As Integer = 0 To size - 2
+        '        '    a = obj(i).x
+        '        '    b = obj(i).y
+        '        '    c = obj(i + 1).x
+        '        '    d = obj(i + 1).y
+        '        '    graphics.DrawLine(blackpen, a, b, c, d)
+        '        'Next
+        '>>>>>>> refs/remotes/origin/master
         deltaTheta = 180 / latitude
         deltaU = 360 / longitude
         For i = 0 To latitude / 2 - 1
@@ -349,12 +372,13 @@ Public Class MainForm
         MainCanvas.Image = bitmapCanvas
     End Sub
 
+
     Private Sub MainCanvas_Click(sender As Object, e As EventArgs) Handles MainCanvas.Click
         Status = True
         'Win32.AllocConsole()
         Console.WriteLine(ListofVertices.Count)
         For i As Integer = 0 To ListofVertices.Count - 1
-            Console.WriteLine(ListofVertices.Elmt(i).x.ToString() + " " + ListofVertices.Elmt(i).y.ToString() + " " + ListofVertices.Elmt(i).z.ToString() + Environment.NewLine)
+            'Console.WriteLine(ListoPoints.Elmt(i).x.ToString() + " " + ListofVertices.Elmt(i).y.ToString() + " " + ListofVertices.Elmt(i).z.ToString() + Environment.NewLine)
         Next
         If Status = False Then
             'Win32.FreeConsole()
