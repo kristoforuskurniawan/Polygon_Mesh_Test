@@ -29,6 +29,7 @@
         Me.dx = temp.dx
         Me.dy = temp.dy
         Me.carry = temp.carry
+        Me.zofymin = temp.zofymin
         Me.normalize = temp.normalize
         nxt = Nothing
     End Sub

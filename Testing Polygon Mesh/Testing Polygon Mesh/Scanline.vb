@@ -1,7 +1,9 @@
 ﻿Module Scanline
-    Dim edgetable As List(Of EdgeTable) 'SET
-    Dim AET As AEL
-    Dim stacker As Stack(Of EdgeTable)
+    Dim edgetable As New List(Of EdgeTable)
+    'The SET table
+    Dim AET As New AEL
+    'The AEL 
+    Dim stacker As New Stack(Of EdgeTable)
 
     Enum poly
         p0 = 0
@@ -9,37 +11,51 @@
         p2 = 2
     End Enum
 
-    Public Sub FillPolygon(a As ListPolygons, b As ListPoints, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen)
-        edgetable = New List(Of EdgeTable)
-        stacker = New Stack(Of EdgeTable)
+    Public Sub FillPolygon(a As ListPolygons, b As ListPoints, PView As Matrix4x4, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen)
         edgetable.Clear()
         stacker.Clear()
-        FillSET(a, b)
+        FillSET(a, b, PView)
         AET = New AEL
         ProcessAET(g, bmp, pen)
     End Sub
 
-    Public Sub FillSET(a As ListPolygons, b As ListPoints)
-        Dim min As Integer = getMinimumY(a, b)
-        Dim max As Integer = getMaximumY(a, b)
+    Public Sub FillSET(a As ListPolygons, b As ListPoints, PView As Matrix4x4)
+        edgetable = New List(Of EdgeTable)
+        Dim pointtemp(3) As TArrPoint
+        pointtemp(0) = New TArrPoint
+        pointtemp(1) = New TArrPoint
+        pointtemp(2) = New TArrPoint
+        'pointtemp(0).InsertVal(b, a.Elmt(0).p1)
+        'pointtemp(1).InsertVal(b, a.Elmt(0).p2)
+        'pointtemp(2).InsertVal(b, a.Elmt(0).p3)
+        pointtemp(0).MultiplyMatMesh(b, a.Elmt(0).p1, PView)
+        pointtemp(1).MultiplyMatMesh(b, a.Elmt(0).p2, PView)
+        pointtemp(2).MultiplyMatMesh(b, a.Elmt(0).p3, PView)
+        Dim min As Integer = getMinimumY(pointtemp)
+        Dim max As Integer = getMaximumY(pointtemp)
         Dim size As Integer = max - min + 1
+        'MsgBox(b.Elmt(a.Elmt(0).p2).x.ToString + " vs " + pointtemp(1).x.ToString)
         resizeArray(edgetable, size)
-        DeclareTemp(min, a.Elmt(0).p1, a.Elmt(0).p2, a, b)
-
+        MsgBox(edgetable.Count)
+        DeclareTemp(min, pointtemp(0), pointtemp(1))
+        DeclareTemp(min, pointtemp(1), pointtemp(2))
+        DeclareTemp(min, pointtemp(2), pointtemp(1))
+        'displaySET(edgetable)
+        'test
 
     End Sub
 
-    Public Sub DeclareTemp(min As Integer, i As Integer, j As Integer, a As ListPolygons, b As ListPoints)
-        If Not (b.Elmt(i).y = b.Elmt(j).y) Then
+    Public Sub DeclareTemp(min As Integer, i As TArrPoint, j As TArrPoint)
+        If Not (i.y = j.y) Then
             Dim temp As New EdgeTable
             temp.normalize = min
-            temp.ymin = If(b.Elmt(i).y <= b.Elmt(j).y, b.Elmt(i).y, b.Elmt(j).y)
-            temp.ymax = If(b.Elmt(i).y <= b.Elmt(j).y, b.Elmt(i).y, b.Elmt(j).y)
-            temp.xofymin = If(b.Elmt(i).y <= b.Elmt(j).y, b.Elmt(i).x, b.Elmt(j).x)
-            temp.dx = b.Elmt(j).x - b.Elmt(i).x
-            temp.dy = b.Elmt(j).y - b.Elmt(i).y
+            temp.ymin = If(i.y <= j.y, i.y, j.y)
+            temp.ymax = If(i.y >= j.y, i.y, j.y)
+            temp.xofymin = If(i.y <= j.y, i.x, j.x)
+            temp.dx = j.x - i.x
+            temp.dy = j.y - i.y
             temp.carry = 0
-            temp.zofymin = If(b.Elmt(i).y <= b.Elmt(j).y, b.Elmt(i).z, b.Elmt(j).z)
+            temp.zofymin = If(i.y <= j.y, i.z, j.z)
             temp.nxt = Nothing
             If temp.dy < 0 Then
                 temp.dy = -temp.dy
@@ -88,11 +104,13 @@
                 ' MsgBox(i.ToString + ": "+data.xofymin.ToString + " " + data2.xofymin.ToString)
                 If (data.xofymin = data2.xofymin) Then
                     'setpixel
-                    bmp.SetPixel(data.xofymin, y + data.normalize, pen.Color)
+                    'bmp.SetPixel(data.xofymin, y + data.normalize, pen.Color)
                 Else
                     'MsgBox(AET.length.ToString + " -- " + (y + data.normalize).ToString)
                     g.DrawLine(pen, data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize)
+                    'MsgBox("dtx : " + data.xofymin.ToString + "- dtnrm" + data.normalize.ToString + " - dt2x: " + data2.xofymin.ToString + "- y: " + y.ToString + " - dt2nrm: " + data2.normalize.ToString)
                 End If
+                'MsgBox("dtx : " + data.xofymin.ToString + "- dtnrm" + data.normalize.ToString + " - dt2x: " + data2.xofymin.ToString + "- y: " + y.ToString + " - dt2nrm: " + data2.normalize.ToString)
                 data = data.nxt.nxt
                 If Not (data Is Nothing) Then
                     data2 = data.nxt
@@ -115,7 +133,7 @@
         Dim counter As Integer = 0
         If (AET.CountAET() > 0) Then
             While Not (currentdata Is Nothing)
-                If currentdata.ymax = y + currentdata.normalize Then
+                If currentdata.ymax >= y + currentdata.normalize Then
                     'delete node
                     AET.Remove(counter)
                     counter = counter - 1
@@ -246,48 +264,64 @@
         Next
     End Sub
 
-    'Public Sub displaySET(temp As List(Of EdgeTable))
-    '    'to check the content of SET
-    '    For i = 0 To temp.Count - 1
-    '        If Not (temp(i) Is Nothing) Then
-    '            Dim node As EdgeTable = temp(i)
-    '            Dim str As String
-    '            While Not (node Is Nothing)
-    '                str = ""
-    '                str = node.ymin.ToString + " " + node.ymax.ToString + " " + node.xofymin.ToString + " " + node.dx.ToString
-    '                MsgBox(str)
-    '                node = node.nxt
-    '            End While
+    Public Sub displaySET(temp As List(Of EdgeTable))
+        'to check the content of SET
+        For i = 0 To temp.Count - 1
+            If Not (temp(i) Is Nothing) Then
+                Dim node As EdgeTable = temp(i)
+                Dim str As String
+                While Not (node Is Nothing)
+                    str = ""
+                    str = node.ymin.ToString + " " + node.ymax.ToString + " " + node.xofymin.ToString + " " + node.dx.ToString
+                    MsgBox(str)
+                    node = node.nxt
+                End While
 
-    '        End If
-    '    Next
-    'End Sub
+            End If
+        Next
+    End Sub
 
-    'Public Sub displayAET(temp As EdgeTable)
-    '    'to check the content of SET
-    '    If Not (temp Is Nothing) Then
-    '        Dim node As EdgeTable = temp
-    '        Dim str As String
-    '        While Not (node Is Nothing)
-    '            str = ""
-    '            str = str + node.ymin.ToString + " " + node.ymax.ToString + " " + node.xofymin.ToString + " " + node.dx.ToString
-    '            node = node.nxt
-    '            MsgBox(str)
-    '        End While
-    '    End If
-    'End Sub
+    Public Sub displayAET(temp As EdgeTable)
+        'to check the content of SET
+        If Not (temp Is Nothing) Then
+            Dim node As EdgeTable = temp
+            Dim str As String
+            While Not (node Is Nothing)
+                str = ""
+                str = str + node.ymin.ToString + " " + node.ymax.ToString + " " + node.xofymin.ToString + " " + node.dx.ToString
+                node = node.nxt
+                MsgBox(str)
+            End While
+        End If
+    End Sub
 
-    Public Function getMinimumY(v As ListPolygons, a As ListPoints)
+    Public Function getMinimumY(pointtemp As TArrPoint())
         Dim min As Integer
-        min = If(a.Elmt(v.Elmt(0).p1).y < a.Elmt(v.Elmt(0).p2).y, a.Elmt(v.Elmt(0).p1).y, a.Elmt(v.Elmt(0).p2).y)
-        min = If(min < a.Elmt(v.Elmt(0).p3).y, min, a.Elmt(v.Elmt(0).p3).y)
+        For i As Integer = 0 To 2
+            If i = 0 Then
+                min = pointtemp(i).y
+            Else
+                If pointtemp(i).y < min Then
+                    min = pointtemp(i).y
+                End If
+            End If
+        Next
         Return min
     End Function
 
-    Public Function getMaximumY(v As ListPolygons, a As ListPoints)
+    Public Function getMaximumY(pointtemp As TArrPoint())
         Dim max As Integer
-        max = If(a.Elmt(v.Elmt(0).p1).y > a.Elmt(v.Elmt(0).p2).y, a.Elmt(v.Elmt(0).p1).y, a.Elmt(v.Elmt(0).p2).y)
-        max = If(max > a.Elmt(v.Elmt(0).p3).y, max, a.Elmt(v.Elmt(0).p3).y)
+        For i As Integer = 0 To 2
+            'MsgBox(pointtemp(i).y)
+            If i = 0 Then
+                max = pointtemp(i).y
+            Else
+                If pointtemp(i).y > max Then
+                    max = pointtemp(i).y
+
+                End If
+            End If
+        Next
         Return max
     End Function
 

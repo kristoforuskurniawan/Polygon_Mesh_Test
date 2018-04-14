@@ -4,6 +4,7 @@ Public Class MainForm
     Private bitmapCanvas As Bitmap
     Private graphics As Graphics
     Private whitepen As Pen
+    Private bluepen As Pen
     Private ListPoints As ListPoints
     Private ListPolygon As ListPolygons
     Private sphereCenter, surfaceNormal As TPoint
@@ -20,6 +21,7 @@ Public Class MainForm
         bitmapCanvas = New Bitmap(MainCanvas.Width, MainCanvas.Height)
         graphics = Graphics.FromImage(bitmapCanvas)
         whitepen = New Pen(Color.White)
+        bluepen = New Pen(Color.Blue)
         MainCanvas.Image = bitmapCanvas
         ListPoints = New ListPoints
         ListPolygon = New ListPolygons
@@ -145,12 +147,18 @@ Public Class MainForm
         Return Math.PI * x / 180.0
     End Function
 
-    Private Function CountPhong(ka As Double, ia As Double, kd As Double, il As Double, deg As Double, ks As Double, kl As Double, n As Integer, alpha As Double)
-        Return ((ka * ia) + (kd * il * Use_Cos(deg)) + (ks * il * Math.Pow(Use_Cos(alpha), n)))
+    Private Function CountPhong(ka As Double, ia As Double, kd As Double, il As Double, V As Double(), R As Double(), ks As Double, kl As Double, n As Integer, alpha As Double)
+        ' Return ((ka * ia) + (kd * il * Use_Cos(deg)) + (ks * il * Math.Pow(dotproduct(V, R)), n)))
     End Function
 
     Private Function GetPhong()
-
+        Dim Iamb, Idiff, Ispec As Double
+        Dim ka, kd, ks, ia, il As Double
+        Dim expo As Integer
+        Iamb = Double.Parse(ambientTxtBox.Text.ToString)
+        Idiff = Double.Parse(diffuseTxtBox.Text.ToString)
+        Ispec = Double.Parse(specularTxtBox.Text.ToString)
+        expo = Integer.Parse(exponentTxtBox.Text.ToString)
     End Function
 
     Private Sub Projection()
@@ -315,7 +323,8 @@ Public Class MainForm
                 temp.Init()
                 temp.InsertIndex(p1, p2, p3)
                 MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
-                SurfaceDetection(temp)
+                'MsgBox(p2.ToString + " aaa " + temp.Elmt(0).p2.ToString)
+                FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, whitepen)
                 graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
                 graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
                 graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
@@ -324,12 +333,6 @@ Public Class MainForm
 
     End Sub
 
-    Private Sub SurfaceDetection(temp As ListPolygons)
-        Dim edgetable As New List(Of EdgeTable) 'SET
-        Dim AET As New AEL
-        Dim stacker As New Stack(Of EdgeTable)
-
-    End Sub
 
 
     Private Sub MultiplyPV(p1 As Integer, p2 As Integer, p3 As Integer, ByRef m1 As Double, ByRef m2 As Double, ByRef m3 As Double, ByRef m4 As Double, ByRef m5 As Double, ByRef m6 As Double)
