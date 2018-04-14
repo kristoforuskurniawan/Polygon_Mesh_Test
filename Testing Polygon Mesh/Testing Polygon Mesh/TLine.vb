@@ -1,4 +1,4 @@
-﻿Public Class TLine
+﻿Public Class TLine 'Class ini ga dipakai sepertinya...
     Public PointIndex1 As Integer
     Public PointIndex2 As Integer
     Public poly1 As Integer 'For shared edge
