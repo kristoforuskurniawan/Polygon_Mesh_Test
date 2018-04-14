@@ -38,15 +38,20 @@ Partial Class MainForm
         Me.Y_TransButton = New System.Windows.Forms.Button()
         Me.Z_TransButton = New System.Windows.Forms.Button()
         Me.LightSourceLabel = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.TextBox3 = New System.Windows.Forms.TextBox()
+        Me.Light_XPosTextBox = New System.Windows.Forms.TextBox()
+        Me.Light_YPosTextBox = New System.Windows.Forms.TextBox()
+        Me.Light_ZPosTextBox = New System.Windows.Forms.TextBox()
         Me.X_LightSourceLabel = New System.Windows.Forms.Label()
         Me.Y_LightSourceLabel = New System.Windows.Forms.Label()
         Me.Z_LightSourceLabel = New System.Windows.Forms.Label()
         Me.AddLightButton = New System.Windows.Forms.Button()
         Me.BackCulling_ONRadioButton = New System.Windows.Forms.RadioButton()
         Me.BackCulling_OFFRadioButton = New System.Windows.Forms.RadioButton()
+        Me.SphereMoveRadioButton = New System.Windows.Forms.RadioButton()
+        Me.LightMoveRadioButton = New System.Windows.Forms.RadioButton()
+        Me.LightSourceListBox = New System.Windows.Forms.ListBox()
+        Me.LightSourceListLabel = New System.Windows.Forms.Label()
+        Me.DeleteLightSourceButton = New System.Windows.Forms.Button()
         CType(Me.MainCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -61,7 +66,7 @@ Partial Class MainForm
         '
         'DrawMeshButton
         '
-        Me.DrawMeshButton.Location = New System.Drawing.Point(442, 154)
+        Me.DrawMeshButton.Location = New System.Drawing.Point(442, 140)
         Me.DrawMeshButton.Name = "DrawMeshButton"
         Me.DrawMeshButton.Size = New System.Drawing.Size(140, 23)
         Me.DrawMeshButton.TabIndex = 1
@@ -182,26 +187,26 @@ Partial Class MainForm
         Me.LightSourceLabel.TabIndex = 15
         Me.LightSourceLabel.Text = "Light Source"
         '
-        'TextBox1
+        'Light_XPosTextBox
         '
-        Me.TextBox1.Location = New System.Drawing.Point(519, 304)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(61, 20)
-        Me.TextBox1.TabIndex = 16
+        Me.Light_XPosTextBox.Location = New System.Drawing.Point(519, 304)
+        Me.Light_XPosTextBox.Name = "Light_XPosTextBox"
+        Me.Light_XPosTextBox.Size = New System.Drawing.Size(61, 20)
+        Me.Light_XPosTextBox.TabIndex = 16
         '
-        'TextBox2
+        'Light_YPosTextBox
         '
-        Me.TextBox2.Location = New System.Drawing.Point(519, 331)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(62, 20)
-        Me.TextBox2.TabIndex = 17
+        Me.Light_YPosTextBox.Location = New System.Drawing.Point(519, 331)
+        Me.Light_YPosTextBox.Name = "Light_YPosTextBox"
+        Me.Light_YPosTextBox.Size = New System.Drawing.Size(62, 20)
+        Me.Light_YPosTextBox.TabIndex = 17
         '
-        'TextBox3
+        'Light_ZPosTextBox
         '
-        Me.TextBox3.Location = New System.Drawing.Point(519, 358)
-        Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(62, 20)
-        Me.TextBox3.TabIndex = 18
+        Me.Light_ZPosTextBox.Location = New System.Drawing.Point(519, 358)
+        Me.Light_ZPosTextBox.Name = "Light_ZPosTextBox"
+        Me.Light_ZPosTextBox.Size = New System.Drawing.Size(62, 20)
+        Me.Light_ZPosTextBox.TabIndex = 18
         '
         'X_LightSourceLabel
         '
@@ -261,20 +266,73 @@ Partial Class MainForm
         Me.BackCulling_OFFRadioButton.Text = "Show Back"
         Me.BackCulling_OFFRadioButton.UseVisualStyleBackColor = True
         '
+        'SphereMoveRadioButton
+        '
+        Me.SphereMoveRadioButton.AutoSize = True
+        Me.SphereMoveRadioButton.Location = New System.Drawing.Point(442, 174)
+        Me.SphereMoveRadioButton.Name = "SphereMoveRadioButton"
+        Me.SphereMoveRadioButton.Size = New System.Drawing.Size(59, 17)
+        Me.SphereMoveRadioButton.TabIndex = 25
+        Me.SphereMoveRadioButton.TabStop = True
+        Me.SphereMoveRadioButton.Text = "Sphere"
+        Me.SphereMoveRadioButton.UseVisualStyleBackColor = True
+        '
+        'LightMoveRadioButton
+        '
+        Me.LightMoveRadioButton.AutoSize = True
+        Me.LightMoveRadioButton.Location = New System.Drawing.Point(532, 174)
+        Me.LightMoveRadioButton.Name = "LightMoveRadioButton"
+        Me.LightMoveRadioButton.Size = New System.Drawing.Size(48, 17)
+        Me.LightMoveRadioButton.TabIndex = 26
+        Me.LightMoveRadioButton.TabStop = True
+        Me.LightMoveRadioButton.Text = "Light"
+        Me.LightMoveRadioButton.UseVisualStyleBackColor = True
+        '
+        'LightSourceListBox
+        '
+        Me.LightSourceListBox.FormattingEnabled = True
+        Me.LightSourceListBox.Location = New System.Drawing.Point(598, 40)
+        Me.LightSourceListBox.Name = "LightSourceListBox"
+        Me.LightSourceListBox.Size = New System.Drawing.Size(120, 368)
+        Me.LightSourceListBox.TabIndex = 27
+        '
+        'LightSourceListLabel
+        '
+        Me.LightSourceListLabel.AutoSize = True
+        Me.LightSourceListLabel.Location = New System.Drawing.Point(608, 23)
+        Me.LightSourceListLabel.Name = "LightSourceListLabel"
+        Me.LightSourceListLabel.Size = New System.Drawing.Size(97, 13)
+        Me.LightSourceListLabel.TabIndex = 28
+        Me.LightSourceListLabel.Text = "Light Source(s) List"
+        '
+        'DeleteLightSourceButton
+        '
+        Me.DeleteLightSourceButton.Location = New System.Drawing.Point(598, 422)
+        Me.DeleteLightSourceButton.Name = "DeleteLightSourceButton"
+        Me.DeleteLightSourceButton.Size = New System.Drawing.Size(120, 23)
+        Me.DeleteLightSourceButton.TabIndex = 29
+        Me.DeleteLightSourceButton.Text = "Delete Selected"
+        Me.DeleteLightSourceButton.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(593, 459)
+        Me.ClientSize = New System.Drawing.Size(730, 459)
+        Me.Controls.Add(Me.DeleteLightSourceButton)
+        Me.Controls.Add(Me.LightSourceListLabel)
+        Me.Controls.Add(Me.LightSourceListBox)
+        Me.Controls.Add(Me.LightMoveRadioButton)
+        Me.Controls.Add(Me.SphereMoveRadioButton)
         Me.Controls.Add(Me.BackCulling_OFFRadioButton)
         Me.Controls.Add(Me.BackCulling_ONRadioButton)
         Me.Controls.Add(Me.AddLightButton)
         Me.Controls.Add(Me.Z_LightSourceLabel)
         Me.Controls.Add(Me.Y_LightSourceLabel)
         Me.Controls.Add(Me.X_LightSourceLabel)
-        Me.Controls.Add(Me.TextBox3)
-        Me.Controls.Add(Me.TextBox2)
-        Me.Controls.Add(Me.TextBox1)
+        Me.Controls.Add(Me.Light_ZPosTextBox)
+        Me.Controls.Add(Me.Light_YPosTextBox)
+        Me.Controls.Add(Me.Light_XPosTextBox)
         Me.Controls.Add(Me.LightSourceLabel)
         Me.Controls.Add(Me.Z_TransButton)
         Me.Controls.Add(Me.Y_TransButton)
@@ -315,13 +373,18 @@ Partial Class MainForm
     Friend WithEvents Y_TransButton As Button
     Friend WithEvents Z_TransButton As Button
     Friend WithEvents LightSourceLabel As Label
-    Friend WithEvents TextBox1 As TextBox
-    Friend WithEvents TextBox2 As TextBox
-    Friend WithEvents TextBox3 As TextBox
+    Friend WithEvents Light_XPosTextBox As TextBox
+    Friend WithEvents Light_YPosTextBox As TextBox
+    Friend WithEvents Light_ZPosTextBox As TextBox
     Friend WithEvents X_LightSourceLabel As Label
     Friend WithEvents Y_LightSourceLabel As Label
     Friend WithEvents Z_LightSourceLabel As Label
     Friend WithEvents AddLightButton As Button
     Friend WithEvents BackCulling_ONRadioButton As RadioButton
     Friend WithEvents BackCulling_OFFRadioButton As RadioButton
+    Friend WithEvents SphereMoveRadioButton As RadioButton
+    Friend WithEvents LightMoveRadioButton As RadioButton
+    Friend WithEvents LightSourceListBox As ListBox
+    Friend WithEvents LightSourceListLabel As Label
+    Friend WithEvents DeleteLightSourceButton As Button
 End Class

@@ -6,11 +6,12 @@ Public Class MainForm
     Private blackpen As Pen
     Private ListofVertices As TArrPoint
     Private sphereCenter, surfaceNormal As TPoint
+    Private mesh As TMesh
     Private ListofEdges As List(Of TLine)
     Private ListofMeshes As TArrMesh
-    Private sphereRadius, deltaU, deltaTheta, theta As Double
-    Private longitude, latitude As Integer
-    Dim PV As New Matrix4x4
+    Private sphereRadius, deltaU, deltaTheta, theta, u, rotationAngle_X, rotationAngle_Y, rotationAngle_Z As Double
+    Private longitude, latitude, transPhere_X, transSphere_Y, transSphere_Z As Integer
+    Private PV As New Matrix4x4
     Private Status, backFaceCullingStatus As Boolean
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -19,13 +20,20 @@ Public Class MainForm
         blackpen = New Pen(Color.Black)
         MainCanvas.Image = bitmapCanvas
         ListofVertices = New TArrPoint
+        mesh = New TMesh()
         ListofVertices.Init()
         ListofEdges = New List(Of TLine)
         ListofMeshes = New TArrMesh()
         ListofMeshes.Init()
         sphereRadius = 150
-        longitude = 20
-        latitude = 20
+        longitude = 30
+        latitude = 30
+        transPhere_X = 0
+        transSphere_Y = 0
+        transSphere_Z = 0
+        rotationAngle_X = 0
+        rotationAngle_Y = 0
+        rotationAngle_Z = 0
         SphereRadInput.Text = sphereRadius.ToString()
         LongiInput.Text = longitude.ToString()
         LatiInput.Text = latitude.ToString()
