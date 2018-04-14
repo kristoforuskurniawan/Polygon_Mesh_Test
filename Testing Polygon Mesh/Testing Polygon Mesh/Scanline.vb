@@ -1,57 +1,60 @@
 ﻿Module Scanline
-    Dim edgetable As New List(Of EdgeTable) 'SET
-    Dim AET As New AEL
-    Dim stacker As New Stack(Of EdgeTable)
+    Dim edgetable As List(Of EdgeTable) 'SET
+    Dim AET As AEL
+    Dim stacker As Stack(Of EdgeTable)
+
+    Enum poly
+        p0 = 0
+        p1 = 1
+        p2 = 2
+    End Enum
 
     Public Sub FillPolygon(a As ListPolygons, b As ListPoints, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen)
+        edgetable = New List(Of EdgeTable)
+        stacker = New Stack(Of EdgeTable)
         edgetable.Clear()
         stacker.Clear()
         FillSET(a, b)
         AET = New AEL
         ProcessAET(g, bmp, pen)
-
     End Sub
 
     Public Sub FillSET(a As ListPolygons, b As ListPoints)
-        'filling the SET if the polygon is valid (doesn't cross)
-        edgetable = New List(Of EdgeTable)
-        'get the min and max to know how index that is needed
-        Dim min As Integer = getMinimumY(b)
-        Dim max As Integer = getMaximumY(b)
+        Dim min As Integer = getMinimumY(a, b)
+        Dim max As Integer = getMaximumY(a, b)
         Dim size As Integer = max - min + 1
         resizeArray(edgetable, size)  'resize the array for the iteration in AEL, may cause problem
         Dim d As Integer
         'the increment
-        For i As Integer = 0 To a.N - 1
-            d = i + 1
-            If i = a.N - 1 Then
-                'if it's the last index, make the line with last point and start point
-                d = 0
-            End If
-            If Not (a.Elmt(i).EdgeIndex2 = a.Elmt(d).EdgeIndex2) Then
-                'If it Is Not horizontal line (a.Elmt(i).EdgeIndex2 = a.Elmt(d).EdgeIndex2) Then fill all data 
-                Dim temp As New EdgeTable
-                temp.normalize = min
-                temp.ymin = If(a.Elmt(i).EdgeIndex2 <= a.Elmt(d).EdgeIndex2, a.Elmt(i).EdgeIndex2, a.Elmt(d).EdgeIndex2)
-                temp.ymax = If(a.Elmt(i).EdgeIndex2 >= a.Elmt(d).EdgeIndex2, a.Elmt(i).EdgeIndex2, a.Elmt(d).EdgeIndex2)
-                temp.xofymin = If(a.Elmt(i).EdgeIndex2 <= a.Elmt(d).EdgeIndex2, a.Elmt(i).EdgeIndex1, a.Elmt(d).EdgeIndex1)
-                temp.dx = a.Elmt(d).EdgeIndex1 - a.Elmt(i).EdgeIndex1
-                temp.dy = a.Elmt(d).EdgeIndex2 - a.Elmt(i).EdgeIndex2
-                temp.carry = 0
-                temp.zofymin = a.
-                temp.nxt = Nothing
-                If temp.dy < 0 Then
-                    temp.dy = -temp.dy
-                    temp.dx = -temp.dx
-                End If
-                'the data is filled
-                Dim index As Integer = temp.ymin - min
-                'normalize the index that will be use
-                sortedInsertion(edgetable(index), temp)
-            End If
-        Next
+
+        If Not (b.Elmt(a.Elmt(0).p1).y = b.Elmt(a.Elmt(0).p1).y) Then
+            'If it Is Not horizontal line (a.Elmt(i).EdgeIndex2 = a.Elmt(d).EdgeIndex2) Then fill all data 
+            DeclareTemp(min, a.Elmt(0).p1, a.Elmt(0).p2, a, b)
+        End If
 
     End Sub
+
+    Public Sub DeclareTemp(min As Integer, i As Integer, j As Integer, a As ListPolygons, b As ListPoints)
+        Dim temp As New EdgeTable
+        temp.normalize = min
+        temp.ymin = If(b.Elmt(i).y <= b.Elmt(j).y, b.Elmt(i).y, b.Elmt(j).y)
+        temp.ymax = If(b.Elmt(i).y <= b.Elmt(j).y, b.Elmt(i).y, b.Elmt(j).y)
+        temp.xofymin = If(b.Elmt(i).y <= b.Elmt(j).y, b.Elmt(i).x, b.Elmt(j).x)
+        temp.dx = b.Elmt(j).x - b.Elmt(i).x
+        temp.dy = b.Elmt(j).y - b.Elmt(i).y
+        temp.carry = 0
+        'temp.zofymin = a.
+        temp.nxt = Nothing
+        If temp.dy < 0 Then
+            temp.dy = -temp.dy
+            temp.dx = -temp.dx
+        End If
+        'the data is filled
+        Dim index As Integer = temp.ymin - min
+        'normalize the index that will be use
+        sortedInsertion(edgetable(index), temp)
+    End Sub
+
 
     Public Sub ProcessAET(ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen)
         'Loop from index 0 to Max
@@ -248,62 +251,48 @@
         Next
     End Sub
 
-    Public Sub displaySET(temp As List(Of EdgeTable))
-        'to check the content of SET
-        For i = 0 To temp.Count - 1
-            If Not (temp(i) Is Nothing) Then
-                Dim node As EdgeTable = temp(i)
-                Dim str As String
-                While Not (node Is Nothing)
-                    str = ""
-                    str = node.ymin.ToString + " " + node.ymax.ToString + " " + node.xofymin.ToString + " " + node.dx.ToString
-                    MsgBox(str)
-                    node = node.nxt
-                End While
+    'Public Sub displaySET(temp As List(Of EdgeTable))
+    '    'to check the content of SET
+    '    For i = 0 To temp.Count - 1
+    '        If Not (temp(i) Is Nothing) Then
+    '            Dim node As EdgeTable = temp(i)
+    '            Dim str As String
+    '            While Not (node Is Nothing)
+    '                str = ""
+    '                str = node.ymin.ToString + " " + node.ymax.ToString + " " + node.xofymin.ToString + " " + node.dx.ToString
+    '                MsgBox(str)
+    '                node = node.nxt
+    '            End While
 
-            End If
-        Next
-    End Sub
+    '        End If
+    '    Next
+    'End Sub
 
-    Public Sub displayAET(temp As EdgeTable)
-        'to check the content of SET
-        If Not (temp Is Nothing) Then
-            Dim node As EdgeTable = temp
-            Dim str As String
-            While Not (node Is Nothing)
-                str = ""
-                str = str + node.ymin.ToString + " " + node.ymax.ToString + " " + node.xofymin.ToString + " " + node.dx.ToString
-                node = node.nxt
-                MsgBox(str)
-            End While
-        End If
-    End Sub
+    'Public Sub displayAET(temp As EdgeTable)
+    '    'to check the content of SET
+    '    If Not (temp Is Nothing) Then
+    '        Dim node As EdgeTable = temp
+    '        Dim str As String
+    '        While Not (node Is Nothing)
+    '            str = ""
+    '            str = str + node.ymin.ToString + " " + node.ymax.ToString + " " + node.xofymin.ToString + " " + node.dx.ToString
+    '            node = node.nxt
+    '            MsgBox(str)
+    '        End While
+    '    End If
+    'End Sub
 
-    Public Function getMinimumY(v As ListPoints)
+    Public Function getMinimumY(v As ListPolygons, a As ListPoints)
         Dim min As Integer
-        For i As Integer = 0 To v.N - 1
-            If i = 0 Then
-                min = v.Elmt(i).y
-            Else
-                If v.Elmt(i).y < min Then
-                    min = v.Elmt(i).y
-                End If
-            End If
-        Next
+        min = If(a.Elmt(v.Elmt(0).p1).y < a.Elmt(v.Elmt(0).p2).y, a.Elmt(v.Elmt(0).p1).y, a.Elmt(v.Elmt(0).p2).y)
+        min = If(min < a.Elmt(v.Elmt(0).p3).y, min, a.Elmt(v.Elmt(0).p3).y)
         Return min
     End Function
 
-    Public Function getMaximumY(v As ListPoints)
+    Public Function getMaximumY(v As ListPolygons, a As ListPoints)
         Dim max As Integer
-        For i As Integer = 0 To v.N - 1
-            If i = 0 Then
-                max = v.Elmt(i).y
-            Else
-                If v.Elmt(i).y > max Then
-                    max = v.Elmt(i).y
-                End If
-            End If
-        Next
+        max = If(a.Elmt(v.Elmt(0).p1).y > a.Elmt(v.Elmt(0).p2).y, a.Elmt(v.Elmt(0).p1).y, a.Elmt(v.Elmt(0).p2).y)
+        max = If(max > a.Elmt(v.Elmt(0).p3).y, max, a.Elmt(v.Elmt(0).p3).y)
         Return max
     End Function
 
