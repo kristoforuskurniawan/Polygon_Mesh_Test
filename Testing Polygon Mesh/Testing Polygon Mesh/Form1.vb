@@ -5,12 +5,13 @@ Public Class MainForm
     Private graphics As Graphics
     Private blackpen As Pen
     Private ListofVertices As TArrPoint
+    Private sphereCenter, surfaceNormal As TPoint
     Private ListofEdges As List(Of TLine)
     Private ListofMeshes As TArrMesh
-    Private sphereRadius As Double
+    Private sphereRadius, deltaU, deltaTheta, theta As Double
     Private longitude, latitude As Integer
     Dim PV As New Matrix4x4
-    Private Status As Boolean
+    Private Status, backFaceCullingStatus As Boolean
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         bitmapCanvas = New Bitmap(MainCanvas.Width, MainCanvas.Height)
@@ -22,9 +23,12 @@ Public Class MainForm
         ListofEdges = New List(Of TLine)
         ListofMeshes = New TArrMesh()
         ListofMeshes.Init()
-        sphereRadius = 0
-        longitude = 0
-        latitude = 0
+        sphereRadius = 150
+        longitude = 20
+        latitude = 20
+        SphereRadInput.Text = sphereRadius.ToString()
+        LongiInput.Text = longitude.ToString()
+        LatiInput.Text = latitude.ToString()
         Status = True
     End Sub
 
@@ -54,27 +58,27 @@ Public Class MainForm
         ListofEdges.Add(temp)
     End Sub
 
-    Private Sub DeclareSphere()
-        sphereRadius = Double.Parse(SphereRadInput.Text)
-        longitude = Integer.Parse(LongiInput.Text)
-        latitude = Integer.Parse(LatiInput.Text)
-        'Dim radius As Integer = 10
-        'Dim angley As Integer = 0
-        'Dim anglez As Integer = 0
-        'Dim tempx, tempy, tempz As Double
-        'While anglez <= 90
-        '    tempy = radius * Use_Sin(anglez)
-        '    While angley <= 360
-        '        tempx = radius * Use_Cos(angley)
-        '        tempz = radius * Use_Sin(angley)
-        '        SetVertices(tempx, tempy, tempz)
-        '        SetVertices(tempx, -tempy, tempz)
-        '        angley += 15
-        '    End While
-        '    anglez += 15
-        '    angley = 0
-        'End While
-    End Sub
+    'Private Sub DeclareSphere()
+    '    sphereRadius = Double.Parse(SphereRadInput.Text)
+    '    longitude = Integer.Parse(LongiInput.Text)
+    '    latitude = Integer.Parse(LatiInput.Text)
+    '    'Dim radius As Integer = 10
+    '    'Dim angley As Integer = 0
+    '    'Dim anglez As Integer = 0
+    '    'Dim tempx, tempy, tempz As Double
+    '    'While anglez <= 90
+    '    '    tempy = radius * Use_Sin(anglez)
+    '    '    While angley <= 360
+    '    '        tempx = radius * Use_Cos(angley)
+    '    '        tempz = radius * Use_Sin(angley)
+    '    '        SetVertices(tempx, tempy, tempz)
+    '    '        SetVertices(tempx, -tempy, tempz)
+    '    '        angley += 15
+    '    '    End While
+    '    '    anglez += 15
+    '    '    angley = 0
+    '    'End While
+    'End Sub
 
     Private Function Use_Cos(deg As Double)
         Return Math.Cos(convert_to_degree(deg))
@@ -128,7 +132,7 @@ Public Class MainForm
         If SphereRadInput.Text = "" Or LongiInput.Text = "" Or LatiInput.Text = "" Then
             MessageBox.Show("Please give a proper input")
         Else
-            DeclareSphere()
+            'DeclareSphere()
             Projection()
             DrawSphere()
         End If
