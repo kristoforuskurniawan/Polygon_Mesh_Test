@@ -36,7 +36,7 @@
         Dim size As Integer = max - min + 1
         'MsgBox(b.Elmt(a.Elmt(0).p2).x.ToString + " vs " + pointtemp(1).x.ToString)
         resizeArray(edgetable, size)
-        MsgBox(edgetable.Count)
+        'MsgBox(edgetable.Count)
         DeclareTemp(min, pointtemp(0), pointtemp(1))
         DeclareTemp(min, pointtemp(1), pointtemp(2))
         DeclareTemp(min, pointtemp(2), pointtemp(1))
