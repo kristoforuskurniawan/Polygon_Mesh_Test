@@ -136,26 +136,7 @@ Public Class MainForm
     Private Function GetPhong()
 
     End Function
-
-    'Public Sub DrawCube(M As Matrix4x4)
-    '    Dim size As Integer = ListPoints.Count()
-    '    Dim obj(size) As TPoint
-    '    For i As Integer = 0 To size - 1
-    '        obj(i) = MultiplyMat(ListPoints.Elmt(i), M)
-    '    Next
-    '    Dim a, b, c, d As Single
-    '    For i As Integer = 0 To size - 1
-    '        a = obj(i).x
-    '        b = obj(i).y
-    '        For j As Integer = 0 To size - 1
-    '            c = obj(j).x
-    '            d = obj(j).y
-    '            graphics.DrawLine(blackpen, a, b, c, d)
-    '        Next
-    '    Next
-    '    MainCanvas.Image = bitmapCanvas
-    'End Sub
-
+    
     Private Sub Projection()
         Dim Vt, St As New Matrix4x4
         PV = New Matrix4x4
@@ -169,27 +150,20 @@ Public Class MainForm
         If SphereRadInput.Text = "" Or LongiInput.Text = "" Or LatiInput.Text = "" Then
             MessageBox.Show("Please give a proper input")
         Else
-            'DeclareSphere()
-            Projection()
-            DrawSphere()
+            Dim lat, longi As Integer
+            lat = Integer.Parse(LatiInput.Text)
+            longi = Integer.Parse(LongiInput.Text)
+            If (lat Mod 2 = 0) And (longi Mod 2 = 0) Then
+                graphics.Clear(Color.White)
+                latitude = lat
+                longitude = longi
+                radius = Double.Parse(SphereRadInput.Text)
+                DrawSphere()
+            Else
+                MessageBox.Show("The number of longitude and latitude must be an even number ",
+                                "Value Error", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            End If
         End If
-        'DrawCube(PV)
-        'Dim temp As New TPoint
-        'Dim x, y, z As Double
-        'Dim hl, vl, radius As Integer 'horizontal lines and vertical lines
-        'hl = 10
-        'vl = 10
-        'radius = 100
-        'For m As Integer = 0 To hl 'horizontalLines
-        '    For n As Integer = 0 To vl - 1 'verticalLines - 1
-        '        x = Math.Sin(Math.PI * m / hl) * Math.Cos(2 * Math.PI * n / vl) * radius
-        '        y = Math.Sin(Math.PI * m / hl) * Math.Sin(2 * Math.PI * n / vl) * radius
-        '        z = Math.Cos(Math.PI * m / hl) * radius
-        '        temp = New TPoint(x, y, z)
-        '    Next
-        'Next
-        'drawsphere()
-        'DrawCube(PV)
     End Sub
 
     Private Sub DrawSphere()
