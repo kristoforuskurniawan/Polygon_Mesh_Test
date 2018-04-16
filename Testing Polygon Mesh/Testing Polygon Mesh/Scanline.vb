@@ -107,6 +107,7 @@
                     'bmp.SetPixel(data.xofymin, y + data.normalize, pen.Color)
                 Else
                     'MsgBox(AET.length.ToString + " -- " + (y + data.normalize).ToString)
+                    'edit this
                     g.DrawLine(pen, data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize)
                     'MsgBox("dtx : " + data.xofymin.ToString + "- dtnrm" + data.normalize.ToString + " - dt2x: " + data2.xofymin.ToString + "- y: " + y.ToString + " - dt2nrm: " + data2.normalize.ToString)
                 End If

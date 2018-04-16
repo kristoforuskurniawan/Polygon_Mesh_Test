@@ -168,6 +168,8 @@ Public Class MainForm
 
     Private Sub AnimationTimer_Tick(sender As Object, e As EventArgs) Handles AnimationTimer.Tick
         If RotX Then
+            'ListPoints.Init()
+            'ListPoints.InsertPoint(sp)
             graphics.Clear(Color.Black)
             PV.RotateX(0.344)
             DrawSphere()
@@ -374,7 +376,7 @@ Public Class MainForm
                 temp.InsertIndex(p1, p2, p3)
                 MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
                 'MsgBox(p2.ToString + " aaa " + temp.Elmt(0).p2.ToString)
-                FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, whitepen)
+                FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, bluepen)
                 graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
                 graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
                 graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
