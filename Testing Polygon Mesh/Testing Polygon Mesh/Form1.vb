@@ -11,12 +11,16 @@ Public Class MainForm
     Private mesh As TMesh
     'Private ListofEdges As List(Of TLine)
     'Private ListofMeshes As TArrMesh
+    Private L, N, V, R As Normalvalue 'Vectors to calculate intensity
+    Private LightSource As TPoint
     Private radius, dtheta, du, theta, u, x, y, z, w As Double
     Private longitude, latitude, transSphere_X, transSphere_Y, transSphere_Z As Integer
     Private PV As New Matrix4x4
     Private p1, p2, p3 As Integer
-    Private ka, kd, ks, ki, intentAmb, intentDiff, intentSpec, iTot As Double
+    Private ka, kd, ks, ki, intentAmb, intentDiff, intentSpec, intentLight, iTot As Double
     Private Status, backFaceCullingStatus As Boolean
+
+    Private RotX, RotY, RotZ As Boolean
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         bitmapCanvas = New Bitmap(MainCanvas.Width, MainCanvas.Height)
@@ -26,7 +30,9 @@ Public Class MainForm
         MainCanvas.Image = bitmapCanvas
         ListPoints = New ListPoints()
         ListPolygon = New ListPolygons()
+        LightSource = New TPoint()
         sphereCenter = New TPoint(0, 0, 0)
+        intentLight = 1
         'sphereCenter = New TPoint(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0)
         'mesh = New TMesh()
         'ListPoints.Init()
@@ -66,11 +72,15 @@ Public Class MainForm
         'Status = True
     End Sub
 
+    Private Function getUnitVector(ByRef Vector As TPoint) As TPoint
+        Dim divisor As Double = Math.Sqrt((Vector.x * Vector.x) + (Vector.y * Vector.y) + (Vector.z * Vector.z))
+        Dim result As New TPoint(Vector.x / divisor, Vector.y / divisor, Vector.z / divisor)
+        Return result
+    End Function
 
     Private Function dotproduct(x As Double(), y As Double()) As Double
         Dim d As Double = x(0) * y(0) + x(1) * y(1) + x(2) * y(2)
         Return If(d < 0, -d, 0)
-        'asdf
     End Function
 
     Private Sub translateButton_Click_1(sender As Object, e As EventArgs) Handles TranslateButton.Click
@@ -129,11 +139,15 @@ Public Class MainForm
     '    surfaceNormal = getCrossProduct(P1_P2, P1_P3)
     'End Sub
 
-    Private Sub BackCullON_BTN_CheckedChanged(sender As Object, e As EventArgs)
-        backFaceCullingStatus = True
+    Private Sub AddLightButton_Click(sender As Object, e As EventArgs) Handles AddLightButton.Click
+        If Light_XPosTextBox.Text <> "" And Light_YPosTextBox.Text <> "" And Light_ZPosTextBox.Text <> "" Then
+            LightSource.SetPoints(Double.Parse(Light_XPosTextBox.Text), Double.Parse(Light_YPosTextBox.Text), Double.Parse(Light_ZPosTextBox.Text))
+            MessageBox.Show(LightSource.x & ", " & LightSource.y & ", " & LightSource.z)
+            Dim rect As New Rectangle()
+            graphics.DrawEllipse(whitepen, rect)
+        End If
+        MainCanvas.Image = bitmapCanvas
     End Sub
-
-    Private RotX, RotY, RotZ As Boolean
 
     Private Sub Rotate_XButton_Click(sender As Object, e As EventArgs) Handles Rotate_XButton.Click
         RotX = True
@@ -168,8 +182,6 @@ Public Class MainForm
 
     Private Sub AnimationTimer_Tick(sender As Object, e As EventArgs) Handles AnimationTimer.Tick
         If RotX Then
-            'ListPoints.Init()
-            'ListPoints.InsertPoint(sp)
             graphics.Clear(Color.Black)
             PV.RotateX(0.344)
             DrawSphere()
@@ -220,22 +232,22 @@ Public Class MainForm
         Vt.OnePointProjection(5) ' Zc = 3
         St.TranslateMat(200, 200, 0) 'translate
         PV.Mat = MultiplyMat4x4(Vt, St)
-        Console.WriteLine(PV.Mat(0, 0)) 'baris,kolom
-        Console.WriteLine(PV.Mat(0, 1))
-        Console.WriteLine(PV.Mat(0, 2))
-        Console.WriteLine(PV.Mat(0, 3))
-        Console.WriteLine(PV.Mat(1, 0))
-        Console.WriteLine(PV.Mat(1, 1))
-        Console.WriteLine(PV.Mat(1, 2))
-        Console.WriteLine(PV.Mat(1, 3))
-        Console.WriteLine(PV.Mat(2, 0))
-        Console.WriteLine(PV.Mat(2, 1))
-        Console.WriteLine(PV.Mat(2, 2))
-        Console.WriteLine(PV.Mat(2, 3))
-        Console.WriteLine(PV.Mat(3, 0))
-        Console.WriteLine(PV.Mat(3, 1))
-        Console.WriteLine(PV.Mat(3, 2))
-        Console.WriteLine(PV.Mat(3, 3))
+        'Console.WriteLine(PV.Mat(0, 0)) 'baris,kolom
+        'Console.WriteLine(PV.Mat(0, 1))
+        'Console.WriteLine(PV.Mat(0, 2))
+        'Console.WriteLine(PV.Mat(0, 3))
+        'Console.WriteLine(PV.Mat(1, 0))
+        'Console.WriteLine(PV.Mat(1, 1))
+        'Console.WriteLine(PV.Mat(1, 2))
+        'Console.WriteLine(PV.Mat(1, 3))
+        'Console.WriteLine(PV.Mat(2, 0))
+        'Console.WriteLine(PV.Mat(2, 1))
+        'Console.WriteLine(PV.Mat(2, 2))
+        'Console.WriteLine(PV.Mat(2, 3))
+        'Console.WriteLine(PV.Mat(3, 0))
+        'Console.WriteLine(PV.Mat(3, 1))
+        'Console.WriteLine(PV.Mat(3, 2))
+        'Console.WriteLine(PV.Mat(3, 3))
     End Sub
 
     Private Sub DrawMeshButton_Click(sender As Object, e As EventArgs) Handles DrawMeshButton.Click
@@ -367,21 +379,38 @@ Public Class MainForm
         DOP(0) = 0
         DOP(1) = 0
         DOP(2) = -10
-        For i = 0 To ListPolygon.N - 1
-            If dotproduct2(DOP, ListPolygon.Normal(i)) < 0 Then
+        If AnimationTimer.Enabled = True Then
+            For i = 0 To ListPolygon.N - 1
+                ' If dotproduct2(DOP, ListPolygon.Normal(i)) < 0 Then
                 p1 = ListPolygon.Elmt(i).p1
                 p2 = ListPolygon.Elmt(i).p2
                 p3 = ListPolygon.Elmt(i).p3
                 temp.Init()
                 temp.InsertIndex(p1, p2, p3)
                 MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
-                'MsgBox(p2.ToString + " aaa " + temp.Elmt(0).p2.ToString)
-                FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, bluepen)
+                ' SurfaceDetection(temp)
                 graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
                 graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
                 graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
-            End If
-        Next
+                ' End If
+            Next
+        Else
+            For i = 0 To ListPolygon.N - 1
+                If dotproduct2(DOP, ListPolygon.Normal(i)) < 0 Then
+                    p1 = ListPolygon.Elmt(i).p1
+                    p2 = ListPolygon.Elmt(i).p2
+                    p3 = ListPolygon.Elmt(i).p3
+                    temp.Init()
+                    temp.InsertIndex(p1, p2, p3)
+                    MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
+                    'MsgBox(p2.ToString + " aaa " + temp.Elmt(0).p2.ToString)
+                    FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, whitepen)
+                    graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
+                    graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
+                    graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
+                End If
+            Next
+        End If
     End Sub
 
 
