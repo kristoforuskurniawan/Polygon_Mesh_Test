@@ -28,6 +28,7 @@
         'pointtemp(0).InsertVal(b, a.Elmt(0).p1)
         'pointtemp(1).InsertVal(b, a.Elmt(0).p2)
         'pointtemp(2).InsertVal(b, a.Elmt(0).p3)
+        '  Console.WriteLine(a.Elmt(0).p1)
         pointtemp(0).MultiplyMatMesh(b, a.Elmt(0).p1, PView)
         pointtemp(1).MultiplyMatMesh(b, a.Elmt(0).p2, PView)
         pointtemp(2).MultiplyMatMesh(b, a.Elmt(0).p3, PView)
@@ -108,11 +109,15 @@
                 Else
                     'MsgBox(AET.length.ToString + " -- " + (y + data.normalize).ToString)
                     'edit this
-                    g.DrawLine(pen, data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize)
-                    'MsgBox("dtx : " + data.xofymin.ToString + "- dtnrm" + data.normalize.ToString + " - dt2x: " + data2.xofymin.ToString + "- y: " + y.ToString + " - dt2nrm: " + data2.normalize.ToString)
+                    If (data.xofymin = 200) Then
+                        g.DrawLine(Pens.Blue, data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize)
+
+
+                        'MsgBox("dtx : " + data.xofymin.ToString + "- dtnrm" + data.normalize.ToString + " - dt2x: " + data2.xofymin.ToString + "- y: " + y.ToString + " - dt2nrm: " + data2.normalize.ToString)
+                    End If
                 End If
-                'MsgBox("dtx : " + data.xofymin.ToString + "- dtnrm" + data.normalize.ToString + " - dt2x: " + data2.xofymin.ToString + "- y: " + y.ToString + " - dt2nrm: " + data2.normalize.ToString)
-                data = data.nxt.nxt
+                    'MsgBox("dtx : " + data.xofymin.ToString + "- dtnrm" + data.normalize.ToString + " - dt2x: " + data2.xofymin.ToString + "- y: " + y.ToString + " - dt2nrm: " + data2.normalize.ToString)
+                    data = data.nxt.nxt
                 If Not (data Is Nothing) Then
                     data2 = data.nxt
                 Else

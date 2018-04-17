@@ -20,6 +20,7 @@ Public Class MainForm
     Private ka, kd, ks, ki, intentAmb, intentDiff, intentSpec, intentLight, iTot As Double
     Private Status, backFaceCullingStatus As Boolean
 
+
     Private RotX, RotY, RotZ As Boolean
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -96,48 +97,6 @@ Public Class MainForm
         DrawSphere()
     End Sub
 
-    'Public Sub SetVertices(x As Double, y As Double, z As Double)
-    '    Dim temp As New TPoint(x, y, z)
-    '    ListPoints.InsertLast(temp.x, temp.y, temp.z)
-    'End Sub
-
-    'Public Sub SetEdges(x As Integer, y As Integer, a As Integer, b As Integer)
-    '    Dim temp As New TLine(x, y, a, b)
-    '    ListofEdges.Add(temp)
-    'End Sub
-
-    'Private Sub DeclareSphere()
-    '    sphereRadius = Double.Parse(SphereRadInput.Text)
-    '    longitude = Integer.Parse(LongiInput.Text)
-    '    latitude = Integer.Parse(LatiInput.Text)
-    '    'Dim radius As Integer = 10
-    '    'Dim angley As Integer = 0
-    '    'Dim anglez As Integer = 0
-    '    'Dim tempx, tempy, tempz As Double
-    '    'While anglez <= 90
-    '    '    tempy = radius * Use_Sin(anglez)
-    '    '    While angley <= 360
-    '    '        tempx = radius * Use_Cos(angley)
-    '    '        tempz = radius * Use_Sin(angley)
-    '    '        SetVertices(tempx, tempy, tempz)
-    '    '        SetVertices(tempx, -tempy, tempz)
-    '    '        angley += 15
-    '    '    End While
-    '    '    anglez += 15
-    '    '    angley = 0
-    '    'End While
-    'End Sub
-
-    'Private Function getCrossProduct(ByRef Vector1 As TPoint, ByRef Vector2 As TPoint)
-    '    Return New TPoint(Vector1.y * Vector2.z - Vector1.z * Vector2.y, Vector1.z * Vector2.x - Vector1.x * Vector2.z, Vector1.x * Vector2.y - Vector1.y * Vector2.x)
-    'End Function
-
-    'Private Sub calculateSurfaceNormal(ByRef Point1 As TPoint, ByRef Point2 As TPoint, ByRef Point3 As TPoint) 'Urutan tiga point udah counter clockwise
-    '    Dim P1_P2, P1_P3 As TPoint
-    '    P1_P2 = New TPoint(Point2.x - Point1.x, Point2.y - Point1.y, Point2.z - Point1.z)
-    '    P1_P3 = New TPoint(Point3.x - Point1.x, Point3.y - Point1.y, Point3.z - Point1.z)
-    '    surfaceNormal = getCrossProduct(P1_P2, P1_P3)
-    'End Sub
 
     Private Sub AddLightButton_Click(sender As Object, e As EventArgs) Handles AddLightButton.Click
         If Light_XPosTextBox.Text <> "" And Light_YPosTextBox.Text <> "" And Light_ZPosTextBox.Text <> "" Then
@@ -355,13 +314,13 @@ Public Class MainForm
                 ListPolygon.InsertIndex(p1, p2, p3)
             Else
                 For j = 0 To longitude - 2
-                    p1 = (longitude * -i + j) + ((latitude / 2 * longitude) + 1) ' 13 + j 'n * i + j
-                    p2 = (longitude * -i + j + 1) + (latitude / 2 * longitude) + 1 '14
+                    p1 = (longitude * -i + j + 1) + (latitude / 2 * longitude) + 1 '14
+                    p2 = (longitude * -i + j) + ((latitude / 2 * longitude) + 1) ' 13 + j 'n * i + j
                     p3 = (latitude / 2 * longitude) + (latitude / 2 * longitude) + 1 '17
                     ListPolygon.InsertIndex(p1, p2, p3)
                 Next
-                p1 = (longitude * (-i + 1) - 1) + (latitude / 2 * longitude) + 1 '16
-                p2 = (longitude * -i) + (latitude / 2 * longitude) + 1 '13
+                p1 = (longitude * -i) + (latitude / 2 * longitude) + 1 '13
+                p2 = (longitude * (-i + 1) - 1) + (latitude / 2 * longitude) + 1 '16
                 p3 = (longitude * (-i + 1)) + (latitude / 2 * longitude) + 1 '17
                 ListPolygon.InsertIndex(p1, p2, p3)
             End If
@@ -381,21 +340,6 @@ Public Class MainForm
         DOP(2) = -10
         If AnimationTimer.Enabled = True Then
             For i = 0 To ListPolygon.N - 1
-                ' If dotproduct2(DOP, ListPolygon.Normal(i)) < 0 Then
-                p1 = ListPolygon.Elmt(i).p1
-                p2 = ListPolygon.Elmt(i).p2
-                p3 = ListPolygon.Elmt(i).p3
-                temp.Init()
-                temp.InsertIndex(p1, p2, p3)
-                MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
-                ' SurfaceDetection(temp)
-                graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
-                graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
-                graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
-                ' End If
-            Next
-        Else
-            For i = 0 To ListPolygon.N - 1
                 If dotproduct2(DOP, ListPolygon.Normal(i)) < 0 Then
                     p1 = ListPolygon.Elmt(i).p1
                     p2 = ListPolygon.Elmt(i).p2
@@ -403,8 +347,24 @@ Public Class MainForm
                     temp.Init()
                     temp.InsertIndex(p1, p2, p3)
                     MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
+                    ' SurfaceDetection(temp)
+                    graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
+                    graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
+                    graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
+                End If
+            Next
+        Else
+            For i = 0 To ListPolygon.N - 1
+                If dotproduct2(DOP, ListPolygon.Normal(i)) < 0 Then
+                    p1 = ListPolygon.Elmt(i).p1
+                    p2 = ListPolygon.Elmt(i).p2
+                    p3 = ListPolygon.Elmt(i).p3
+                    ' Console.WriteLine(p1)
+                    temp.Init()
+                    temp.InsertIndex(p1, p2, p3)
+                    MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
                     'MsgBox(p2.ToString + " aaa " + temp.Elmt(0).p2.ToString)
-                    FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, whitepen)
+                    FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, bluepen)
                     graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
                     graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
                     graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
@@ -435,7 +395,7 @@ Public Class MainForm
         Dim d As Integer = x(0) * normal.x + x(1) * normal.y + x(2) * normal.z
         Return d
     End Function
-
+    'Surface normal
     Private Sub CalculateNormal(poly As ListPolygons)
         Dim ppp As New TMesh
         Dim p1, p2, p3, m1, m2, m3, m4, m5, m6 As Integer
