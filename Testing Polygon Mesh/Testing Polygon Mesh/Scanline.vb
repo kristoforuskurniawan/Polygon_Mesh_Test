@@ -109,12 +109,12 @@
                 Else
                     'MsgBox(AET.length.ToString + " -- " + (y + data.normalize).ToString)
                     'edit this
-                    If (data.xofymin = 200) Then
-                        g.DrawLine(Pens.Blue, data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize)
+                    '  If (data.xofymin = 200) Then
+                    g.DrawLine(Pens.Blue, data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize)
 
 
-                        'MsgBox("dtx : " + data.xofymin.ToString + "- dtnrm" + data.normalize.ToString + " - dt2x: " + data2.xofymin.ToString + "- y: " + y.ToString + " - dt2nrm: " + data2.normalize.ToString)
-                    End If
+                    'MsgBox("dtx : " + data.xofymin.ToString + "- dtnrm" + data.normalize.ToString + " - dt2x: " + data2.xofymin.ToString + "- y: " + y.ToString + " - dt2nrm: " + data2.normalize.ToString)
+                    '   End If
                 End If
                     'MsgBox("dtx : " + data.xofymin.ToString + "- dtnrm" + data.normalize.ToString + " - dt2x: " + data2.xofymin.ToString + "- y: " + y.ToString + " - dt2nrm: " + data2.normalize.ToString)
                     data = data.nxt.nxt
