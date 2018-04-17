@@ -57,9 +57,9 @@ Partial Class MainForm
         Me.specularLbl = New System.Windows.Forms.Label()
         Me.specularExponentLbl = New System.Windows.Forms.Label()
         Me.DoShadingButton = New System.Windows.Forms.Button()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.xPosLbl = New System.Windows.Forms.Label()
+        Me.yPosLbl = New System.Windows.Forms.Label()
+        Me.zPosLbl = New System.Windows.Forms.Label()
         CType(Me.MainCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -347,44 +347,41 @@ Partial Class MainForm
         Me.DoShadingButton.Text = "Shade Sphere"
         Me.DoShadingButton.UseVisualStyleBackColor = True
         '
-        'Label1
+        'xPosLbl
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(439, 176)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(67, 13)
-        Me.Label1.TabIndex = 45
-        Me.Label1.Text = "X Movement"
-        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.xPosLbl.AutoSize = True
+        Me.xPosLbl.Location = New System.Drawing.Point(439, 169)
+        Me.xPosLbl.Name = "xPosLbl"
+        Me.xPosLbl.Size = New System.Drawing.Size(54, 13)
+        Me.xPosLbl.TabIndex = 45
+        Me.xPosLbl.Text = "X Position"
         '
-        'Label2
+        'yPosLbl
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(439, 202)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(67, 13)
-        Me.Label2.TabIndex = 46
-        Me.Label2.Text = "Y Movement"
-        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.yPosLbl.AutoSize = True
+        Me.yPosLbl.Location = New System.Drawing.Point(439, 198)
+        Me.yPosLbl.Name = "yPosLbl"
+        Me.yPosLbl.Size = New System.Drawing.Size(54, 13)
+        Me.yPosLbl.TabIndex = 46
+        Me.yPosLbl.Text = "Y Position"
         '
-        'Label3
+        'zPosLbl
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(439, 228)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(67, 13)
-        Me.Label3.TabIndex = 47
-        Me.Label3.Text = "Z Movement"
-        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.zPosLbl.AutoSize = True
+        Me.zPosLbl.Location = New System.Drawing.Point(439, 224)
+        Me.zPosLbl.Name = "zPosLbl"
+        Me.zPosLbl.Size = New System.Drawing.Size(54, 13)
+        Me.zPosLbl.TabIndex = 47
+        Me.zPosLbl.Text = "Z Position"
         '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(827, 514)
-        Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.zPosLbl)
+        Me.Controls.Add(Me.yPosLbl)
+        Me.Controls.Add(Me.xPosLbl)
         Me.Controls.Add(Me.DoShadingButton)
         Me.Controls.Add(Me.specularExponentLbl)
         Me.Controls.Add(Me.specularLbl)
@@ -460,7 +457,7 @@ Partial Class MainForm
     Friend WithEvents specularLbl As Label
     Friend WithEvents specularExponentLbl As Label
     Friend WithEvents DoShadingButton As Button
-    Friend WithEvents Label1 As Label
-    Friend WithEvents Label2 As Label
-    Friend WithEvents Label3 As Label
+    Friend WithEvents xPosLbl As Label
+    Friend WithEvents yPosLbl As Label
+    Friend WithEvents zPosLbl As Label
 End Class
