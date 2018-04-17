@@ -42,7 +42,6 @@
         DeclareTemp(min, pointtemp(2), pointtemp(0))
         'displaySET(edgetable)
         'test
-
     End Sub
 
     Public Sub DeclareTemp(min As Integer, i As TArrPoint, j As TArrPoint)

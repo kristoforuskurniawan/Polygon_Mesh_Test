@@ -98,6 +98,28 @@ Public Class MainForm
         Return If(d < 0, -d, 0)
     End Function
 
+    Private Sub MidPointDrawLine(ByVal x1 As Integer, ByVal y1 As Integer, ByVal x2 As Integer, ByVal y2 As Integer)
+        Dim dx As Integer = x2 - x1
+        Dim dy As Integer = y2 - y1
+        Dim dr As Integer = 2 * dy
+        Dim dur As Integer = 2 * (dy - dx)
+        Dim d As Integer = 2 * dy - dx
+        Dim x As Integer = x1
+        Dim y As Integer = y1
+
+        While x <= x2
+            x = x + 1
+            If d < 0 Then
+                d = d + dy
+            Else
+                d = d + dur
+                y = y + 1
+            End If
+            bitmapCanvas.SetPixel(x, y, Color.White)
+        End While
+        MainCanvas.Image = bitmapCanvas
+    End Sub
+
     Private Sub translateButton_Click_1(sender As Object, e As EventArgs) Handles TranslateButton.Click
         graphics.Clear(Color.Black)
         transSphere_X = Integer.Parse(X_TransTextBox.Text)
@@ -186,6 +208,13 @@ Public Class MainForm
     '    AnimationTimer.Enabled = True
     'End Sub
 
+    'Private Sub Rotate_ZButton_Click(sender As Object, e As EventArgs)
+    '    RotX = False
+    '    RotY = False
+    '    RotZ = True
+    '    AnimationTimer.Enabled = True
+    'End Sub
+
     Private Sub DoShadingButton_Click(sender As Object, e As EventArgs) Handles DoShadingButton.Click
         If ambientTxtBox.Text <> "" And specularTxtBox.Text <> "" And diffuseTxtBox.Text <> "" Then
             ka = ambientTxtBox.Text
@@ -194,13 +223,6 @@ Public Class MainForm
         Else
             MessageBox.Show("Please fill the coefficient for each!")
         End If
-    End Sub
-
-    Private Sub Rotate_ZButton_Click(sender As Object, e As EventArgs)
-        RotX = False
-        RotY = False
-        RotZ = True
-        AnimationTimer.Enabled = True
     End Sub
 
     'Private Sub AnimationTimer_Tick(sender As Object, e As EventArgs) Handles AnimationTimer.Tick
@@ -235,18 +257,14 @@ Public Class MainForm
         Return Math.PI * x / 180.0
     End Function
 
-    Private Function CountPhong(ka As Double, ia As Double, kd As Double, il As Double, V As Double(), R As Double(), ks As Double, kl As Double, n As Integer, alpha As Double)
-        ' Return ((ka * ia) + (kd * il * Use_Cos(deg)) + (ks * il * Math.Pow(dotproduct(V, R)), n)))
-    End Function
-
     Private Function GetPhong() As Double
         'Dim ka, kd, ks, ia, il As Double
         'Dim expo As Integer
-        intentAmb = Double.Parse(ambientTxtBox.Text.ToString)
-        intentDiff = Double.Parse(diffuseTxtBox.Text.ToString)
-        intentSpec = Double.Parse(specularTxtBox.Text.ToString)
+        ka = Double.Parse(ambientTxtBox.Text.ToString)
+        kd = Double.Parse(diffuseTxtBox.Text.ToString)
+        ks = Double.Parse(specularTxtBox.Text.ToString)
         expon = Integer.Parse(exponentTxtBox.Text.ToString)
-        iTot = 0
+        'iTot = ((ka * intentAmb) + (kd * intentLight * dotproduct(I, L) + (ks * intentLight * Math.Pow(dotproduct(V, R), expon)))
         Return iTot
     End Function
 
@@ -413,6 +431,9 @@ Public Class MainForm
                 MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
                 'MsgBox(p2.ToString + " aaa " + temp.Elmt(0).p2.ToString)
                 FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, Pens.Blue)
+                'MidPointDrawLine(m1, m2, m3, m4)
+                'MidPointDrawLine(m3, m4, m5, m6)
+                'MidPointDrawLine(m5, m6, m1, m2)
                 graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
                 graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
                 graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
