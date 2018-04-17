@@ -143,7 +143,7 @@ Public Class MainForm
         If Light_XPosTextBox.Text <> "" And Light_YPosTextBox.Text <> "" And Light_ZPosTextBox.Text <> "" Then
             LightSource.SetPoints(Double.Parse(Light_XPosTextBox.Text), Double.Parse(Light_YPosTextBox.Text), Double.Parse(Light_ZPosTextBox.Text))
             'MessageBox.Show(LightSource.x & ", " & LightSource.y & ", " & LightSource.z)
-            LightSourceListBox.Items.Add("Light " & lightCount)
+            LightSourceListBox.Items.Add("Light " & lightCount + 1)
             lightCount += 1
             Dim rect As New Rectangle(LightSource.x, LightSource.y, 10, 10)
             Dim thickPen = New Pen(Color.White, 10)
@@ -392,9 +392,9 @@ Public Class MainForm
                 'MidPointDrawLine(m1, m2, m3, m4)
                 'MidPointDrawLine(m3, m4, m5, m6)
                 'MidPointDrawLine(m5, m6, m1, m2)
-                graphics.DrawLine(bluepen, New Point(m1, m2), New Point(m3, m4))
-                graphics.DrawLine(bluepen, New Point(m3, m4), New Point(m5, m6))
-                graphics.DrawLine(bluepen, New Point(m5, m6), New Point(m1, m2)) 'x
+                'graphics.DrawLine(bluepen, New Point(m1, m2), New Point(m3, m4))
+                'graphics.DrawLine(bluepen, New Point(m3, m4), New Point(m5, m6))
+                'graphics.DrawLine(bluepen, New Point(m5, m6), New Point(m1, m2)) 'x
             End If
         Next
     End Sub
