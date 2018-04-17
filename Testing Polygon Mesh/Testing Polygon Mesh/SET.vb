@@ -1,4 +1,4 @@
-﻿Public Class EdgeTable
+﻿Public Class EdgeTable 'Ini linked list nya
     'updated
     Public ymin As Integer
     Public ymax As Integer

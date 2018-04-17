@@ -115,7 +115,7 @@ Public Class MainForm
                 d = d + dur
                 y = y + 1
             End If
-            bitmapCanvas.SetPixel(x, y, Color.White)
+            bitmapCanvas.SetPixel(x, y, Color.Blue)
         End While
         MainCanvas.Image = bitmapCanvas
     End Sub
@@ -128,7 +128,7 @@ Public Class MainForm
         sphereCenter.SetPoints(sphereCenter.x + transSphere_X, sphereCenter.y + transSphere_Y, sphereCenter.z + transSphere_Z)
         Dim Vt, St As New Matrix4x4
         'PV = New Matrix4x4
-        Vt.OnePointProjection(sphereCenter.z)
+        Vt.OnePointProjection(5)
         St.TranslateMat(sphereCenter.x + transSphere_X, sphereCenter.y + transSphere_Y, 0 + sphereCenter.z + transSphere_Z)
         PV.Mat = MultiplyMat4x4(Vt, St)
         PV.TranslateMat(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0)
@@ -400,19 +400,19 @@ Public Class MainForm
                     p1 = (longitude * -i + j) + ((latitude / 2 * longitude) + 1) ' 13 + j 'n * i + j
                     p2 = (longitude * -i + j + 1) + (latitude / 2 * longitude) + 1 '14
                     p3 = (latitude / 2 * longitude) + (latitude / 2 * longitude) + 1 '17
-                    ListPolygon.InsertIndex(p1, p2, p3)
+                    ListPolygon.InsertIndex(p2, p1, p3)
                 Next
                 p1 = (longitude * (-i + 1) - 1) + (latitude / 2 * longitude) + 1 '16
                 p2 = (longitude * -i) + (latitude / 2 * longitude) + 1 '13
                 p3 = (longitude * (-i + 1)) + (latitude / 2 * longitude) + 1 '17
-                ListPolygon.InsertIndex(p1, p2, p3)
+                ListPolygon.InsertIndex(p2, p1, p3)
             End If
         Next
-        gambarpoly()
+        DrawWithMesh()
         MainCanvas.Image = bitmapCanvas
     End Sub
 
-    Public Sub gambarpoly()
+    Public Sub DrawWithMesh()
         Dim m1, m2, m3, m4, m5, m6, m11, m22, m33, m44, m55, m66 As Double
         Dim p1, p2, p3 As Integer
         Dim temp As New ListPolygons()
@@ -430,13 +430,13 @@ Public Class MainForm
                 temp.InsertIndex(p1, p2, p3)
                 MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
                 'MsgBox(p2.ToString + " aaa " + temp.Elmt(0).p2.ToString)
-                FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, Pens.Blue)
+                FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, Pens.Blue, MainCanvas)
                 'MidPointDrawLine(m1, m2, m3, m4)
                 'MidPointDrawLine(m3, m4, m5, m6)
                 'MidPointDrawLine(m5, m6, m1, m2)
-                graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
-                graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
-                graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
+                graphics.DrawLine(bluepen, New Point(m1, m2), New Point(m3, m4))
+                graphics.DrawLine(bluepen, New Point(m3, m4), New Point(m5, m6))
+                graphics.DrawLine(bluepen, New Point(m5, m6), New Point(m1, m2)) 'x
             End If
         Next
     End Sub

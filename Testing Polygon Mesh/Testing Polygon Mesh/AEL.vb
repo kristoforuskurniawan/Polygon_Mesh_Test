@@ -1,4 +1,4 @@
-﻿Public Class AEL
+﻿Public Class AEL 'Stack yang nunjuk ke head linked list-nya
     Public head As EdgeTable
     Public length As Integer
     Private s As New Stack(Of EdgeTable)

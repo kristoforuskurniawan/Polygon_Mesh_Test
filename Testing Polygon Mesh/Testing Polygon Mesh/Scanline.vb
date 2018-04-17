@@ -11,12 +11,34 @@
         p2 = 2
     End Enum
 
-    Public Sub FillPolygon(a As ListPolygons, b As ListPoints, PView As Matrix4x4, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen)
+    Public Sub FillPolygon(a As ListPolygons, b As ListPoints, PView As Matrix4x4, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox)
         edgetable.Clear()
         stacker.Clear()
         FillSET(a, b, PView)
         AET = New AEL
-        ProcessAET(g, bmp, pen)
+        ProcessAET(g, bmp, pen, pic)
+    End Sub
+
+    Private Sub MidPointDrawLine(ByVal x1 As Integer, ByVal y1 As Integer, ByVal x2 As Integer, ByVal y2 As Integer, ByRef bitmapCanvas As Bitmap, ByRef MainCanvas As PictureBox)
+        Dim dx As Integer = x2 - x1
+        Dim dy As Integer = y2 - y1
+        Dim dr As Integer = 2 * dy
+        Dim dur As Integer = 2 * (dy - dx)
+        Dim d As Integer = 2 * dy - dx
+        Dim x As Integer = x1
+        Dim y As Integer = y1
+
+        While x <= x2
+            x = x + 1
+            If d < 0 Then
+                d = d + dy
+            Else
+                d = d + dur
+                y = y + 1
+            End If
+            bitmapCanvas.SetPixel(x, y, Color.Blue)
+        End While
+        MainCanvas.Image = bitmapCanvas
     End Sub
 
     Public Sub FillSET(a As ListPolygons, b As ListPoints, PView As Matrix4x4)
@@ -66,7 +88,7 @@
     End Sub
 
 
-    Public Sub ProcessAET(ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen)
+    Public Sub ProcessAET(ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox)
         'Loop from index 0 to Max
         Dim current As EdgeTable
         For i As Integer = 0 To edgetable.Count - 1
@@ -83,7 +105,8 @@
                 'MsgBox(AET.length.ToString)
             End While
             'draw lines (don't forget about the normalization)
-            drawlines(i, g, bmp, pen)
+            drawlines(i, g, bmp, pen, pic)
+            'MidPointDrawLine(i, AET.head.ymax, i, AET.head.ymax, bmp, pic)
             'delete the double expired
             '
             'If i > 0 Then CheckDoubleExpired(i) 'cause bug
@@ -95,7 +118,7 @@
         Next
     End Sub
 
-    Public Sub drawlines(y As Integer, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen)
+    Public Sub drawlines(y As Integer, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox)
         If AET.length > 0 Then
             Dim data As EdgeTable = AET.head
             Dim data2 As EdgeTable = data.nxt
@@ -106,7 +129,8 @@
                     'bmp.SetPixel(data.xofymin, y + data.normalize, pen.Color)
                 Else
                     'MsgBox(AET.length.ToString + " -- " + (y + data.normalize).ToString)
-                    g.DrawLine(pen, data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize)
+                    MidPointDrawLine(data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize, bmp, pic)
+                    'g.DrawLine(pen, data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize)
                     'MsgBox("dtx : " + data.xofymin.ToString + "- dtnrm" + data.normalize.ToString + " - dt2x: " + data2.xofymin.ToString + "- y: " + y.ToString + " - dt2nrm: " + data2.normalize.ToString)
                 End If
                 'MsgBox("dtx : " + data.xofymin.ToString + "- dtnrm" + data.normalize.ToString + " - dt2x: " + data2.xofymin.ToString + "- y: " + y.ToString + " - dt2nrm: " + data2.normalize.ToString)
@@ -335,4 +359,3 @@
     End Function
 
 End Module
-
