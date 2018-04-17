@@ -118,7 +118,7 @@ Public Class MainForm
                 d = d + dur
                 y = y + 1
             End If
-            bitmapCanvas.SetPixel(x, y, Color.Blue)
+            bitmapCanvas.SetPixel(x, y, Color.Red)
         End While
         MainCanvas.Image = bitmapCanvas
     End Sub

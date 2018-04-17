@@ -36,7 +36,7 @@
                 d = d + dur
                 y = y + 1
             End If
-            bitmapCanvas.SetPixel(x, y, Color.FromArgb(255 * 0.333, 255, 255)) 'Mainin intensitas warna di sini
+            bitmapCanvas.SetPixel(x, y, Color.FromArgb(255 * 0.333, 255 * 0.333, 255 * 0.333)) 'Mainin intensitas warna di sini
         End While
         MainCanvas.Image = bitmapCanvas
     End Sub
