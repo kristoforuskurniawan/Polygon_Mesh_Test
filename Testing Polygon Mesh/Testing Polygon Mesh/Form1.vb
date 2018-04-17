@@ -7,7 +7,7 @@ Public Class MainForm
     Private bluepen As Pen
     Private ListPoints As ListPoints
     Private ListPolygon As ListPolygons
-    Private sphereCenter, surfaceNormal As TPoint
+    Private sphereCenter, surfaceNormal, surfacePoint As TPoint
     Private mesh As TMesh
     'Private ListofEdges As List(Of TLine)
     'Private ListofMeshes As TArrMesh
@@ -17,7 +17,7 @@ Public Class MainForm
     Private longitude, latitude, transSphere_X, transSphere_Y, transSphere_Z As Integer
     Private PV As New Matrix4x4
     Private p1, p2, p3 As Integer
-    Private ka, kd, ks, ki, intentAmb, intentDiff, intentSpec, intentLight, iTot As Double
+    Private ka, kd, ks, ki, intentAmb, intentDiff, intentSpec, intentLight, iTot, expon As Double
     Private Status, backFaceCullingStatus As Boolean
     Private RotX, RotY, RotZ As Boolean
 
@@ -31,7 +31,23 @@ Public Class MainForm
         ListPolygon = New ListPolygons()
         LightSource = New TPoint()
         sphereCenter = New TPoint(0, 0, 0)
+        surfacePoint = New TPoint()
+        PV = New Matrix4x4()
         intentLight = 1
+        intentAmb = 0.2
+        intentDiff = 0.4
+        intentSpec = 0.7
+        ka = 1
+        kd = 1
+        ks = 1
+        expon = 1
+        ambientTxtBox.Text = ka.ToString()
+        diffuseTxtBox.Text = kd.ToString()
+        specularTxtBox.Text = ks.ToString()
+        exponentTxtBox.Text = expon.ToString()
+        Light_XPosTextBox.Text = -10
+        Light_YPosTextBox.Text = 10
+        Light_ZPosTextBox.Text = 10
         'sphereCenter = New TPoint(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0)
         'mesh = New TMesh()
         'ListPoints.Init()
@@ -84,14 +100,17 @@ Public Class MainForm
 
     Private Sub translateButton_Click_1(sender As Object, e As EventArgs) Handles TranslateButton.Click
         graphics.Clear(Color.Black)
-        transSphere_X = transSphere_X + Integer.Parse(X_TransTextBox.Text)
-        transSphere_Y = transSphere_Y + Integer.Parse(Y_TransTextBox.Text)
-        transSphere_Z = transSphere_Z + Integer.Parse(Z_TransTextBox.Text)
+        transSphere_X = Integer.Parse(X_TransTextBox.Text)
+        transSphere_Y = Integer.Parse(Y_TransTextBox.Text)
+        transSphere_Z = Integer.Parse(Z_TransTextBox.Text)
+        sphereCenter.SetPoints(sphereCenter.x + transSphere_X, sphereCenter.y + transSphere_Y, sphereCenter.z + transSphere_Z)
         Dim Vt, St As New Matrix4x4
-        PV = New Matrix4x4
-        Vt.OnePointProjection(5)
-        St.TranslateMat(200 + transSphere_X, 200 + transSphere_Y, 0 + transSphere_Z)
+        'PV = New Matrix4x4
+        Vt.OnePointProjection(sphereCenter.z)
+        St.TranslateMat(sphereCenter.x + transSphere_X, sphereCenter.y + transSphere_Y, 0 + sphereCenter.z + transSphere_Z)
         PV.Mat = MultiplyMat4x4(Vt, St)
+        PV.TranslateMat(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0)
+        'MessageBox.Show(sphereCenter.x & ", " & sphereCenter.y & ", " & sphereCenter.z)
         DrawSphere()
     End Sub
 
@@ -138,29 +157,34 @@ Public Class MainForm
     '    surfaceNormal = getCrossProduct(P1_P2, P1_P3)
     'End Sub
 
+    Dim lightCount As Integer = 1
+
     Private Sub AddLightButton_Click(sender As Object, e As EventArgs) Handles AddLightButton.Click
         If Light_XPosTextBox.Text <> "" And Light_YPosTextBox.Text <> "" And Light_ZPosTextBox.Text <> "" Then
             LightSource.SetPoints(Double.Parse(Light_XPosTextBox.Text), Double.Parse(Light_YPosTextBox.Text), Double.Parse(Light_ZPosTextBox.Text))
-            MessageBox.Show(LightSource.x & ", " & LightSource.y & ", " & LightSource.z)
-            Dim rect As New Rectangle()
-            graphics.DrawEllipse(whitepen, rect)
+            'MessageBox.Show(LightSource.x & ", " & LightSource.y & ", " & LightSource.z)
+            LightSourceListBox.Items.Add("Light " & lightCount)
+            lightCount += 1
+            Dim rect As New Rectangle(LightSource.x, LightSource.y, 10, 10)
+            Dim thickPen = New Pen(Color.White, 10)
+            graphics.DrawEllipse(thickPen, rect)
         End If
         MainCanvas.Image = bitmapCanvas
     End Sub
 
-    Private Sub Rotate_XButton_Click(sender As Object, e As EventArgs) Handles Rotate_XButton.Click
-        RotX = True
-        RotY = False
-        RotZ = False
-        AnimationTimer.Enabled = True
-    End Sub
+    'Private Sub Rotate_XButton_Click(sender As Object, e As EventArgs)
+    '    RotX = True
+    '    RotY = False
+    '    RotZ = False
+    '    AnimationTimer.Enabled = True
+    'End Sub
 
-    Private Sub Rotate_YButton_Click(sender As Object, e As EventArgs) Handles Rotate_YButton.Click
-        RotX = False
-        RotY = True
-        RotZ = False
-        AnimationTimer.Enabled = True
-    End Sub
+    'Private Sub Rotate_YButton_Click(sender As Object, e As EventArgs)
+    '    RotX = False
+    '    RotY = True
+    '    RotZ = False
+    '    AnimationTimer.Enabled = True
+    'End Sub
 
     Private Sub DoShadingButton_Click(sender As Object, e As EventArgs) Handles DoShadingButton.Click
         If ambientTxtBox.Text <> "" And specularTxtBox.Text <> "" And diffuseTxtBox.Text <> "" Then
@@ -172,28 +196,28 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub Rotate_ZButton_Click(sender As Object, e As EventArgs) Handles Rotate_ZButton.Click
+    Private Sub Rotate_ZButton_Click(sender As Object, e As EventArgs)
         RotX = False
         RotY = False
         RotZ = True
         AnimationTimer.Enabled = True
     End Sub
 
-    Private Sub AnimationTimer_Tick(sender As Object, e As EventArgs) Handles AnimationTimer.Tick
-        If RotX Then
-            graphics.Clear(Color.Black)
-            PV.RotateX(0.344)
-            DrawSphere()
-        ElseIf RotY Then
-            graphics.Clear(Color.Black)
-            PV.RotateY(0.344)
-            DrawSphere()
-        Else
-            graphics.Clear(Color.Black)
-            PV.RotateZ(0.344)
-            DrawSphere()
-        End If
-    End Sub
+    'Private Sub AnimationTimer_Tick(sender As Object, e As EventArgs) Handles AnimationTimer.Tick
+    '    If RotX Then
+    '        graphics.Clear(Color.Black)
+    '        PV.RotateX(0.344)
+    '        DrawSphere()
+    '    ElseIf RotY Then
+    '        graphics.Clear(Color.Black)
+    '        PV.RotateY(0.344)
+    '        DrawSphere()
+    '    Else
+    '        graphics.Clear(Color.Black)
+    '        PV.RotateZ(0.344)
+    '        DrawSphere()
+    '    End If
+    'End Sub
 
     Private Sub BackCullOFF_BTN_CheckedChanged(sender As Object, e As EventArgs)
         backFaceCullingStatus = False
@@ -215,38 +239,39 @@ Public Class MainForm
         ' Return ((ka * ia) + (kd * il * Use_Cos(deg)) + (ks * il * Math.Pow(dotproduct(V, R)), n)))
     End Function
 
-    Private Function GetPhong()
-        Dim Iamb, Idiff, Ispec As Double
-        Dim ka, kd, ks, ia, il As Double
-        Dim expo As Integer
-        Iamb = Double.Parse(ambientTxtBox.Text.ToString)
-        Idiff = Double.Parse(diffuseTxtBox.Text.ToString)
-        Ispec = Double.Parse(specularTxtBox.Text.ToString)
-        expo = Integer.Parse(exponentTxtBox.Text.ToString)
+    Private Function GetPhong() As Double
+        'Dim ka, kd, ks, ia, il As Double
+        'Dim expo As Integer
+        intentAmb = Double.Parse(ambientTxtBox.Text.ToString)
+        intentDiff = Double.Parse(diffuseTxtBox.Text.ToString)
+        intentSpec = Double.Parse(specularTxtBox.Text.ToString)
+        expon = Integer.Parse(exponentTxtBox.Text.ToString)
+        iTot = 0
+        Return iTot
     End Function
 
     Private Sub Projection()
         Dim Vt, St As New Matrix4x4
         PV = New Matrix4x4
         Vt.OnePointProjection(5) ' Zc = 3
-        St.TranslateMat(200, 200, 0) 'translate
+        St.TranslateMat(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0) 'translate
         PV.Mat = MultiplyMat4x4(Vt, St)
-        Console.WriteLine(PV.Mat(0, 0)) 'baris,kolom
-        Console.WriteLine(PV.Mat(0, 1))
-        Console.WriteLine(PV.Mat(0, 2))
-        Console.WriteLine(PV.Mat(0, 3))
-        Console.WriteLine(PV.Mat(1, 0))
-        Console.WriteLine(PV.Mat(1, 1))
-        Console.WriteLine(PV.Mat(1, 2))
-        Console.WriteLine(PV.Mat(1, 3))
-        Console.WriteLine(PV.Mat(2, 0))
-        Console.WriteLine(PV.Mat(2, 1))
-        Console.WriteLine(PV.Mat(2, 2))
-        Console.WriteLine(PV.Mat(2, 3))
-        Console.WriteLine(PV.Mat(3, 0))
-        Console.WriteLine(PV.Mat(3, 1))
-        Console.WriteLine(PV.Mat(3, 2))
-        Console.WriteLine(PV.Mat(3, 3))
+        'Console.WriteLine(PV.Mat(0, 0)) 'baris,kolom
+        'Console.WriteLine(PV.Mat(0, 1))
+        'Console.WriteLine(PV.Mat(0, 2))
+        'Console.WriteLine(PV.Mat(0, 3))
+        'Console.WriteLine(PV.Mat(1, 0))
+        'Console.WriteLine(PV.Mat(1, 1))
+        'Console.WriteLine(PV.Mat(1, 2))
+        'Console.WriteLine(PV.Mat(1, 3))
+        'Console.WriteLine(PV.Mat(2, 0))
+        'Console.WriteLine(PV.Mat(2, 1))
+        'Console.WriteLine(PV.Mat(2, 2))
+        'Console.WriteLine(PV.Mat(2, 3))
+        'Console.WriteLine(PV.Mat(3, 0))
+        'Console.WriteLine(PV.Mat(3, 1))
+        'Console.WriteLine(PV.Mat(3, 2))
+        'Console.WriteLine(PV.Mat(3, 3))
     End Sub
 
     Private Sub DrawMeshButton_Click(sender As Object, e As EventArgs) Handles DrawMeshButton.Click
@@ -387,7 +412,7 @@ Public Class MainForm
                 temp.InsertIndex(p1, p2, p3)
                 MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
                 'MsgBox(p2.ToString + " aaa " + temp.Elmt(0).p2.ToString)
-                FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, whitepen)
+                FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, Pens.Blue)
                 graphics.DrawLine(whitepen, New Point(m1, m2), New Point(m3, m4))
                 graphics.DrawLine(whitepen, New Point(m3, m4), New Point(m5, m6))
                 graphics.DrawLine(whitepen, New Point(m5, m6), New Point(m1, m2)) 'x
@@ -395,17 +420,13 @@ Public Class MainForm
         Next
     End Sub
 
-
-
     Private Sub MultiplyPV(p1 As Integer, p2 As Integer, p3 As Integer, ByRef m1 As Double, ByRef m2 As Double, ByRef m3 As Double, ByRef m4 As Double, ByRef m5 As Double, ByRef m6 As Double)
-
         m1 = ListPoints.Elmt(p1).x * PV.Mat(0, 0) + ListPoints.Elmt(p1).y * PV.Mat(0, 1) + ListPoints.Elmt(p1).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
         m2 = ListPoints.Elmt(p1).x * PV.Mat(1, 0) + ListPoints.Elmt(p1).y * PV.Mat(1, 1) + ListPoints.Elmt(p1).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
         m3 = ListPoints.Elmt(p2).x * PV.Mat(0, 0) + ListPoints.Elmt(p2).y * PV.Mat(0, 1) + ListPoints.Elmt(p2).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
         m4 = ListPoints.Elmt(p2).x * PV.Mat(1, 0) + ListPoints.Elmt(p2).y * PV.Mat(1, 1) + ListPoints.Elmt(p2).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)
         m5 = ListPoints.Elmt(p3).x * PV.Mat(0, 0) + ListPoints.Elmt(p3).y * PV.Mat(0, 1) + ListPoints.Elmt(p3).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
         m6 = ListPoints.Elmt(p3).x * PV.Mat(1, 0) + ListPoints.Elmt(p3).y * PV.Mat(1, 1) + ListPoints.Elmt(p3).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3) 'test
-
     End Sub
 
     Private Sub MainCanvas_Move(sender As Object, e As MouseEventArgs) Handles MainCanvas.MouseMove
