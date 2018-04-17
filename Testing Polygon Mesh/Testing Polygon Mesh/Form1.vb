@@ -19,13 +19,14 @@ Public Class MainForm
     Private p1, p2, p3 As Integer
     Private ka, kd, ks, ki, intentAmb, intentDiff, intentSpec, intentLight, iTot, expon As Double
     Private Status, backFaceCullingStatus As Boolean
-
+    Private lightCount As Integer
 
     Private RotX, RotY, RotZ As Boolean
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        lightCount = 0
         bitmapCanvas = New Bitmap(MainCanvas.Width, MainCanvas.Height)
-        graphics = graphics.FromImage(bitmapCanvas)
+        graphics = Graphics.FromImage(bitmapCanvas)
         whitepen = New Pen(Color.White)
         bluepen = New Pen(Color.Blue)
         MainCanvas.Image = bitmapCanvas
@@ -137,7 +138,6 @@ Public Class MainForm
         'MessageBox.Show(sphereCenter.x & ", " & sphereCenter.y & ", " & sphereCenter.z)
         DrawSphere()
     End Sub
-
 
     Private Sub AddLightButton_Click(sender As Object, e As EventArgs) Handles AddLightButton.Click
         If Light_XPosTextBox.Text <> "" And Light_YPosTextBox.Text <> "" And Light_ZPosTextBox.Text <> "" Then
