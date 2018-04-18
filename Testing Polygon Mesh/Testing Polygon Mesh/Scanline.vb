@@ -37,9 +37,9 @@
                 y = y + 1
             End If
             Iphong = getphong(x, y, z, phong)
-            value = Math.Abs(155 * Iphong)
-            'MsgBox(Iphong)
-            bitmapCanvas.SetPixel(x, y, Color.FromArgb(255, value, 255)) 'Mainin intensitas warna di sini
+            value = Math.Abs(255 * Iphong)
+            ' MsgBox(Iphong)
+            bitmapCanvas.SetPixel(x, y, Color.FromArgb(value, value, value)) 'Mainin intensitas warna di sini
             z += zr
             Iphong = 1
         End While
@@ -47,37 +47,30 @@
     End Sub
 
     Private Function getphong(x As Double, y As Double, z As Double, data As phongdata) As Double
-        Dim iTot, IAmb, IDiff, iSpec, LN, R(3), VR, Center(3) As Double
+        Dim ITot, IAmb, IDiff, ISpec, LN, R(3), VR As Double
         IAmb = data.ka * data.ia
-        data.lightsource.x = data.lightsource.x - x
-        data.lightsource.y = data.lightsource.y - y
-        data.lightsource.z = data.lightsource.z - z
+        'MsgBox(IAmb)
         Dim temp1 As Double = GetRoot(data.lightsource.x, data.lightsource.y, data.lightsource.z)
         data.lightsource.x = data.lightsource.x / temp1
         data.lightsource.y = data.lightsource.y / temp1
         data.lightsource.z = data.lightsource.z / temp1
-        Center(0) = data.viewer.x
-        Center(1) = data.viewer.y
-        Center(2) = data.viewer.z
-        data.viewer.x = data.viewer.x - x
-        data.viewer.y = data.viewer.y - y
-        data.viewer.z = data.viewer.z - z
+        Dim temp2 As Double = GetRoot(x, y, z)
+        x = x / temp2
+        y = y / temp2
+        z = z / temp2
         Dim temp3 As Double = GetRoot(data.viewer.x, data.viewer.y, data.viewer.z)
         data.viewer.x = data.viewer.x / temp3
         data.viewer.y = data.viewer.y / temp3
         data.viewer.z = data.viewer.z / temp3
-        Dim temp2 As Double = GetRoot(x, y, z)
-        x = (x - Center(0)) / temp2
-        y = (y - Center(1)) / temp2
-        z = (z - Center(2)) / temp2
-        LN = (data.lightsource.x * x) + (data.lightsource.y * y) + (data.lightsource.z * z)
+        LN = data.lightsource.x * x + data.lightsource.y * y + data.lightsource.z * z
         IDiff = data.kd * data.il * LN
-        R(0) = (2 * LN * x) - data.lightsource.x
-        R(1) = (2 * LN * y) + data.lightsource.y
-        R(2) = (2 * LN * z) - data.lightsource.z
-        VR = (R(0) * data.viewer.x) + (R(1) * data.viewer.y) + (R(2) * data.viewer.z)
-        iSpec = data.ks * data.il * Math.Pow(VR, data.expo)
-        iTot = IAmb + IDiff + iSpec
+        R(0) = 2 * LN * data.lightsource.x - data.lightsource.x
+        R(1) = 2 * LN * data.lightsource.y - data.lightsource.y
+        R(2) = 2 * LN * data.lightsource.z - data.lightsource.z
+        VR = R(0) * data.viewer.x + R(1) * data.viewer.y + R(2) * data.viewer.z
+        ISpec = data.ks * data.il * Math.Pow(VR, data.expo)
+        iTot = IAmb + IDiff + ISpec
+        If ITot > 1 Then ITot = 1
         Return iTot
     End Function
 

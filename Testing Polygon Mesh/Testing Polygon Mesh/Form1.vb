@@ -39,21 +39,21 @@ Public Class MainForm
         sphereCenter = New TPoint(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0)
         surfacePoint = New TPoint()
         PV = New Matrix4x4()
-        intentLight = 1
-        intentAmb = 0.2
-        intentDiff = 0.4
-        intentSpec = 0.7
-        ka = 0.5
-        kd = 0.3
-        ks = 0.2
+        'intentLight = 1
+        'intentAmb = 0.6
+        'intentDiff = 0.4
+        'intentSpec = 0.7
+        ka = 0.6
+        kd = 0.5
+        ks = 0.3
         expon = 1
         ambientTxtBox.Text = ka.ToString()
         diffuseTxtBox.Text = kd.ToString()
         specularTxtBox.Text = ks.ToString()
         exponentTxtBox.Text = expon.ToString()
-        Light_XPosTextBox.Text = 300
+        Light_XPosTextBox.Text = -10
         Light_YPosTextBox.Text = 10
-        Light_ZPosTextBox.Text = 200
+        Light_ZPosTextBox.Text = 10
         'sphereCenter = New TPoint(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0)
         'mesh = New TMesh()
         'ListPoints.Init()
@@ -76,8 +76,8 @@ Public Class MainForm
         'PV.Mat = MultiplyMat4x4(Vt, St)
         SphereRadInput.Enabled = False
         SphereRadInput.Text = 1
-        LongiInput.Text = 30
-        LatiInput.Text = 30
+        LongiInput.Text = 4
+        LatiInput.Text = 4
         transSphere_X = 0
         transSphere_Y = 0
         transSphere_Z = 0
@@ -183,6 +183,7 @@ Public Class MainForm
             ka = ambientTxtBox.Text
             ks = specularTxtBox.Text
             kd = diffuseTxtBox.Text
+            DrawWithMesh()
         Else
             MessageBox.Show("Please fill the coefficient for each!")
         End If
@@ -223,9 +224,8 @@ Public Class MainForm
     Private Sub GetPhong(ByRef data As phongdata)
         'Dim ka, kd, ks, ia, il As Double
         'Dim expo As Integer
-        data = New phongdata
-        data.ia = 0.9
-        data.il = 0.9
+        data.ia = 0.8
+        data.il = 0.8
         data.ka = Double.Parse(ambientTxtBox.Text.ToString)
         data.kd = Double.Parse(diffuseTxtBox.Text.ToString)
         data.ks = Double.Parse(specularTxtBox.Text.ToString)
@@ -233,8 +233,7 @@ Public Class MainForm
         If lightCount > 0 Then
             data.lightsource = LightSource
         Else
-            data.lightsource = New TPoint(200, 50, 400)
-            'data.lightsource = MultiplyMat(data.lightsource, PV)
+            data.lightsource = New TPoint(1, 1, 1)
         End If
         data.viewer = New TPoint(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 10)
         'iTot = ((ka * intentAmb) + (kd * intentLight * dotproduct(I, L) + (ks * intentLight * Math.Pow(dotproduct(V, R), expon)))
