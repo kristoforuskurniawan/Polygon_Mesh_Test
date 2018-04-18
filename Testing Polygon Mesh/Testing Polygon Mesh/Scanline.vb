@@ -4,7 +4,6 @@
     Dim AET As New AEL
     'The AEL 
     Dim stacker As New Stack(Of EdgeTable)
-    Dim spher
     Enum poly
         p0 = 0
         p1 = 1
@@ -37,17 +36,25 @@
                 d = d + dur
                 y = y + 1
             End If
-            Iphong = getphong(phong)
+            Iphong = getphong(x, y, z, phong)
+            MsgBox(Iphong)
             bitmapCanvas.SetPixel(x, y, Color.FromArgb(255 * Iphong, 255 * Iphong, 255)) 'Mainin intensitas warna di sini
             z += zr
         End While
         MainCanvas.Image = bitmapCanvas
     End Sub
 
-    Private Function getphong(data As phongdata) As Double
-        Dim iTot, IAmb, IDiff, iSpec As Double
+    Private Function getphong(x As Double, y As Double, z As Double, data As phongdata) As Double
+        Dim iTot, IAmb, IDiff, iSpec, LN, R(3), VR As Double
         IAmb = data.ka * data.ia
-        iTot = IAmb
+        LN = data.lightsource.x * x + data.lightsource.y * y + data.lightsource.z * z
+        IDiff = data.kd * data.il * LN
+        R(0) = 2 * LN * data.lightsource.x - data.lightsource.x
+        R(1) = 2 * LN * data.lightsource.y - data.lightsource.y
+        R(2) = 2 * LN * data.lightsource.z - data.lightsource.z
+        VR = R(0) * data.viewer.x + R(1) * data.viewer.y + R(2) * data.viewer.z
+        iSpec = data.ks * data.il * Math.Pow(VR, data.expo)
+        iTot = IAmb + IDiff + iSpec
         Return iTot
     End Function
 

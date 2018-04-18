@@ -33,6 +33,8 @@
     Structure phongdata
         Dim ka, kd, ks, il, ia As Double
         Dim expo As Integer
+        Dim lightsource As TPoint
+        Dim viewer As TPoint
     End Structure
 
     Structure TVector

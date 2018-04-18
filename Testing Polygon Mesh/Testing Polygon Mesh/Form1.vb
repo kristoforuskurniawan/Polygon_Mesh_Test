@@ -228,6 +228,12 @@ Public Class MainForm
         data.kd = Double.Parse(diffuseTxtBox.Text.ToString)
         data.ks = Double.Parse(specularTxtBox.Text.ToString)
         data.expo = Integer.Parse(exponentTxtBox.Text.ToString)
+        If lightCount > 0 Then
+            data.lightsource = LightSource
+        Else
+            data.lightsource = New TPoint(1, 1, 1)
+        End If
+        data.viewer = New TPoint(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 10)
         'iTot = ((ka * intentAmb) + (kd * intentLight * dotproduct(I, L) + (ks * intentLight * Math.Pow(dotproduct(V, R), expon)))
 
     End Sub
@@ -384,12 +390,13 @@ Public Class MainForm
         Dim p1, p2, p3 As Integer
         Dim temp As New ListPolygons()
         Dim dataphong As New phongdata
+        GetPhong(dataphong)
         BackFaceCulling()
         Dim DOP(3) As Integer
         DOP(0) = 0
         DOP(1) = 0
         DOP(2) = -10
-        GetPhong(dataphong)
+
         For i = 0 To ListPolygon.N - 1
             If dotproduct2(DOP, ListPolygon.Normal(i)) < 0 Then
                 p1 = ListPolygon.Elmt(i).p1
