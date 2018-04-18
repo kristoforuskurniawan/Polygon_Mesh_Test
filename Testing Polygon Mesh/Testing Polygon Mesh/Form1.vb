@@ -7,6 +7,7 @@ Public Class MainForm
     Private bluepen As Pen
     Private ListPoints As ListPoints
     Private ListPolygon As ListPolygons
+    Private ListNormal As ListNormal
     Private sphereCenter, surfaceNormal, surfacePoint As TPoint
     Private mesh As TMesh
     'Private ListofEdges As List(Of TLine)
@@ -17,6 +18,7 @@ Public Class MainForm
     Private longitude, latitude, transSphere_X, transSphere_Y, transSphere_Z As Integer
     Private PV As New Matrix4x4
     Private p1, p2, p3 As Integer
+    Dim Nx, Ny, Nz As Double
     Private ka, kd, ks, ki, intentAmb, intentDiff, intentSpec, intentLight, iTot, expon As Double
     Private Status, backFaceCullingStatus As Boolean
     Private lightCount As Integer
@@ -32,8 +34,9 @@ Public Class MainForm
         MainCanvas.Image = bitmapCanvas
         ListPoints = New ListPoints()
         ListPolygon = New ListPolygons()
+        ListNormal = New ListNormal()
         LightSource = New TPoint()
-        sphereCenter = New TPoint(0, 0, 0)
+        sphereCenter = New TPoint(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0)
         surfacePoint = New TPoint()
         PV = New Matrix4x4()
         intentLight = 1
@@ -73,8 +76,8 @@ Public Class MainForm
         'PV.Mat = MultiplyMat4x4(Vt, St)
         SphereRadInput.Enabled = False
         SphereRadInput.Text = 1
-        LongiInput.Text = 30
-        LatiInput.Text = 30
+        LongiInput.Text = 4
+        LatiInput.Text = 4
         transSphere_X = 0
         transSphere_Y = 0
         transSphere_Z = 0
@@ -82,11 +85,13 @@ Public Class MainForm
         Y_TransTextBox.Text = transSphere_Y
         Z_TransTextBox.Text = transSphere_Z
         Projection()
+
         'DrawSphere()
         radius = Integer.Parse(SphereRadInput.Text) * 150
         latitude = Integer.Parse(LatiInput.Text)
         longitude = Integer.Parse(LongiInput.Text)
         DrawSphere()
+        getVertexNormal()
         'Status = True
     End Sub
 
@@ -231,6 +236,7 @@ Public Class MainForm
         PV = New Matrix4x4
         Vt.OnePointProjection(5) ' Zc = 3
         St.TranslateMat(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0) 'translate
+        'MessageBox.Show(MainCanvas.Width)
         PV.Mat = MultiplyMat4x4(Vt, St)
         'Console.WriteLine(PV.Mat(0, 0)) 'baris,kolom
         'Console.WriteLine(PV.Mat(0, 1))
@@ -366,7 +372,9 @@ Public Class MainForm
                 ListPolygon.InsertIndex(p2, p1, p3)
             End If
         Next
+        '   MsgBox(ListPolygon.N)
         DrawWithMesh()
+        '  MsgBox(ListPolygon.N)
         MainCanvas.Image = bitmapCanvas
     End Sub
 
@@ -388,17 +396,36 @@ Public Class MainForm
                 temp.InsertIndex(p1, p2, p3)
                 MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
                 'MsgBox(p2.ToString + " aaa " + temp.Elmt(0).p2.ToString)
-                FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, Pens.Blue, MainCanvas)
+
+                '  FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, Pens.Blue, MainCanvas, sphereCenter)
                 'MidPointDrawLine(m1, m2, m3, m4)
                 'MidPointDrawLine(m3, m4, m5, m6)
                 'MidPointDrawLine(m5, m6, m1, m2)
-                'graphics.DrawLine(bluepen, New Point(m1, m2), New Point(m3, m4))
-                'graphics.DrawLine(bluepen, New Point(m3, m4), New Point(m5, m6))
-                'graphics.DrawLine(bluepen, New Point(m5, m6), New Point(m1, m2)) 'x
+                graphics.DrawLine(bluepen, New Point(m1, m2), New Point(m3, m4))
+                graphics.DrawLine(bluepen, New Point(m3, m4), New Point(m5, m6))
+                graphics.DrawLine(bluepen, New Point(m5, m6), New Point(m1, m2)) 'x
             End If
         Next
     End Sub
-
+    Private Sub getVertexNormal()
+        ListNormal = New ListNormal
+        '   ListNormal.Init()
+        For i = 0 To ListPoints.N - 1
+            Nx = sphereCenter.x - ListPoints.Elmt(i).x
+            Ny = sphereCenter.y - ListPoints.Elmt(i).y
+            Nz = sphereCenter.z - ListPoints.Elmt(i).z
+            ' Console.WriteLine(ListPoints.Elmt(i).z)
+            ListNormal.InsertNormal(Nx, Ny, Nz)
+        Next
+        For j = 0 To ListNormal.N - 1
+            'Console.WriteLine(ListNormal.N)
+            Console.Write(ListNormal.Elmt(j).Nx)
+            Console.Write(", ")
+            Console.Write(ListNormal.Elmt(j).Ny)
+            Console.Write(", ")
+            Console.WriteLine(ListNormal.Elmt(j).Nz)
+        Next
+    End Sub
     Private Sub MultiplyPV(p1 As Integer, p2 As Integer, p3 As Integer, ByRef m1 As Double, ByRef m2 As Double, ByRef m3 As Double, ByRef m4 As Double, ByRef m5 As Double, ByRef m6 As Double)
         m1 = ListPoints.Elmt(p1).x * PV.Mat(0, 0) + ListPoints.Elmt(p1).y * PV.Mat(0, 1) + ListPoints.Elmt(p1).z * PV.Mat(0, 2) + 1 * PV.Mat(0, 3)
         m2 = ListPoints.Elmt(p1).x * PV.Mat(1, 0) + ListPoints.Elmt(p1).y * PV.Mat(1, 1) + ListPoints.Elmt(p1).z * PV.Mat(1, 2) + 1 * PV.Mat(1, 3)

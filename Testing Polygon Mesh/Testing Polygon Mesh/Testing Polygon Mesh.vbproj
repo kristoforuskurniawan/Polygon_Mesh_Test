@@ -101,6 +101,7 @@
     <Compile Include="Scanline.vb" />
     <Compile Include="SET.vb" />
     <Compile Include="TArrMesh.vb" />
+    <Compile Include="TArrNormal.vb" />
     <Compile Include="TArrPoint.vb" />
     <Compile Include="TMesh.vb" />
     <Compile Include="TPoint.vb" />
