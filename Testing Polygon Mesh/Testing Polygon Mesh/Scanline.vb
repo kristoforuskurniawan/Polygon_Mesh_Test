@@ -26,7 +26,7 @@
         Dim d As Integer = 2 * dy - dx
         Dim x As Integer = x1
         Dim y As Integer = y1
-        Dim Iphong As Double
+        Dim Iphong, value As Double
         '  Dim n As TPoi
         While x <= x2
             x = x + 1
@@ -36,10 +36,12 @@
                 d = d + dur
                 y = y + 1
             End If
-            Iphong = getphong(x, y, z, phong)
-            MsgBox(Iphong)
-            bitmapCanvas.SetPixel(x, y, Color.FromArgb(255 * Iphong, 255 * Iphong, 255)) 'Mainin intensitas warna di sini
+            Iphong = getphong(x, y, z, phong) / 100000
+            value = Math.Abs((255 * Iphong) Mod 255)
+            'MsgBox(Iphong)
+            bitmapCanvas.SetPixel(x, y, Color.FromArgb(value, value, 255)) 'Mainin intensitas warna di sini
             z += zr
+            Iphong = 1
         End While
         MainCanvas.Image = bitmapCanvas
     End Sub

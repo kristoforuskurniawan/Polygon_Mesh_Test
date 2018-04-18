@@ -223,7 +223,8 @@ Public Class MainForm
     Private Sub GetPhong(ByRef data As phongdata)
         'Dim ka, kd, ks, ia, il As Double
         'Dim expo As Integer
-
+        data.ia = 0.8
+        data.il = 1
         data.ka = Double.Parse(ambientTxtBox.Text.ToString)
         data.kd = Double.Parse(diffuseTxtBox.Text.ToString)
         data.ks = Double.Parse(specularTxtBox.Text.ToString)
