@@ -4,22 +4,22 @@
     Dim AET As New AEL
     'The AEL 
     Dim stacker As New Stack(Of EdgeTable)
-
+    Dim spher
     Enum poly
         p0 = 0
         p1 = 1
         p2 = 2
     End Enum
 
-    Public Sub FillPolygon(a As ListPolygons, b As ListPoints, PView As Matrix4x4, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox)
+    Public Sub FillPolygon(a As ListPolygons, b As ListPoints, PView As Matrix4x4, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox, ByRef sphereCenter As TPoint)
         edgetable.Clear()
         stacker.Clear()
         FillSET(a, b, PView)
         AET = New AEL
-        ProcessAET(g, bmp, pen, pic)
+        ProcessAET(g, bmp, pen, pic, sphereCenter)
     End Sub
 
-    Private Sub MidPointDrawLine(ByVal x1 As Integer, ByVal y1 As Integer, ByVal x2 As Integer, ByVal y2 As Integer, ByRef bitmapCanvas As Bitmap, ByRef MainCanvas As PictureBox)
+    Private Sub MidPointDrawLine(ByVal x1 As Integer, ByVal y1 As Integer, ByVal x2 As Integer, ByVal y2 As Integer, ByRef bitmapCanvas As Bitmap, ByRef MainCanvas As PictureBox, ByRef sphereCenter As TPoint)
         Dim dx As Integer = x2 - x1
         Dim dy As Integer = y2 - y1
         Dim dr As Integer = 2 * dy
@@ -27,7 +27,7 @@
         Dim d As Integer = 2 * dy - dx
         Dim x As Integer = x1
         Dim y As Integer = y1
-
+        '  Dim n As TPoi
         While x <= x2
             x = x + 1
             If d < 0 Then
@@ -36,7 +36,8 @@
                 d = d + dur
                 y = y + 1
             End If
-            bitmapCanvas.SetPixel(x, y, Color.FromArgb(255 * 0.333, 255 * 0.333, 255 * 0.333)) 'Mainin intensitas warna di sini
+
+            bitmapCanvas.SetPixel(x, y, Color.FromArgb(255 * 0.333, 255, 255)) 'Mainin intensitas warna di sini
         End While
         MainCanvas.Image = bitmapCanvas
     End Sub
@@ -89,7 +90,7 @@
     End Sub
 
 
-    Public Sub ProcessAET(ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox)
+    Public Sub ProcessAET(ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox, ByRef sphereCenter As TPoint)
         'Loop from index 0 to Max
         Dim current As EdgeTable
         For i As Integer = 0 To edgetable.Count - 1
@@ -106,7 +107,7 @@
                 'MsgBox(AET.length.ToString)
             End While
             'draw lines (don't forget about the normalization)
-            drawlines(i, g, bmp, pen, pic)
+            drawlines(i, g, bmp, pen, pic, sphereCenter)
             'MidPointDrawLine(i, AET.head.ymax, i, AET.head.ymax, bmp, pic)
             'delete the double expired
             '
@@ -119,7 +120,7 @@
         Next
     End Sub
 
-    Public Sub drawlines(y As Integer, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox)
+    Public Sub drawlines(y As Integer, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox, ByRef sphereCenter As TPoint)
         If AET.length > 0 Then
             Dim data As EdgeTable = AET.head
             Dim data2 As EdgeTable = data.nxt
@@ -130,7 +131,7 @@
                     'bmp.SetPixel(data.xofymin, y + data.normalize, pen.Color)
                 Else
                     'MsgBox(AET.length.ToString + " -- " + (y + data.normalize).ToString)
-                    MidPointDrawLine(data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize, bmp, pic)
+                    MidPointDrawLine(data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize, bmp, pic, sphereCenter)
                     'g.DrawLine(pen, data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize)
                     'MsgBox("dtx : " + data.xofymin.ToString + "- dtnrm" + data.normalize.ToString + " - dt2x: " + data2.xofymin.ToString + "- y: " + y.ToString + " - dt2nrm: " + data2.normalize.ToString)
                     '   End If
