@@ -5,6 +5,8 @@
     Public xofymin As Integer
     Public dx As Integer
     Public dy As Integer
+    Public zup As Double
+    Public zright As Double
     Public carry As Integer
     Public normalize As Integer
     Public zofymin As Integer

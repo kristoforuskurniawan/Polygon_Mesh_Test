@@ -19,7 +19,7 @@
         ProcessAET(g, bmp, pen, pic, sphereCenter)
     End Sub
 
-    Private Sub MidPointDrawLine(ByVal x1 As Integer, ByVal y1 As Integer, ByVal x2 As Integer, ByVal y2 As Integer, ByRef bitmapCanvas As Bitmap, ByRef MainCanvas As PictureBox, ByRef sphereCenter As TPoint)
+    Private Sub MidPointDrawLine(ByVal x1 As Integer, ByVal y1 As Integer, ByVal x2 As Integer, ByVal y2 As Integer, ByRef bitmapCanvas As Bitmap, ByRef MainCanvas As PictureBox, ByRef sphereCenter As TPoint, ByRef z As Double, zr As Double)
         Dim dx As Integer = x2 - x1
         Dim dy As Integer = y2 - y1
         Dim dr As Integer = 2 * dy
@@ -38,6 +38,7 @@
             End If
 
             bitmapCanvas.SetPixel(x, y, Color.FromArgb(255 * 0.333, 255, 255)) 'Mainin intensitas warna di sini
+            z += zr
         End While
         MainCanvas.Image = bitmapCanvas
     End Sub
@@ -61,14 +62,14 @@
         'MsgBox(b.Elmt(a.Elmt(0).p2).x.ToString + " vs " + pointtemp(1).x.ToString)
         resizeArray(edgetable, size)
         'MsgBox(edgetable.Count)
-        DeclareTemp(min, pointtemp(0), pointtemp(1))
-        DeclareTemp(min, pointtemp(1), pointtemp(2))
-        DeclareTemp(min, pointtemp(2), pointtemp(0))
+        DeclareTemp(min, pointtemp(0), pointtemp(1), a.Normal(0))
+        DeclareTemp(min, pointtemp(1), pointtemp(2), a.Normal(0))
+        DeclareTemp(min, pointtemp(2), pointtemp(0), a.Normal(0))
         'displaySET(edgetable)
         'test
     End Sub
 
-    Public Sub DeclareTemp(min As Integer, i As TArrPoint, j As TArrPoint)
+    Public Sub DeclareTemp(min As Integer, i As TArrPoint, j As TArrPoint, normal As Normalvalue)
         If Not (i.y = j.y) Then
             Dim temp As New EdgeTable
             temp.normalize = min
@@ -79,6 +80,8 @@
             temp.dy = j.y - i.y
             temp.carry = 0
             temp.zofymin = If(i.y <= j.y, i.z, j.z)
+            temp.zup = -((temp.dx / temp.dy) * normal.x + normal.y) / normal.z
+            temp.zright = -normal.x / normal.z
             temp.nxt = Nothing
             If temp.dy < 0 Then
                 temp.dy = -temp.dy
@@ -93,11 +96,16 @@
     Public Sub ProcessAET(ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox, ByRef sphereCenter As TPoint)
         'Loop from index 0 to Max
         Dim current As EdgeTable
+        Dim Zval As Double
         For i As Integer = 0 To edgetable.Count - 1
             'assign the temporary variable to save the current data 
             current = edgetable(i)
             'delete the single expired
-            If i > 0 Then CheckSingleExpired(i)
+            If i > 0 Then
+                CheckSingleExpired(i)
+            ElseIf i = 0 Then
+                Zval = current.zofymin
+            End If
             'insert the new edges (sorted)
 
             While Not (current Is Nothing)
@@ -107,7 +115,7 @@
                 'MsgBox(AET.length.ToString)
             End While
             'draw lines (don't forget about the normalization)
-            drawlines(i, g, bmp, pen, pic, sphereCenter)
+            drawlines(i, g, bmp, pen, pic, sphereCenter, Zval, current.zright)
             'MidPointDrawLine(i, AET.head.ymax, i, AET.head.ymax, bmp, pic)
             'delete the double expired
             '
@@ -116,11 +124,12 @@
             AET.Update()
             'sort
             AET.Sorted()
+            Zval += current.zup
             'sortAETStackVersion() ' is failed
         Next
     End Sub
 
-    Public Sub drawlines(y As Integer, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox, ByRef sphereCenter As TPoint)
+    Public Sub drawlines(y As Integer, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox, ByRef sphereCenter As TPoint, ByRef z As Double, zr As Double)
         If AET.length > 0 Then
             Dim data As EdgeTable = AET.head
             Dim data2 As EdgeTable = data.nxt
@@ -131,7 +140,7 @@
                     'bmp.SetPixel(data.xofymin, y + data.normalize, pen.Color)
                 Else
                     'MsgBox(AET.length.ToString + " -- " + (y + data.normalize).ToString)
-                    MidPointDrawLine(data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize, bmp, pic, sphereCenter)
+                    MidPointDrawLine(data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize, bmp, pic, sphereCenter, z, zr)
                     'g.DrawLine(pen, data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize)
                     'MsgBox("dtx : " + data.xofymin.ToString + "- dtnrm" + data.normalize.ToString + " - dt2x: " + data2.xofymin.ToString + "- y: " + y.ToString + " - dt2nrm: " + data2.normalize.ToString)
                     '   End If

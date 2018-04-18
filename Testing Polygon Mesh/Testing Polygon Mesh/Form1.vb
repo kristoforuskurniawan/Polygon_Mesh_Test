@@ -394,10 +394,11 @@ Public Class MainForm
                 p3 = ListPolygon.Elmt(i).p3
                 temp.Init()
                 temp.InsertIndex(p1, p2, p3)
+                temp.Normal(0) = ListPolygon.Normal(i)
                 MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
                 'MsgBox(p2.ToString + " aaa " + temp.Elmt(0).p2.ToString)
 
-                '  FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, Pens.Blue, MainCanvas, sphereCenter)
+                FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, Pens.Blue, MainCanvas, sphereCenter)
                 'MidPointDrawLine(m1, m2, m3, m4)
                 'MidPointDrawLine(m3, m4, m5, m6)
                 'MidPointDrawLine(m5, m6, m1, m2)
