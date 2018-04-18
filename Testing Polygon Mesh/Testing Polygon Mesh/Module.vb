@@ -30,6 +30,10 @@
         Return (1 / Math.Tan(tetha * DegToRad))
     End Function
 
+    Structure phongdata
+        Dim ka, kd, ks, il, ia As Double
+        Dim expo As Integer
+    End Structure
 
     Structure TVector
         Dim x, y, z As Double

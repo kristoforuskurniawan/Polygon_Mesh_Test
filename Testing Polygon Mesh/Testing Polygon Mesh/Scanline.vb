@@ -11,15 +11,15 @@
         p2 = 2
     End Enum
 
-    Public Sub FillPolygon(a As ListPolygons, b As ListPoints, PView As Matrix4x4, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox, ByRef sphereCenter As TPoint)
+    Public Sub FillPolygon(a As ListPolygons, b As ListPoints, PView As Matrix4x4, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox, ByRef sphereCenter As TPoint, phong As phongdata)
         edgetable.Clear()
         stacker.Clear()
         FillSET(a, b, PView)
         AET = New AEL
-        ProcessAET(g, bmp, pen, pic, sphereCenter)
+        ProcessAET(g, bmp, pen, pic, sphereCenter, phong)
     End Sub
 
-    Private Sub MidPointDrawLine(ByVal x1 As Integer, ByVal y1 As Integer, ByVal x2 As Integer, ByVal y2 As Integer, ByRef bitmapCanvas As Bitmap, ByRef MainCanvas As PictureBox, ByRef sphereCenter As TPoint, ByRef z As Double, zr As Double)
+    Private Sub MidPointDrawLine(ByVal x1 As Integer, ByVal y1 As Integer, ByVal x2 As Integer, ByVal y2 As Integer, ByRef bitmapCanvas As Bitmap, ByRef MainCanvas As PictureBox, ByRef sphereCenter As TPoint, ByRef z As Double, zr As Double, phong As phongdata)
         Dim dx As Integer = x2 - x1
         Dim dy As Integer = y2 - y1
         Dim dr As Integer = 2 * dy
@@ -27,6 +27,7 @@
         Dim d As Integer = 2 * dy - dx
         Dim x As Integer = x1
         Dim y As Integer = y1
+        Dim Iphong As Double
         '  Dim n As TPoi
         While x <= x2
             x = x + 1
@@ -36,12 +37,20 @@
                 d = d + dur
                 y = y + 1
             End If
-
-            bitmapCanvas.SetPixel(x, y, Color.FromArgb(255 * 0.333, 255, 255)) 'Mainin intensitas warna di sini
+            Iphong = getphong(phong)
+            bitmapCanvas.SetPixel(x, y, Color.FromArgb(255 * Iphong, 255 * Iphong, 255)) 'Mainin intensitas warna di sini
             z += zr
         End While
         MainCanvas.Image = bitmapCanvas
     End Sub
+
+    Private Function getphong(data As phongdata) As Double
+        Dim iTot, IAmb, IDiff, iSpec As Double
+        IAmb = data.ka * data.ia
+        iTot = IAmb
+        Return iTot
+    End Function
+
 
     Public Sub FillSET(a As ListPolygons, b As ListPoints, PView As Matrix4x4)
         edgetable = New List(Of EdgeTable)
@@ -93,10 +102,10 @@
     End Sub
 
 
-    Public Sub ProcessAET(ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox, ByRef sphereCenter As TPoint)
+    Public Sub ProcessAET(ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox, ByRef sphereCenter As TPoint, phong As phongdata)
         'Loop from index 0 to Max
         Dim current As EdgeTable
-        Dim Zval As Double
+        Dim Zval, Zrig, Zup As Double
         For i As Integer = 0 To edgetable.Count - 1
             'assign the temporary variable to save the current data 
             current = edgetable(i)
@@ -105,6 +114,8 @@
                 CheckSingleExpired(i)
             ElseIf i = 0 Then
                 Zval = current.zofymin
+                Zrig = current.zright
+                Zup = current.zup
             End If
             'insert the new edges (sorted)
 
@@ -115,7 +126,7 @@
                 'MsgBox(AET.length.ToString)
             End While
             'draw lines (don't forget about the normalization)
-            drawlines(i, g, bmp, pen, pic, sphereCenter, Zval, current.zright)
+            drawlines(i, g, bmp, pen, pic, sphereCenter, Zval, Zrig, phong)
             'MidPointDrawLine(i, AET.head.ymax, i, AET.head.ymax, bmp, pic)
             'delete the double expired
             '
@@ -124,12 +135,12 @@
             AET.Update()
             'sort
             AET.Sorted()
-            Zval += current.zup
+            Zval += Zup
             'sortAETStackVersion() ' is failed
         Next
     End Sub
 
-    Public Sub drawlines(y As Integer, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox, ByRef sphereCenter As TPoint, ByRef z As Double, zr As Double)
+    Public Sub drawlines(y As Integer, ByRef g As Graphics, ByRef bmp As Bitmap, pen As Pen, ByRef pic As PictureBox, ByRef sphereCenter As TPoint, ByRef z As Double, zr As Double, phong As phongdata)
         If AET.length > 0 Then
             Dim data As EdgeTable = AET.head
             Dim data2 As EdgeTable = data.nxt
@@ -140,7 +151,7 @@
                     'bmp.SetPixel(data.xofymin, y + data.normalize, pen.Color)
                 Else
                     'MsgBox(AET.length.ToString + " -- " + (y + data.normalize).ToString)
-                    MidPointDrawLine(data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize, bmp, pic, sphereCenter, z, zr)
+                    MidPointDrawLine(data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize, bmp, pic, sphereCenter, z, zr, phong)
                     'g.DrawLine(pen, data.xofymin, y + data.normalize, data2.xofymin, y + data2.normalize)
                     'MsgBox("dtx : " + data.xofymin.ToString + "- dtnrm" + data.normalize.ToString + " - dt2x: " + data2.xofymin.ToString + "- y: " + y.ToString + " - dt2nrm: " + data2.normalize.ToString)
                     '   End If

@@ -220,16 +220,17 @@ Public Class MainForm
         Return Math.PI * x / 180.0
     End Function
 
-    Private Function GetPhong() As Double
+    Private Sub GetPhong(ByRef data As phongdata)
         'Dim ka, kd, ks, ia, il As Double
         'Dim expo As Integer
-        ka = Double.Parse(ambientTxtBox.Text.ToString)
-        kd = Double.Parse(diffuseTxtBox.Text.ToString)
-        ks = Double.Parse(specularTxtBox.Text.ToString)
-        expon = Integer.Parse(exponentTxtBox.Text.ToString)
+
+        data.ka = Double.Parse(ambientTxtBox.Text.ToString)
+        data.kd = Double.Parse(diffuseTxtBox.Text.ToString)
+        data.ks = Double.Parse(specularTxtBox.Text.ToString)
+        data.expo = Integer.Parse(exponentTxtBox.Text.ToString)
         'iTot = ((ka * intentAmb) + (kd * intentLight * dotproduct(I, L) + (ks * intentLight * Math.Pow(dotproduct(V, R), expon)))
-        Return iTot
-    End Function
+
+    End Sub
 
     Private Sub Projection()
         Dim Vt, St As New Matrix4x4
@@ -382,11 +383,13 @@ Public Class MainForm
         Dim m1, m2, m3, m4, m5, m6, m11, m22, m33, m44, m55, m66 As Double
         Dim p1, p2, p3 As Integer
         Dim temp As New ListPolygons()
+        Dim dataphong As New phongdata
         BackFaceCulling()
         Dim DOP(3) As Integer
         DOP(0) = 0
         DOP(1) = 0
         DOP(2) = -10
+        GetPhong(dataphong)
         For i = 0 To ListPolygon.N - 1
             If dotproduct2(DOP, ListPolygon.Normal(i)) < 0 Then
                 p1 = ListPolygon.Elmt(i).p1
@@ -396,9 +399,8 @@ Public Class MainForm
                 temp.InsertIndex(p1, p2, p3)
                 temp.Normal(0) = ListPolygon.Normal(i)
                 MultiplyPV(p1, p2, p3, m1, m2, m3, m4, m5, m6)
-                'MsgBox(p2.ToString + " aaa " + temp.Elmt(0).p2.ToString)
-
-                FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, Pens.Blue, MainCanvas, sphereCenter)
+                'MsgBox(p2.ToString + " aaa " + temp.Elmt(0).p2.ToString
+                FillPolygon(temp, ListPoints, PV, graphics, bitmapCanvas, Pens.Blue, MainCanvas, sphereCenter, dataphong)
                 'MidPointDrawLine(m1, m2, m3, m4)
                 'MidPointDrawLine(m3, m4, m5, m6)
                 'MidPointDrawLine(m5, m6, m1, m2)
@@ -464,4 +466,6 @@ Public Class MainForm
         CalculateNormal(ListPolygon)
         Dim DOP(3) As Double
     End Sub
+
+
 End Class
