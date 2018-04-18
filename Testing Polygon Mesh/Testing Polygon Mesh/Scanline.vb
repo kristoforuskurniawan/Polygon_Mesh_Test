@@ -38,8 +38,8 @@
             End If
             Iphong = getphong(x, y, z, phong)
             value = Math.Abs(255 * Iphong)
-            'MsgBox(Iphong)
-            bitmapCanvas.SetPixel(x, y, Color.FromArgb(value, 175, 255)) 'Mainin intensitas warna di sini
+            ' MsgBox(Iphong)
+            bitmapCanvas.SetPixel(x, y, Color.FromArgb(value, value, value)) 'Mainin intensitas warna di sini
             z += zr
             Iphong = 1
         End While
@@ -47,8 +47,9 @@
     End Sub
 
     Private Function getphong(x As Double, y As Double, z As Double, data As phongdata) As Double
-        Dim iTot, IAmb, IDiff, iSpec, LN, R(3), VR As Double
+        Dim ITot, IAmb, IDiff, ISpec, LN, R(3), VR As Double
         IAmb = data.ka * data.ia
+        'MsgBox(IAmb)
         Dim temp1 As Double = GetRoot(data.lightsource.x, data.lightsource.y, data.lightsource.z)
         data.lightsource.x = data.lightsource.x / temp1
         data.lightsource.y = data.lightsource.y / temp1
@@ -67,8 +68,9 @@
         R(1) = 2 * LN * data.lightsource.y - data.lightsource.y
         R(2) = 2 * LN * data.lightsource.z - data.lightsource.z
         VR = R(0) * data.viewer.x + R(1) * data.viewer.y + R(2) * data.viewer.z
-        iSpec = data.ks * data.il * Math.Pow(VR, data.expo)
-        iTot = IAmb + IDiff + iSpec
+        ISpec = data.ks * data.il * Math.Pow(VR, data.expo)
+        iTot = IAmb + IDiff + ISpec
+        If ITot > 1 Then ITot = 1
         Return iTot
     End Function
 

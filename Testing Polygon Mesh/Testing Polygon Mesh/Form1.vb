@@ -39,11 +39,11 @@ Public Class MainForm
         sphereCenter = New TPoint(MainCanvas.Width / 2 - 1, MainCanvas.Height / 2 - 1, 0)
         surfacePoint = New TPoint()
         PV = New Matrix4x4()
-        intentLight = 1
-        intentAmb = 0.2
-        intentDiff = 0.4
-        intentSpec = 0.7
-        ka = 0.2
+        'intentLight = 1
+        'intentAmb = 0.6
+        'intentDiff = 0.4
+        'intentSpec = 0.7
+        ka = 0.6
         kd = 0.5
         ks = 0.3
         expon = 1
@@ -183,6 +183,7 @@ Public Class MainForm
             ka = ambientTxtBox.Text
             ks = specularTxtBox.Text
             kd = diffuseTxtBox.Text
+            DrawWithMesh()
         Else
             MessageBox.Show("Please fill the coefficient for each!")
         End If
