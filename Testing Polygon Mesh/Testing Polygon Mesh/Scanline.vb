@@ -36,10 +36,10 @@
                 d = d + dur
                 y = y + 1
             End If
-            Iphong = getphong(x, y, z, phong) / 100000
-            value = Math.Abs((255 * Iphong) Mod 255)
+            Iphong = getphong(x, y, z, phong)
+            value = Math.Abs(255 * Iphong)
             'MsgBox(Iphong)
-            bitmapCanvas.SetPixel(x, y, Color.FromArgb(value, value, 255)) 'Mainin intensitas warna di sini
+            bitmapCanvas.SetPixel(x, y, Color.FromArgb(value, 175, 255)) 'Mainin intensitas warna di sini
             z += zr
             Iphong = 1
         End While
@@ -49,6 +49,18 @@
     Private Function getphong(x As Double, y As Double, z As Double, data As phongdata) As Double
         Dim iTot, IAmb, IDiff, iSpec, LN, R(3), VR As Double
         IAmb = data.ka * data.ia
+        Dim temp1 As Double = GetRoot(data.lightsource.x, data.lightsource.y, data.lightsource.z)
+        data.lightsource.x = data.lightsource.x / temp1
+        data.lightsource.y = data.lightsource.y / temp1
+        data.lightsource.z = data.lightsource.z / temp1
+        Dim temp2 As Double = GetRoot(x, y, z)
+        x = x / temp2
+        y = y / temp2
+        z = z / temp2
+        Dim temp3 As Double = GetRoot(data.viewer.x, data.viewer.y, data.viewer.z)
+        data.viewer.x = data.viewer.x / temp3
+        data.viewer.y = data.viewer.y / temp3
+        data.viewer.z = data.viewer.z / temp3
         LN = data.lightsource.x * x + data.lightsource.y * y + data.lightsource.z * z
         IDiff = data.kd * data.il * LN
         R(0) = 2 * LN * data.lightsource.x - data.lightsource.x
@@ -59,6 +71,7 @@
         iTot = IAmb + IDiff + iSpec
         Return iTot
     End Function
+
 
 
     Public Sub FillSET(a As ListPolygons, b As ListPoints, PView As Matrix4x4)

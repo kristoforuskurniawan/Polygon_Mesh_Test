@@ -30,6 +30,10 @@
         Return (1 / Math.Tan(tetha * DegToRad))
     End Function
 
+    Public Function GetRoot(x As Double, y As Double, z As Double) As Double
+        Return Math.Sqrt(x * x + y * y + z * z)
+    End Function
+
     Structure phongdata
         Dim ka, kd, ks, il, ia As Double
         Dim expo As Integer

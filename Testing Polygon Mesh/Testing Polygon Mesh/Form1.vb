@@ -43,9 +43,9 @@ Public Class MainForm
         intentAmb = 0.2
         intentDiff = 0.4
         intentSpec = 0.7
-        ka = 1
-        kd = 1
-        ks = 1
+        ka = 0.2
+        kd = 0.5
+        ks = 0.3
         expon = 1
         ambientTxtBox.Text = ka.ToString()
         diffuseTxtBox.Text = kd.ToString()
@@ -224,7 +224,7 @@ Public Class MainForm
         'Dim ka, kd, ks, ia, il As Double
         'Dim expo As Integer
         data.ia = 0.8
-        data.il = 1
+        data.il = 0.8
         data.ka = Double.Parse(ambientTxtBox.Text.ToString)
         data.kd = Double.Parse(diffuseTxtBox.Text.ToString)
         data.ks = Double.Parse(specularTxtBox.Text.ToString)
@@ -412,9 +412,9 @@ Public Class MainForm
                 'MidPointDrawLine(m1, m2, m3, m4)
                 'MidPointDrawLine(m3, m4, m5, m6)
                 'MidPointDrawLine(m5, m6, m1, m2)
-                graphics.DrawLine(bluepen, New Point(m1, m2), New Point(m3, m4))
-                graphics.DrawLine(bluepen, New Point(m3, m4), New Point(m5, m6))
-                graphics.DrawLine(bluepen, New Point(m5, m6), New Point(m1, m2)) 'x
+                'graphics.DrawLine(bluepen, New Point(m1, m2), New Point(m3, m4))
+                'graphics.DrawLine(bluepen, New Point(m3, m4), New Point(m5, m6))
+                'graphics.DrawLine(bluepen, New Point(m5, m6), New Point(m1, m2)) 'x
             End If
         Next
     End Sub
