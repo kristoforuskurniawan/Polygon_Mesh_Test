@@ -39,7 +39,7 @@
             Iphong = getphong(x, y, z, phong)
             value = Math.Abs(255 * Iphong)
             ' MsgBox(Iphong)
-            bitmapCanvas.SetPixel(x, y, Color.FromArgb(value, value, 255)) 'Mainin intensitas warna di sini
+            bitmapCanvas.SetPixel(x, y, Color.FromArgb(value, value, value)) 'Mainin intensitas warna di sini
             z += zr
             Iphong = 1
         End While
@@ -70,7 +70,11 @@
         VR = R(0) * data.viewer.x + R(1) * data.viewer.y + R(2) * data.viewer.z
         ISpec = data.ks * data.il * Math.Pow(VR, data.expo)
         ITot = IAmb + IDiff + ISpec
-        If ITot > 1 Then ITot = 1
+        If ITot > 1 Then
+            ITot = 1
+        ElseIf ITot < 0 Then
+            ITot = 0
+        End If
         Return ITot
     End Function
 
